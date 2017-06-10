@@ -50,7 +50,7 @@
     "virtualNetworkSettings": {
       "value": {
         "name": "ra-adds-onpremise-vnet",
-        "resourceGroup": "ra-adds-onpremise-rg"
+        "resourceGroup": "ra-adds-onpremise-sp2016-rg"
       }
     },
     "buildingBlockSettings": {
