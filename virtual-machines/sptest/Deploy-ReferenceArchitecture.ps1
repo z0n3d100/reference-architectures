@@ -66,7 +66,7 @@ $publicDmzParametersFile = [System.IO.Path]::Combine($PSScriptRoot, "parameters\
 
 
 # Azure Onpremise Deployments
-$onpremiseNetworkResourceGroupName = "ra-adds-onpremise-rg"
+$onpremiseNetworkResourceGroupName = "ra-adds-onpremise-sp2016-rg"
 
 # Azure ADDS Deployments
 $azureNetworkResourceGroupName = "ra-adds-network-rg"
