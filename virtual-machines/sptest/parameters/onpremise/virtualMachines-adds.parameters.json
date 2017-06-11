@@ -13,10 +13,9 @@
         "osAuthenticationType": "password",
         "nics": [
           {
-            "isPublic": "true",
+            "isPublic": "false",
             "subnetName": "adds",
             "privateIPAllocationMethod": "Static",
-            "publicIPAllocationMethod": "dynamic",
             "startingIPAddress": "192.168.0.4",
             "enableIPForwarding": false,
             "dnsServers": [
