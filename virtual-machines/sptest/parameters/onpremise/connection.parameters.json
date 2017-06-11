@@ -13,7 +13,7 @@
         },
         "virtualNetworkGateway2": {
           "name": "ra-adds-vpn-vgw",
-          "resourceGroup": "ra-adds-network-rg"
+          "resourceGroup": "ra-sp2016-network-rg"
         }
       }
     }
