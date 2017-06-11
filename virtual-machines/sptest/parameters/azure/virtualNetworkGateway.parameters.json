@@ -5,7 +5,7 @@
     "virtualNetworkSettings": {
       "value": {
         "name": "ra-adds-vnet",
-        "resourceGroup": "ra-adds-network-rg"
+        "resourceGroup": "ra-sp2016-network-rg"
       }
     },
     "virtualNetworkGatewaySettings": {
@@ -23,11 +23,11 @@
         "sharedKey": "123secret",
         "virtualNetworkGateway1": {
           "name": "ra-adds-vpn-vgw",
-          "resourceGroup": "ra-adds-network-rg"
+          "resourceGroup": "ra-sp2016-network-rg"
         },
         "virtualNetworkGateway2": {
           "name": "ra-adds-onpremise-vpn-vgw",
-          "resourceGroup": "ra-adds-onpremise-rg"
+          "resourceGroup": "ra-adds-onpremise-sp2016-rg"
         }
       }
     }
