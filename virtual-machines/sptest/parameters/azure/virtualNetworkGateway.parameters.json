@@ -4,7 +4,7 @@
   "parameters": {
     "virtualNetworkSettings": {
       "value": {
-        "name": "ra-adds-vnet",
+        "name": "ra-sp2016-vnet",
         "resourceGroup": "ra-sp2016-network-rg"
       }
     },
