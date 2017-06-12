@@ -13,7 +13,7 @@
         "osAuthenticationType": "password",
         "nics": [
           {
-            "isPublic": "false",
+            "isPublic": "true",
             "subnetName": "adds",
             "privateIPAllocationMethod": "Static",
             "startingIPAddress": "192.168.0.4",
