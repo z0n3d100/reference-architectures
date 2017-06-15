@@ -125,23 +125,23 @@ if ($Mode -eq "Infrastructure" -Or $Mode -eq "All") {
     #     -TemplateUri $virtualMachineTemplate.AbsoluteUri -TemplateParameterFile $managementParametersFile
 }
 if ($Mode -eq "CreateVpn" -Or $Mode -eq "All") {
-    $onpremiseNetworkResourceGroup = Get-AzureRmResourceGroup -Name $onpremiseNetworkResourceGroupName
-    $azureNetworkResourceGroup = Get-AzureRmResourceGroup -Name $azureNetworkResourceGroupName
+    # $onpremiseNetworkResourceGroup = Get-AzureRmResourceGroup -Name $onpremiseNetworkResourceGroupName
+    # $azureNetworkResourceGroup = Get-AzureRmResourceGroup -Name $azureNetworkResourceGroupName
 
-    Write-Host "Deploying Onpremise Virtual Network Gateway..."
-    New-AzureRmResourceGroupDeployment -Name "ra-adds-onpremise-vpn-gateway-deployment" `
-        -ResourceGroupName $onpremiseNetworkResourceGroup.ResourceGroupName `
-        -TemplateFile $onPremiseVirtualNetworkGatewayTemplateFile -TemplateParameterFile $onpremiseVirtualNetworkGatewayParametersFile
+    # Write-Host "Deploying Onpremise Virtual Network Gateway..."
+    # New-AzureRmResourceGroupDeployment -Name "ra-adds-onpremise-vpn-gateway-deployment" `
+    #     -ResourceGroupName $onpremiseNetworkResourceGroup.ResourceGroupName `
+    #     -TemplateFile $onPremiseVirtualNetworkGatewayTemplateFile -TemplateParameterFile $onpremiseVirtualNetworkGatewayParametersFile
 
-    # DEV: Once the above is working.. Then the following should add it to the existing ra-sp2016
+    # # DEV: Once the above is working.. Then the following should add it to the existing ra-sp2016
 
 
-    Write-Host "Deploying Azure Virtual Network Gateway..."
-    New-AzureRmResourceGroupDeployment -Name "ra-adds-vpn-gateway-deployment" -ResourceGroupName $azureNetworkResourceGroup.ResourceGroupName `
-        -TemplateUri $virtualNetworkGatewayTemplate.AbsoluteUri -TemplateParameterFile $azureVirtualNetworkGatewayParametersFile
+    # Write-Host "Deploying Azure Virtual Network Gateway..."
+    # New-AzureRmResourceGroupDeployment -Name "ra-adds-vpn-gateway-deployment" -ResourceGroupName $azureNetworkResourceGroup.ResourceGroupName `
+    #     -TemplateUri $virtualNetworkGatewayTemplate.AbsoluteUri -TemplateParameterFile $azureVirtualNetworkGatewayParametersFile
 
-    Write-Host "Creating Onpremise connection..."
-    New-AzureRmResourceGroupDeployment -Name "ra-adds-onpremise-connection-deployment" `
-        -ResourceGroupName $onpremiseNetworkResourceGroup.ResourceGroupName `
-        -TemplateFile $onPremiseConnectionTemplateFile -TemplateParameterFile $onpremiseConnectionParametersFile
+    # Write-Host "Creating Onpremise connection..."
+    # New-AzureRmResourceGroupDeployment -Name "ra-adds-onpremise-connection-deployment" `
+    #     -ResourceGroupName $onpremiseNetworkResourceGroup.ResourceGroupName `
+    #     -TemplateFile $onPremiseConnectionTemplateFile -TemplateParameterFile $onpremiseConnectionParametersFile
 }
