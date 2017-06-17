@@ -43,7 +43,7 @@
             "name": "ra-sp2016-wfe-lbp1",
             "port": 80,
             "protocol": "Tcp",
-            "requestPath": "/"
+            "requestPath": null
           }
         ],
         "backendPools": [
