@@ -92,6 +92,8 @@ Login-AzureRmAccount -SubscriptionId $SubscriptionId | Out-Null
 if ($Mode -eq "Onpremise" -Or $Mode -eq "All") 
 {
 
+   Write-Host "Onpremise Section ---------------------------------------------------"
+   Write-Host "Add Onpremise Section"
 
 
 
@@ -104,11 +106,6 @@ if ($Mode -eq "Infrastructure" -Or $Mode -eq "All")
     New-AzureRmResourceGroupDeployment -Name "ra-sp2016-vnet-deployment" `
         -ResourceGroupName $infrastructureResourceGroup.ResourceGroupName -TemplateUri $virtualNetworkTemplate.AbsoluteUri `
         -TemplateParameterFile $virtualNetworkParametersFile
-
- #   Write-Host "Creating VPN Gateway..."
- #   New-AzureRmResourceGroupDeployment -Name "ra-sp2016-vpn-deployment" `
- #       -ResourceGroupName $infrastructureResourceGroup.ResourceGroupName -TemplateUri $virtualNetworkTemplate.AbsoluteUri `
- #       -TemplateParameterFile $virtualNetworkParametersFile
 
     Write-Host "Deploying jumpbox..."
     New-AzureRmResourceGroupDeployment -Name "ra-sp2016-mgmt-deployment" -ResourceGroupName $infrastructureResourceGroup.ResourceGroupName `
@@ -159,6 +156,10 @@ if ($Mode -eq "CreateVPN" -Or $Mode -eq "All")
     Write-Host "CreateVPN Section ---------------------------------------------------"
     Write-Host "Add CreateVPN Section"
 
+ #   Write-Host "Creating SharePoint VPN Gateway..."
+ #   New-AzureRmResourceGroupDeployment -Name "ra-sp2016-vpn-deployment" `
+ #       -ResourceGroupName $infrastructureResourceGroup.ResourceGroupName -TemplateUri $virtualNetworkTemplate.AbsoluteUri `
+ #       -TemplateParameterFile $virtualNetworkParametersFile
 
 
 }
