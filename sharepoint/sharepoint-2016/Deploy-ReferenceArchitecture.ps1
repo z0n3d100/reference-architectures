@@ -107,6 +107,14 @@ $azureVirtualNetworkGatewayParametersFile = [System.IO.Path]::Combine($PSScriptR
 $infrastructureResourceGroupName = "ra-sp2016-network-rg"
 $workloadResourceGroupName = "ra-sp2016-workload-rg"
 
+# Azure Onpremise Deployments
+$onpremiseNetworkResourceGroupName = "ra-adds-onpremise-sp2016-rg"
+
+# Azure sp2016 Deployments
+$azureNetworkResourceGroupName = "ra-sp2016-network-rg"
+
+
+
 # Login to Azure and select your subscription
 Login-AzureRmAccount -SubscriptionId $SubscriptionId | Out-Null
 
