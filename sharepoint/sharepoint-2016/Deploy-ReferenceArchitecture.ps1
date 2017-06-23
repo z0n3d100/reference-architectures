@@ -7,7 +7,7 @@ param(
     [Parameter(Mandatory = $true)]
     $Location,
     [Parameter(Mandatory = $true)]
-    [ValidateSet("All", "Onpremise","Infrastructure", "CreateVpn","ConnectVPN", "Workload","Security")]
+    [ValidateSet("All", "Onprem","Infrastructure", "CreateVpn","ConnectVPN", "Workload","Security")]
     $Mode
 )
 
@@ -117,10 +117,10 @@ $onpremiseNetworkResourceGroupName = "ra-adds-onpremise-sp2016-rg"
 # Login to Azure and select your subscription
 Login-AzureRmAccount -SubscriptionId $SubscriptionId | Out-Null
 
-if ($Mode -eq "Onpremise" -Or $Mode -eq "All") 
+if ($Mode -eq "Onprem" -Or $Mode -eq "All") 
 {
 
-   Write-Host "Onpremise Section ---------------------------------------------------\n"
+   Write-Host "Onprem Section ---------------------------------------------------\n"
 
     $onpremiseNetworkResourceGroup = New-AzureRmResourceGroup -Name $onpremiseNetworkResourceGroupName -Location $Location
 
@@ -347,4 +347,4 @@ if ($Mode -eq "Security" -Or $Mode -eq "All")
 
 }
 
-Write-Host "Deployment of SharePoint 2016 with OnPremise network complete!"
+Write-Host "Deployment of SharePoint 2016 with Onprem network complete for mode:" $Mode
