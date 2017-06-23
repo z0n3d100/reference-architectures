@@ -5,7 +5,7 @@
     "virtualMachinesExtensionSettings": {
       "value": [
         {
-          "vms": [ "ra-adds-onpremise-vm1" ],
+          "vms": [ "ra-onprem-vm1" ],
           "extensions": [
              {
               "name": "install-adds-forest",
