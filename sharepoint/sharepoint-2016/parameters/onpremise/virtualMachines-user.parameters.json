@@ -4,7 +4,7 @@
   "parameters": {
     "virtualMachinesSettings": {
       "value": {
-        "namePrefix": "ra-adds-user",
+        "namePrefix": "ra-onprem-user",
         "computerNamePrefix": "userbox",
         "size": "Standard_DS1_v2",
         "osType": "windows",
