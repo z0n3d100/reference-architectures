@@ -8,7 +8,7 @@
         "computerNamePrefix": "ad",
         "size": "Standard_DS3_v2",
         "osType": "Windows",
-        "adminUsername": "testuser",
+        "adminUsername": "onpremuser",
         "adminPassword": "AweS0me@PW",
         "osAuthenticationType": "password",
         "nics": [

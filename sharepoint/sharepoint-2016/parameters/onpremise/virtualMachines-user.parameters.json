@@ -8,7 +8,7 @@
         "computerNamePrefix": "userbox",
         "size": "Standard_DS1_v2",
         "osType": "windows",
-        "adminUsername": "testuser",
+        "adminUsername": "onpremuser",
         "adminPassword": "AweS0me@PW",
         "osAuthenticationType": "password",
         "nics": [
@@ -48,7 +48,7 @@
           "settingsConfig": {
             "Name": "fabrikam.com",
             "OUPath": "",
-            "User": "fabrikam.com\\testuser",
+            "User": "fabrikam.com\\onpremuser",
             "Restart": true,
             "Options": 3
             },
