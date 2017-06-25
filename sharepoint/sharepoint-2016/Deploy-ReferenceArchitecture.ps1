@@ -7,7 +7,7 @@ param(
     [Parameter(Mandatory = $true)]
     $Location,
     [Parameter(Mandatory = $true)]
-    [ValidateSet("All", "Onprem","Infrastructure", "CreateVpn","ConnectVPN", "Workload","Security")]
+    [ValidateSet("All", "Onprem","Infrastructure", "CreateVpn", "Workload","Security")]
     $Mode
 )
 
@@ -237,7 +237,7 @@ if ($Mode -eq "CreateVPN" -Or $Mode -eq "All")
     # # DEV: Once the above is working.. Then the following should add it to the existing ra-sp2016
 
     # redundent
-    Write-Host "Deploying Azure Virtual Network Gateway..."
+    Write-Host "Deploying sp2016 Virtual Network Gateway..."
     New-AzureRmResourceGroupDeployment -Name "ra-adds-vpn-gateway-deployment" -ResourceGroupName $infrastructureNetworkResourceGroup.ResourceGroupName `
         -TemplateUri $virtualNetworkGatewayTemplate.AbsoluteUri -TemplateParameterFile $sp2016VirtualNetworkGatewayParametersFile
 
@@ -248,9 +248,6 @@ if ($Mode -eq "CreateVPN" -Or $Mode -eq "All")
 
 
 
-}
-if ($Mode -eq "ConnectVPN" -Or $Mode -eq "All") 
-{
     Write-Host "ConnectVPN Section ---------------------------------------------------"
 
     # OnPremise Add the replication site.
