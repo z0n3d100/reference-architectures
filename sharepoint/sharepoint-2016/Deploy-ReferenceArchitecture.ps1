@@ -221,13 +221,14 @@ if ($Mode -eq "CreateVPN" -Or $Mode -eq "All")
     $infrastructureNetworkResourceGroup = Get-AzureRmResourceGroup -Name $infrastructureResourceGroupName
 
 
+    # plan on removing
     # # SharePoint VPN Gateway ..been using the other create VPN
     # Write-Host "Creating SharePoint VPN Gateway..."
     # New-AzureRmResourceGroupDeployment -Name "ra-sp2016-vpn-deployment" `
     #    -ResourceGroupName $azureNetworkResourceGroup.ResourceGroupName -TemplateUri $virtualNetworkTemplate.AbsoluteUri `
     #    -TemplateParameterFile $virtualNetworkParametersFile
 
-
+<#
     # OnPremise VPN Gateway
     Write-Host "Deploying Onpremise Virtual Network Gateway..."
     New-AzureRmResourceGroupDeployment -Name "ra-onprem-vpn-gateway-deployment" `
@@ -256,7 +257,7 @@ if ($Mode -eq "CreateVPN" -Or $Mode -eq "All")
     New-AzureRmResourceGroupDeployment -Name "ra-adds-site-replication-deployment" `
         -ResourceGroupName $onpremNetworkResourceGroup.ResourceGroupName `
         -TemplateUri $virtualMachineExtensionsTemplate.AbsoluteUri -TemplateParameterFile $onpremiseReplicationSiteForestExtensionParametersFile
-
+#>
     $infrastructureNetworkResourceGroup = Get-AzureRmResourceGroup -Name $infrastructureResourceGroupName
     # Update DNS server to point to onpremise and azure
     Write-Host "Updating virtual network DNS..."
