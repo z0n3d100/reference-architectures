@@ -257,14 +257,14 @@ if ($Mode -eq "CreateVPN" -Or $Mode -eq "All")
     New-AzureRmResourceGroupDeployment -Name "ra-adds-site-replication-deployment" `
         -ResourceGroupName $onpremNetworkResourceGroup.ResourceGroupName `
         -TemplateUri $virtualMachineExtensionsTemplate.AbsoluteUri -TemplateParameterFile $onpremiseReplicationSiteForestExtensionParametersFile
-#>
+
     $infrastructureNetworkResourceGroup = Get-AzureRmResourceGroup -Name $infrastructureResourceGroupName
     # Update DNS server to point to onpremise and azure
     Write-Host "Updating virtual network DNS..."
     New-AzureRmResourceGroupDeployment -Name "ra-adds-vnet-onpremise-azure-dns-deployment" `
         -ResourceGroupName $infrastructureNetworkResourceGroup.ResourceGroupName `
         -TemplateUri $virtualNetworkTemplate.AbsoluteUri -TemplateParameterFile $sp2016VirtualNetworkOnpremiseAndAzureDnsParametersFile
-
+#>
     # Join the domain and create DCs
     Write-Host "Creating ADDS domain controllers..."
     New-AzureRmResourceGroupDeployment -Name "ra-adds-adds-dc-deployment" `
