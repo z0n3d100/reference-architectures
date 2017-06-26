@@ -7,7 +7,7 @@ param(
     [Parameter(Mandatory = $true)]
     $Location,
     [Parameter(Mandatory = $true)]
-    [ValidateSet("All", "Onprem","Infrastructure", "CreateVpn", "Workload","Security","Test")]
+    [ValidateSet("All", "Onprem","Infrastructure", "CreateVpn", "Workload","Security")]
     $Mode
 )
 
@@ -134,7 +134,7 @@ if ($Mode -eq "Onprem" -Or $Mode -eq "All")
         -ResourceGroupName $onpremNetworkResourceGroup.ResourceGroupName `
         -TemplateUri $virtualMachineTemplate.AbsoluteUri -TemplateParameterFile $onpremiseADDSVirtualMachinesParametersFile
 
-    # Remove the Azure DNS entry since the forest will create a DNS forwarding entry.
+    # Update DNS entry since the forest will create a DNS forwarding entry.
     Write-Host "Updating virtual network DNS servers..."
     New-AzureRmResourceGroupDeployment -Name "ra-onprem-dns-vnet-deployment" `
         -ResourceGroupName $onpremNetworkResourceGroup.ResourceGroupName -TemplateUri $virtualNetworkTemplate.AbsoluteUri `
@@ -220,15 +220,6 @@ if ($Mode -eq "CreateVPN" -Or $Mode -eq "All")
     $onpremNetworkResourceGroup = Get-AzureRmResourceGroup -Name $onpremNetworkResourceGroupName
     $infrastructureNetworkResourceGroup = Get-AzureRmResourceGroup -Name $infrastructureResourceGroupName
 
-
-    # plan on removing
-    # # SharePoint VPN Gateway ..been using the other create VPN
-    # Write-Host "Creating SharePoint VPN Gateway..."
-    # New-AzureRmResourceGroupDeployment -Name "ra-sp2016-vpn-deployment" `
-    #    -ResourceGroupName $azureNetworkResourceGroup.ResourceGroupName -TemplateUri $virtualNetworkTemplate.AbsoluteUri `
-    #    -TemplateParameterFile $virtualNetworkParametersFile
-
-<#
     # OnPremise VPN Gateway
     Write-Host "Deploying Onpremise Virtual Network Gateway..."
     New-AzureRmResourceGroupDeployment -Name "ra-onprem-vpn-gateway-deployment" `
@@ -264,7 +255,7 @@ if ($Mode -eq "CreateVPN" -Or $Mode -eq "All")
     New-AzureRmResourceGroupDeployment -Name "ra-adds-vnet-onpremise-azure-dns-deployment" `
         -ResourceGroupName $infrastructureNetworkResourceGroup.ResourceGroupName `
         -TemplateUri $virtualNetworkTemplate.AbsoluteUri -TemplateParameterFile $sp2016VirtualNetworkOnpremiseAndAzureDnsParametersFile
-#>
+
     # Join the domain and create DCs
     Write-Host "Creating ADDS domain controllers..."
     New-AzureRmResourceGroupDeployment -Name "ra-adds-adds-dc-deployment" `
@@ -345,14 +336,4 @@ if ($Mode -eq "Security" -Or $Mode -eq "All")
 
 }
 
-if ($Mode -eq "Test") 
-{
-
-    $onpremNetworkResourceGroup = Get-AzureRmResourceGroup -Name $onpremNetworkResourceGroupName    
-    # Remove the Azure DNS entry since the forest will create a DNS forwarding entry.
-    Write-Host "Updating virtual network DNS servers..."
-    New-AzureRmResourceGroupDeployment -Name "ra-onprem-dns-vnet-deployment" `
-        -ResourceGroupName $onpremNetworkResourceGroup.ResourceGroupName -TemplateUri $virtualNetworkTemplate.AbsoluteUri `
-        -TemplateParameterFile $onpremiseVirtualNetworkDnsParametersFile
-}
 Write-Host "Deployment of SharePoint 2016 with Onprem network complete for mode:" $Mode
