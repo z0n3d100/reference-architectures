@@ -7,7 +7,7 @@ param(
     [Parameter(Mandatory = $true)]
     $Location,
     [Parameter(Mandatory = $true)]
-    [ValidateSet("All", "Onprem","Infrastructure", "CreateVpn", "Workload","Security")]
+    [ValidateSet("All", "Onprem","Infrastructure", "CreateVpn", "Workload","Security","Test")]
     $Mode
 )
 
@@ -345,4 +345,14 @@ if ($Mode -eq "Security" -Or $Mode -eq "All")
 
 }
 
+if ($Mode -eq "Test") 
+{
+
+    $onpremNetworkResourceGroup = Get-AzureRmResourceGroup -Name $onpremNetworkResourceGroupName    
+    # Remove the Azure DNS entry since the forest will create a DNS forwarding entry.
+    Write-Host "Updating virtual network DNS servers..."
+    New-AzureRmResourceGroupDeployment -Name "ra-onprem-dns-vnet-deployment" `
+        -ResourceGroupName $onpremNetworkResourceGroup.ResourceGroupName -TemplateUri $virtualNetworkTemplate.AbsoluteUri `
+        -TemplateParameterFile $onpremiseVirtualNetworkDnsParametersFile
+}
 Write-Host "Deployment of SharePoint 2016 with Onprem network complete for mode:" $Mode
