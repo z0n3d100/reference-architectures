@@ -7,7 +7,7 @@ param(
     [Parameter(Mandatory = $true)]
     $Location,
     [Parameter(Mandatory = $true)]
-    [ValidateSet("All", "Onprem","Infrastructure", "CreateVpn", "Workload","Security","Test")]
+    [ValidateSet("All", "Onprem","Infrastructure", "CreateVpn", "Workload","Security")]
     $Mode
 )
 
@@ -318,10 +318,12 @@ if ($Mode -eq "Workload" -Or $Mode -eq "All")
         -ResourceGroupName $workloadResourceGroup.ResourceGroupName -TemplateUri $virtualMachineExtensionsTemplate.AbsoluteUri `
         -TemplateParameterFile $configFarmDch2Srch2ExtensionParametersFile
 
-    Write-Host "Adding DNS Arecords for Web Applications ..."
+   $infrastructureNetworkResourceGroup = Get-AzureRmResourceGroup -Name $infrastructureResourceGroupName
+
+    Write-Host "  Adding DNS Arecords for Web Applications ..."
     New-AzureRmResourceGroupDeployment -Name "ra-sp2016-add-dns-arecord-ext" `
-        -ResourceGroupName $workloadResourceGroup.ResourceGroupName -TemplateUri $virtualMachineExtensionsTemplate.AbsoluteUri `
-        -TemplateParameterFile $addArecordExtensionParametersFile        
+        -ResourceGroupName $infrastructureNetworkResourceGroup.ResourceGroupName -TemplateUri $virtualMachineExtensionsTemplate.AbsoluteUri `
+        -TemplateParameterFile $addArecordExtensionParametersFile     
 }
 
 if ($Mode -eq "Security" -Or $Mode -eq "All")
@@ -336,16 +338,5 @@ if ($Mode -eq "Security" -Or $Mode -eq "All")
 
 }
 
-if ($Mode -eq "Test") 
-{
-
-   Write-Host "Test - adding DNS A-record..."
-   $infrastructureNetworkResourceGroup = Get-AzureRmResourceGroup -Name $infrastructureResourceGroupName
-
-    Write-Host " Test Adding DNS Arecords for Web Applications ..."
-    New-AzureRmResourceGroupDeployment -Name "ra-sp2016-add-dns-arecord-ext" `
-        -ResourceGroupName $infrastructureNetworkResourceGroup.ResourceGroupName -TemplateUri $virtualMachineExtensionsTemplate.AbsoluteUri `
-        -TemplateParameterFile $addArecordExtensionParametersFile     
-}
 
 Write-Host "Deployment of SharePoint 2016 with Onprem network complete for mode:" $Mode
