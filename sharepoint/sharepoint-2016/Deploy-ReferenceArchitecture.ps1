@@ -7,7 +7,7 @@ param(
     [Parameter(Mandatory = $true)]
     $Location,
     [Parameter(Mandatory = $true)]
-    [ValidateSet("All", "Onprem","Infrastructure", "CreateVpn", "Workload","Security")]
+    [ValidateSet("All", "Onprem","Infrastructure", "CreateVpn", "Workload","Security","Test")]
     $Mode
 )
 
@@ -334,6 +334,14 @@ if ($Mode -eq "Security" -Or $Mode -eq "All")
     New-AzureRmResourceGroupDeployment -Name "ra-sp2016-sql-nsg-deployment" -ResourceGroupName $infrastructureResourceGroup.ResourceGroupName `
         -TemplateUri $networkSecurityGroupTemplate.AbsoluteUri -TemplateParameterFile $networkSecurityGroupParametersFile
 
+}
+
+if ($Mode -eq "Test") 
+{
+    Write-Host " Test Adding DNS Arecords for Web Applications ..."
+    New-AzureRmResourceGroupDeployment -Name "ra-sp2016-add-dns-arecord-ext" `
+        -ResourceGroupName $workloadResourceGroup.ResourceGroupName -TemplateUri $virtualMachineExtensionsTemplate.AbsoluteUri `
+        -TemplateParameterFile $addArecordExtensionParametersFile     
 }
 
 Write-Host "Deployment of SharePoint 2016 with Onprem network complete for mode:" $Mode
