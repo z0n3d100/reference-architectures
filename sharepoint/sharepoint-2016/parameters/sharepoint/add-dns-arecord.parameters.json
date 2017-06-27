@@ -11,7 +11,7 @@
               "name": "add-dns-arecord",
               "publisher": "Microsoft.Compute",
               "type": "CustomScriptExtension",
-              "typeHandlerVersion": "1.8",
+              "typeHandlerVersion": "1.7",
               "autoUpgradeMinorVersion": false,
               "settingsConfigMapperUri": "https://raw.githubusercontent.com/mspnp/reference-architectures/larry/sptestgood2tbd/sharepoint/sharepoint-2016/templates/sharepoint/add-arecord-extension-settings-mapper.json",
               "settingsConfig": {
