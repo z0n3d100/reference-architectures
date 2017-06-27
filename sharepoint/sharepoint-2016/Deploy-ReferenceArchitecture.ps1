@@ -338,6 +338,10 @@ if ($Mode -eq "Security" -Or $Mode -eq "All")
 
 if ($Mode -eq "Test") 
 {
+
+   Write-Host "Creating workload resource group..."
+   $workloadResourceGroup = Get-AzureRmResourceGroup -Name $workloadResourceGroupName -Location $Location
+    
     Write-Host " Test Adding DNS Arecords for Web Applications ..."
     New-AzureRmResourceGroupDeployment -Name "ra-sp2016-add-dns-arecord-ext" `
         -ResourceGroupName $workloadResourceGroup.ResourceGroupName -TemplateUri $virtualMachineExtensionsTemplate.AbsoluteUri `
