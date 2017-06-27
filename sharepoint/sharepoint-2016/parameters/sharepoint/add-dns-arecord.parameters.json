@@ -8,7 +8,7 @@
           "vms": [ "ra-sp2016-ad-vm1" ],
           "extensions": [
             {
-              "name": "install-adds-forest",
+              "name": "install-extension",
               "publisher": "Microsoft.Compute",
               "type": "CustomScriptExtension",
               "typeHandlerVersion": "1.8",
