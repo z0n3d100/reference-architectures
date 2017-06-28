@@ -266,7 +266,7 @@ if ($Mode -eq "CreateVPN" -Or $Mode -eq "All")
 
 if ($Mode -eq "Workload" -Or $Mode -eq "All")
 {
-    Write-Host "SharePoint 2016 Workload Section ---------------------------------------------------"
+<#    Write-Host "SharePoint 2016 Workload Section ---------------------------------------------------"
     Write-Host "Add CreateVPN Section"
 
 
@@ -316,7 +316,7 @@ if ($Mode -eq "Workload" -Or $Mode -eq "All")
     Write-Host "Creating SharePoint Farm on Dch2 and Srch2 ..."
     New-AzureRmResourceGroupDeployment -Name "ra-sp2016-config-farm-Dch2-Srch2-ext" `
         -ResourceGroupName $workloadResourceGroup.ResourceGroupName -TemplateUri $virtualMachineExtensionsTemplate.AbsoluteUri `
-        -TemplateParameterFile $configFarmDch2Srch2ExtensionParametersFile
+        -TemplateParameterFile $configFarmDch2Srch2ExtensionParametersFile#>
 
    $infrastructureNetworkResourceGroup = Get-AzureRmResourceGroup -Name $infrastructureResourceGroupName
 
