@@ -268,9 +268,9 @@ if ($Mode -eq "CreateVPN" -Or $Mode -eq "All")
 if ($Mode -eq "Workload" -Or $Mode -eq "All")
 {
     Write-Host "SharePoint 2016 Workload Section ---------------------------------------------------"
-    Write-Host "Add CreateVPN Section"
+    Write-Host ""
 
-
+<#
     Write-Host "Creating workload resource group..."
    $workloadResourceGroup = New-AzureRmResourceGroup -Name $workloadResourceGroupName -Location $Location
 
@@ -325,11 +325,15 @@ if ($Mode -eq "Workload" -Or $Mode -eq "All")
     New-AzureRmResourceGroupDeployment -Name "ra-sp2016-add-dns-arecord-ext" `
         -ResourceGroupName $infrastructureNetworkResourceGroup.ResourceGroupName -TemplateUri $virtualMachineExtensionsTemplate.AbsoluteUri `
         -TemplateParameterFile $addArecordExtensionParametersFile     
+#>
 
-    // Setup SQL always on for HA with Availabiliy set  
-    Write-Host " Setting up SQL for HA with Availability Sets"
+    # added to test out sql availability group
+    $workloadResourceGroup = Get-AzureRmResourceGroup -Name $workloadResourceGroupName
+
+    # Setup SQL always on for HA with Availabiliy Group  
+    Write-Host " Setting up SQL for HA with Availability Group"
     New-AzureRmResourceGroupDeployment -Name "ra-sp2016-add-SQL-availabilitygroup-ext" `
-        -ResourceGroupName $infrastructureNetworkResourceGroup.ResourceGroupName -TemplateUri $virtualMachineExtensionsTemplate.AbsoluteUri `
+        -ResourceGroupName $workloadResourceGroup.ResourceGroupName -TemplateUri $virtualMachineExtensionsTemplate.AbsoluteUri `
         -TemplateParameterFile $addSQLAvailabilityExtensionParametersFile     
     
 }
