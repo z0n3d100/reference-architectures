@@ -328,12 +328,12 @@ if ($Mode -eq "Workload" -Or $Mode -eq "All")
 #>
 
     # added to test out sql availability group
-    $workloadResourceGroup = Get-AzureRmResourceGroup -Name $workloadResourceGroupName
+   $infrastructureNetworkResourceGroup = Get-AzureRmResourceGroup -Name $infrastructureResourceGroupName
 
     # Setup SQL always on for HA with Availabiliy Group  
     Write-Host " Setting up SQL for HA with Availability Group"
     New-AzureRmResourceGroupDeployment -Name "ra-sp2016-add-SQL-availabilitygroup-ext" `
-        -ResourceGroupName $workloadResourceGroup.ResourceGroupName -TemplateUri $virtualMachineExtensionsTemplate.AbsoluteUri `
+        -ResourceGroupName $infrastructureNetworkResourceGroup.ResourceGroupName -TemplateUri $virtualMachineExtensionsTemplate.AbsoluteUri `
         -TemplateParameterFile $addSQLAvailabilityExtensionParametersFile     
     
 }
