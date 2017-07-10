@@ -73,6 +73,7 @@ $configFarmWFE1SRCH1ExtensionParametersFile = [System.IO.Path]::Combine($PSScrip
 $configFarmWfe2App2ExtensionParametersFile = [System.IO.Path]::Combine($PSScriptRoot, "parameters\sharepoint\spt-config-farm-wfe2-app2-ext.parameters.json")
 $configFarmDch2Srch2ExtensionParametersFile = [System.IO.Path]::Combine($PSScriptRoot, "parameters\sharepoint\spt-config-farm-dch2-srch2-ext.parameters.json")
 $addArecordExtensionParametersFile = [System.IO.Path]::Combine($PSScriptRoot, "parameters\sharepoint\add-dns-arecord.parameters.json")
+$addSQLAvailabilityExtensionParametersFile = [System.IO.Path]::Combine($PSScriptRoot, "parameters\sharepoint\add-sql-availabilitygroup.parameters.json")
 $networkSecurityGroupParametersFile = [System.IO.Path]::Combine($PSScriptRoot, "parameters\sharepoint\networkSecurityGroups.parameters.json")
 
 # ########################
@@ -324,6 +325,13 @@ if ($Mode -eq "Workload" -Or $Mode -eq "All")
     New-AzureRmResourceGroupDeployment -Name "ra-sp2016-add-dns-arecord-ext" `
         -ResourceGroupName $infrastructureNetworkResourceGroup.ResourceGroupName -TemplateUri $virtualMachineExtensionsTemplate.AbsoluteUri `
         -TemplateParameterFile $addArecordExtensionParametersFile     
+
+    // Setup SQL always on for HA with Availabiliy set  
+    Write-Host " Setting up SQL for HA with Availability Sets"
+    New-AzureRmResourceGroupDeployment -Name "ra-sp2016-add-SQL-availabilitygroup-ext" `
+        -ResourceGroupName $infrastructureNetworkResourceGroup.ResourceGroupName -TemplateUri $virtualMachineExtensionsTemplate.AbsoluteUri `
+        -TemplateParameterFile $addSQLAvailabilityExtensionParametersFile     
+    
 }
 
 if ($Mode -eq "Security" -Or $Mode -eq "All")
