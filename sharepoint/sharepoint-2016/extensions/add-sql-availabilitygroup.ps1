@@ -1,8 +1,8 @@
 ﻿
 $primaryInst = "SQL2.contoso.local"
 $secondaryInst = "SQL1.contoso.local"
-$MyAgPrimaryPath = "SQLSERVER:\SQL\SQL2.contoso.local\AvailabilityGroups\alwayson-ag"  
-$MyAgSecondaryPath = "SQLSERVER:\SQL\SQL1.contoso.local\AvailabilityGroups\alwayson-ag"  
+$MyAgPrimaryPath = "SQLSERVER:\SQL\SQL2.contoso.local\Default\AvailabilityGroups\alwayson-ag"  
+$MyAgSecondaryPath = "SQLSERVER:\SQL\SQL1.contoso.local\Default\AvailabilityGroups\alwayson-ag"  
 
 #Add-Type -AssemblyName "Microsoft.SqlServer.Smo"
 [System.Reflection.Assembly]::LoadWithPartialName("Microsoft.SqlServer.Smo");
