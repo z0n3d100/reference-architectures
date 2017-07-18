@@ -36,3 +36,34 @@ foreach ($db in $srv.Databases) {
     }
 }
 
+# Check to insure f:\UsageLogs directory exist
+$ComputerNameApp1 = "app1.contoso.local"
+$ComputerNameApp1 = "app2.contoso.local"
+
+$stageSvrs | %{
+         Invoke-Command -ComputerName $ComputerNameApp1 -ScriptBlock { 
+            $TARGETDIR = 'f:\UsageLogs'
+            if(!(Test-Path -Path $TARGETDIR )){
+                Write-Output "Doesn't exist create f:\UsageLogs directory"
+                New-Item -Path $TARGETDIR -type directory -Force 
+            } else 
+            { 
+                Write-Output "Directory exist: don't create"
+            } 
+         }
+}
+
+$stageSvrs | %{
+         Invoke-Command -ComputerName $ComputerNameApp2 -ScriptBlock { 
+            $TARGETDIR = 'f:\UsageLogs'
+            if(!(Test-Path -Path $TARGETDIR )){
+                Write-Output "Doesn't exist create f:\UsageLogs directory"
+                New-Item -Path $TARGETDIR -type directory -Force 
+            } else 
+            { 
+                Write-Output "Directory exist: don't create"
+            } 
+         }
+}
+
+

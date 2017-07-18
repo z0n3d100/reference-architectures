@@ -31,4 +31,3 @@ The following readme covers how to run scripts to setup the final part of SQL Al
 
 
 At this point SQL Always-On fail-over will be working. 
-
