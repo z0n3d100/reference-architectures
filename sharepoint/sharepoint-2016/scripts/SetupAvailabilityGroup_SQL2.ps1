@@ -38,7 +38,7 @@ foreach ($db in $srv.Databases) {
 
 # Check to insure f:\UsageLogs directory exist
 $ComputerNameApp1 = "app1.contoso.local"
-$ComputerNameApp1 = "app2.contoso.local"
+$ComputerNameApp2 = "app2.contoso.local"
 
 $stageSvrs | %{
          Invoke-Command -ComputerName $ComputerNameApp1 -ScriptBlock { 
