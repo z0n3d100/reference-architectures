@@ -49,7 +49,7 @@
       "value": {
         "namePrefix": "ra-sp2016-sql",
         "computerNamePrefix": "sql",
-        "size": "Standard_DS1_v2",
+        "size": "Standard_DS3_v2",
         "osType": "windows",
         "adminUsername": "testuser",
         "adminPassword": "AweS0me@PW",
