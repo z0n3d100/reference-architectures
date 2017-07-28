@@ -13,10 +13,10 @@
               "type": "CustomScriptExtension",
               "typeHandlerVersion": "1.8",
               "autoUpgradeMinorVersion": false,
-              "settingsConfigMapperUri": "https://raw.githubusercontent.com/mspnp/reference-architectures/larry/sptestgood2tbd/sharepoint/sharepoint-2016/templates/sharepoint/add-sql-availabilitygroup-settings-mapper.json",
+              "settingsConfigMapperUri": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/sharepoint/sharepoint-2016/templates/sharepoint/add-sql-availabilitygroup-settings-mapper.json",
               "settingsConfig": {
                 "fileUris": [
-                  "https://raw.githubusercontent.com/mspnp/reference-architectures/larry/sptestgood2tbd/sharepoint/sharepoint-2016/extensions/add-sql-availabilitygroup.ps1"
+                  "https://raw.githubusercontent.com/mspnp/reference-architectures/master/sharepoint/sharepoint-2016/extensions/add-sql-availabilitygroup.ps1"
                 ]
               },
               "protectedSettingsConfig": {
