@@ -80,3 +80,20 @@ You must use a remote desktop client to access the file share witness VM, then c
 - For the WDP load balancer rule, set the [idle timeout](https://azure.microsoft.com/blog/new-configurable-idle-timeout-for-azure-load-balancer/) to **30 minutes**.
 
 - In the WDP load-balancer configuration, set the session persistence property to **Client IP**.
+
+# Modifying this reference architecture
+
+The deployment scripts contain paths to the files in GitHub. If you fork this repository or deploy from a branch other than master, you'll need to update the paths.
+
+Modify the paths in the following files by replacing `/mspnp/reference-architectures/master/` with your repo and branch, such as `/user/reference-architectures/my-branch/`.   
+
+* add-adds-domain-controller.parameters.json
+  * `https://raw.githubusercontent.com/mspnp/reference-architectures/master/sap/sap-hana/templates/adds/adds-domain-controller-extension-settings-mapper.json`
+  * `https://raw.githubusercontent.com/mspnp/reference-architectures/master/sap/sap-hana/extensions/adds.ps1`
+* create-adds-forest-extension.parameters.json
+  * `https://raw.githubusercontent.com/mspnp/reference-architectures/master/sap/sap-hana/templates/adds/ad-forest-extension-settings-mapper.json`
+  * `https://raw.githubusercontent.com/mspnp/reference-architectures/master/sap/sap-hana/extensions/adds-forest.ps1`
+* sapScs.parameters.json
+  * `https://raw.githubusercontent.com/mspnp/reference-architectures/master/sap/sap-hana/extensions/PrepareWSFC.ps1.zip`
+
+
