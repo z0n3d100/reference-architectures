@@ -1,0 +1,61 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualMachinesSettings": {
+      "value": {
+        "namePrefix": "ra-sss-hub",
+        "computerNamePrefix": "hubjumpbox",
+        "size": "Standard_DS1_v2",
+        "osType": "linux",
+        "adminUsername": "adminUser",
+        "adminPassword": "AweS0me@PW",
+        "osAuthenticationType": "password",
+        "nics": [
+          {
+            "isPublic": "false",
+            "subnetName": "mgmt",
+            "privateIPAllocationMethod": "Dynamic",
+            "publicIPAllocationMethod": "Dynamic",
+            "domainNameLabelPrefix":"",
+            "enableIPForwarding": false,
+            "dnsServers": [
+            ],
+            "isPrimary": "true"
+          }
+        ],
+        "imageReference": {
+          "publisher": "Canonical",
+          "offer": "UbuntuServer",
+          "sku": "14.04.5-LTS",
+          "version": "latest"
+        },
+        "dataDisks": {
+          "count": 0,
+          "properties": {}
+        },
+        "osDisk": {
+          "caching": "ReadWrite"
+        },
+        "extensions": [ ],
+        "availabilitySet": {
+          "useExistingAvailabilitySet": "No",
+          "name": "ra-sss-hub-as"
+        }
+      }
+    },
+    "virtualNetworkSettings": {
+      "value": {
+        "name": "ra-sss-hub-vnet",
+        "resourceGroup": "ra-sss-hub-net-rg"
+      }
+    },
+    "buildingBlockSettings": {
+      "value": {
+        "storageAccountsCount": 1,
+        "vmCount": 1,
+        "vmStartIndex": 1
+      }
+    }
+  }
+}

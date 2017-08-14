@@ -184,10 +184,10 @@ You can deploy this reference architecture by using PowerShell, bash, or the Azu
 
 <!-- links -->
 [0]: ./diagram.png
-[bb]: https://github.com/mspnp/template-building-blocks
-[bb-vnet]: https://github.com/mspnp/template-building-blocks/tree/master/templates/buildingBlocks/vnet-n-subnet
-[bb-nsg]: https://github.com/mspnp/template-building-blocks/tree/master/templates/buildingBlocks/networkSecurityGroups
-[bb-vm]: https://github.com/mspnp/template-building-blocks/tree/master/templates/buildingBlocks/multi-vm-n-nic-m-storage
+[bb]: https://github.com/mspnp/template-building-blocks/v1.0.0
+[bb-vnet]: https://github.com/mspnp/template-building-blocks/v1.0.0/tree/master/templates/buildingBlocks/vnet-n-subnet
+[bb-nsg]: https://github.com/mspnp/template-building-blocks/v1.0.0/tree/master/templates/buildingBlocks/networkSecurityGroups
+[bb-vm]: https://github.com/mspnp/template-building-blocks/v1.0.0/tree/master/templates/buildingBlocks/multi-vm-n-nic-m-storage
 [deployment]: #Solution-deployment
 [solution-shscript]: https://github.com/mspnp/reference-architectures/blob/master/guidance-compute-single-vm/deploy-reference-architecture.sh
 [solution-psscript]: https://github.com/mspnp/reference-architectures/blob/master/guidance-compute-single-vm/Deploy-ReferenceArchitecture.ps1
