@@ -221,7 +221,7 @@ You can deploy this reference architecture by using the [Azure Building Blocks][
 	For instance, the command below can be used to deploy a Windows VM to a resource group named `ra-single-windows-vm-rg` in the `West US` Azure region:
 
 	```bash
-		azbb -s xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx -g <resource_group_name> -l <location> -p <parameter_file> --deploy
+		azbb -s xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx -g ra-single-windows-vm-rg -l westus -p ./single-vm.json --deploy
 	```
 
 <!-- links -->
