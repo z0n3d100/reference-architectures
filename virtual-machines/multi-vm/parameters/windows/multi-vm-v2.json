@@ -52,7 +52,7 @@
                         "namePrefix": "ra-multi",
                         "computerNamePrefix": "web",
                         "adminUsername": "testadminuser",
-                        "adminPassword": "test$!Passw0rd111",
+                        "adminPassword": "",
                         "osType": "windows",     
                         "virtualNetwork": {
                             "name": "ra-multi-vm-vnet"
