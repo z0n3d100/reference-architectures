@@ -52,7 +52,7 @@
             "namePrefix": "ra-single-linux",
             "computerNamePrefix": "web",
             "size": "Standard_DS1_v2",
-            "adminUsername": "testadminuser",
+            "adminUsername": "xxx",
             "sshPublicKey":"yyy",
             "virtualNetwork": {
               "name": "ra-single-linux-vm-vnet"
