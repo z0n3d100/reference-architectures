@@ -51,8 +51,8 @@
                         "vmCount": 3,
                         "namePrefix": "ra-multi",
                         "computerNamePrefix": "web",
-                        "adminUsername": "xxx",
-                        "sshPublicKey":"yyy",
+                        "adminUsername": "",
+                        "sshPublicKey":"",
                         "osType": "linux",     
                         "virtualNetwork": {
                             "name": "ra-multi-vm-vnet"

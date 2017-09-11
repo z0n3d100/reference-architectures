@@ -51,8 +51,8 @@
                         "vmCount": 3,
                         "namePrefix": "ra-multi",
                         "computerNamePrefix": "web",
-                        "adminUsername": "xxx",
-                        "adminPassword": "yyy",
+                        "adminUsername": "",
+                        "adminPassword": "",
                         "osType": "windows",     
                         "virtualNetwork": {
                             "name": "ra-multi-vm-vnet"
