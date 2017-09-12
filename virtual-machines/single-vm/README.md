@@ -92,8 +92,8 @@ The parameters below create a VM named `ra-single-linux-vm1` in the `web` subnet
 			"namePrefix": "ra-single-linux",
 			"computerNamePrefix": "web",
 			"size": "Standard_DS1_v2",
-			"adminUsername": "testadminuser",
-			"sshPublicKey":"yyy",
+			"adminUsername": "",
+			"sshPublicKey":"",
 			"virtualNetwork": {
 				"name": "ra-single-linux-vm-vnet"
 			},

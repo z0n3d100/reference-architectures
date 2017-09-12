@@ -1,5 +1,5 @@
 #
-# format-2-data-disks.sh
+# format-disk.sh
 #
 #!/bin/bash
 
