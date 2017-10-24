@@ -3,7 +3,7 @@
 $TrustedDomainName = "contoso.com"
 #$TrustedDomainDnsIpAddresses = "192.168.0.4,192.168.0.5"
 
-$TrustingDomainName = "treyresearch.com"
+$TrustingDomainName = "treyresearch.net"
 $TrustingDomainDnsIpAddresses = "10.0.4.4,10.0.4.5"
 
 $ForwardIpAddress  = $TrustingDomainDnsIpAddresses

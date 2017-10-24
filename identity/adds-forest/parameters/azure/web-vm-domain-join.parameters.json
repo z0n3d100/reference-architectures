@@ -15,9 +15,9 @@
               "autoUpgradeMinorVersion": true,
               "settingsConfigMapperUri": "https://raw.githubusercontent.com/mspnp/template-building-blocks/v1.0.0/templates/resources/Microsoft.Compute/virtualMachines/extensions/vm-extension-passthrough-settings-mapper.json",
               "settingsConfig": {
-                "Name": "treyresearch.com",
+                "Name": "treyresearch.net",
                 "OUPath": "",
-                "User": "treyresearch.com\\testuser",
+                "User": "treyresearch.net\\testuser",
                 "Restart": true,
                 "Options": 3
               },
