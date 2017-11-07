@@ -16,7 +16,7 @@
               "settingsConfigMapperUri": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/identity/adds-forest/templates/onpremise/ad-forest-extension-settings-mapper.json",
               "settingsConfig": {
                 "activeDirectorySettings": {
-                  "domainName": "treyresearch.com",
+                  "domainName": "treyresearch.net",
                   "domainNetbiosName": "treyresearch",
                   "safeModePassword": "Saf3M0de@PW"
                 },

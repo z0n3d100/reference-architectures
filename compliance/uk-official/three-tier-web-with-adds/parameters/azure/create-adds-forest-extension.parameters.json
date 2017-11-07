@@ -19,7 +19,7 @@
               "settingsConfigMapperUri": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/compliance/uk-official/three-tier-web-with-adds/templates/onpremise/adds-domain-controller-extension-settings-mapper.json",
               "settingsConfig": {
                 "activeDirectorySettings": {
-                  "domainName": "treyresearch.com",
+                  "domainName": "treyresearch.net",
                   "domainNetbiosName": "treyresearch",
                   "safeModePassword": "Saf3M0de@PW"
                 },
