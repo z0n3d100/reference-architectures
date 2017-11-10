@@ -177,7 +177,9 @@
                   "startingIPAddress": "10.0.5.4",
                   "isPrimary": true,
                   "enableIPForwarding": false,
-                  "dnsServers": [ ]
+                  "backendPoolNames": [
+                    "ra-adfs-adfs-lb-bep"
+                  ]
                 }
               ],
               "imageReference": {
@@ -259,7 +261,10 @@
                         "privateIPAllocationMethod": "Static",
                         "startingIPAddress": "10.0.6.4",
                         "isPrimary": true,
-                        "enableIPForwarding": false
+                        "enableIPForwarding": false,
+                        "backendPoolNames": [
+                          "ra-adfs-proxy-lb-bep"
+                        ]
                     }
                 ],
                 "imageReference": {
