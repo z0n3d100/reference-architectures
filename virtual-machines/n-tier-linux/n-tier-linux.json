@@ -68,7 +68,7 @@
                                 "autoUpgradeMinorVersion": true,
                                 "settings": {
                                     "fileUris": [
-                                        "https://raw.githubusercontent.com/mspnp/reference-architectures/master/virtual-machines/multi-vm/extensions/linux/install-apache.sh"
+                                        "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/linux/install-apache.sh"
                                     ],
                                     "commandToExecute": "sh install-apache.sh"
                                 },
