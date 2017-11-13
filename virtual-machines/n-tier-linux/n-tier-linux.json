@@ -240,7 +240,7 @@
                                 "autoUpgradeMinorVersion": true,
                                 "settings": {
                                     "fileUris": [
-                                        "https://raw.githubusercontent.com/mspnp/reference-architectures/master/virtual-machines/n-tier-linux/extensions/linux/install-cassandra.sh"
+                                        "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/linux/install-cassandra.sh"
                                     ],
                                     "commandToExecute": "[concat('bash install-cassandra.sh rantierdatanode11 rantierops1 ra-ntier-dc-',resourceGroup().location,' ',resourceGroup().location)]"
                                 },
@@ -281,7 +281,7 @@
                                 "autoUpgradeMinorVersion": true,
                                 "settings": {
                                     "fileUris": [
-                                        "https://raw.githubusercontent.com/mspnp/reference-architectures/master/virtual-machines/n-tier-linux/extensions/linux/install-opscenter.sh"
+                                        "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/linux/install-opscenter.sh"
                                     ],
                                     "commandToExecute": "[concat('sudo bash install-opscenter.sh rantierdatanode11 ', resourceGroup().location)]"
                                 },
