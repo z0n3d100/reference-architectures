@@ -136,7 +136,7 @@
                                     "autoUpgradeMinorVersion": true,
                                     "settings": {
                                         "fileUris": [
-                                            "https://raw.githubusercontent.com/mspnp/reference-architectures/peter/script-update/scripts/windows/ad/adds-forest.ps1"
+                                            "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/windows/ad/adds-forest.ps1"
                                         ]
                                     },
                                     "protectedSettings": {
@@ -151,7 +151,7 @@
                                     "autoUpgradeMinorVersion": true,
                                     "settings": {
                                         "fileUris": [
-                                            "https://raw.githubusercontent.com/mspnp/reference-architectures/peter/script-update/scripts/windows/ad/adds-replication-site.ps1"
+                                            "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/windows/ad/adds-replication-site.ps1"
                                         ]
                                     },
                                     "protectedSettings": {
@@ -236,7 +236,7 @@
                                     "autoUpgradeMinorVersion": true,
                                     "settings": {
                                         "fileUris": [
-                                            "https://raw.githubusercontent.com/mspnp/reference-architectures/peter/script-update/scripts/windows/ad/adds.ps1"
+                                            "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/windows/ad/adds.ps1"
                                         ]
                                     },
                                     "protectedSettings": {
@@ -625,10 +625,7 @@
                             "frontendIPConfigurations": [
                                 {
                                     "name": "webFrontEndIPConfig1",
-                                    "applicationGatewayType": "Internal",
-                                    "internalApplicationGatewaySettings": {
-                                        "subnetName": "appgateway"
-                                    }
+                                    "applicationGatewayType": "Public"
                                 }
                             ],
                             "frontendPorts": [
@@ -642,13 +639,13 @@
                                     "name": "webBackendAddressPool",
                                     "backendAddresses": [
                                         {
-                                            "ipAddress": "10.0.1.4"
-                                        },
-                                        {
                                             "ipAddress": "10.0.1.5"
                                         },
                                         {
                                             "ipAddress": "10.0.1.6"
+                                        },
+                                        {
+                                            "ipAddress": "10.0.1.7"
                                         }
                                     ]
                                 }
@@ -731,7 +728,7 @@
                                 "typeHandlerVersion": "2.1",
                                 "autoUpgradeMinorVersion": true,
                                 "settings": {
-                                    "ModulesUrl": "https://raw.githubusercontent.com/mspnp/reference-architectures/peter/script-update/scripts/windows/iisaspnet.ps1.zip",
+                                    "ModulesUrl": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/windows/iisaspnet.ps1.zip",
                                     "configurationFunction": "iisaspnet.ps1\\iisaspnet"
                                 },
                                 "protectedSettings": {}
@@ -741,7 +738,7 @@
                             "frontendIPConfigurations": [
                                 {
                                     "name": "biz-lb-fe-config1",
-                                    "loadBalancerType": "Internal",
+                                    "loadBalancerType":,
                                     "internalLoadBalancerSettings": {
                                         "privateIPAddress": "10.0.2.100",
                                         "subnetName": "biz"
@@ -855,9 +852,7 @@
                             ],
                             "securityRules": [
                                 {
-                                    "name": "HTTP",
-                                    "sourceAddressPrefix": "10.0.0.0/16",
-                                    "priority": 100
+                                    "name": "HTTP"
                                 }
                             ]
                         },
