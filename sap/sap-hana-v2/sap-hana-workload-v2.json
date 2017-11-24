@@ -235,9 +235,7 @@
               },
               "dataDisks": {
                 "count": 1,
-                "properties": {
-                  "diskSizeGB": 1623
-                }
+                "diskSizeGB": 1423
               },
               "loadBalancerSettings": {
                 "frontendIPConfigurations": [
@@ -539,9 +537,7 @@
               },
               "dataDisks": {
                 "count": 2,
-                "properties": {
-                  "diskSizeGB": 1023
-                }
+                "diskSizeGB": 1023
               }              
             }
           ]
