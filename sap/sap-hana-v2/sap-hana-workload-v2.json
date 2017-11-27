@@ -490,7 +490,7 @@
             {
               "namePrefix": "sap-han",
               "computerNamePrefix": "sap-han",
-              "size": "Standard_GS5",
+              "size": "Standard_DS2",
               "adminUsername": "testuser",
               "adminPassword": "AweS0me@PW",
               "osType": "linux",
