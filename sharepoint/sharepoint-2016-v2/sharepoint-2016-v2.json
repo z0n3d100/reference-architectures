@@ -1,0 +1,744 @@
+{
+    "$schema": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/schemas/buildingBlocks.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "buildingBlocks": {
+            "value": [
+                {
+                    "type": "VirtualNetwork",
+                    "resourceGroupName": "ra-onprem-sp2016-rg",
+                    "settings": [
+                        {
+                            "name": "ra-onprem-vnet",
+                            "resourceGroupName": "ra-onprem-sp2016-rg",
+                            "addressPrefixes": [
+                              "192.168.0.0/16"
+                            ],
+                            "subnets": [
+                              {
+                                "name": "user",
+                                "addressPrefix": "192.168.1.0/24"
+                              },
+                              {
+                                "name": "adds",
+                                "addressPrefix": "192.168.0.0/24"
+                              },
+                              {
+                                "name": "GatewaySubnet",
+                                "addressPrefix": "192.168.255.224/27"
+                              }
+                            ],
+                            "dnsServers": [
+                              "192.168.0.4",
+                              "192.168.0.5",
+                              "168.63.129.16"
+                            ]                            
+                        }
+                    ]
+                },
+                {
+                    "type": "VirtualNetwork",
+                    "resourceGroupName": "ra-sp2016-network-rg",
+                    "settings":[
+                        {
+                            "name": "ra-sp2016-vnet",
+                            "addressPrefixes": [
+                              "10.0.0.0/16"
+                            ],
+                            "subnets": [
+                              {
+                                "name": "web",
+                                "addressPrefix": "10.0.1.0/24"
+                              },
+                              {
+                                "name": "cache",
+                                "addressPrefix": "10.0.2.0/24"
+                              },
+                              {
+                                "name": "sql",
+                                "addressPrefix": "10.0.3.0/24"
+                              },
+                              {
+                                "name": "ad",
+                                "addressPrefix": "10.0.4.0/24"
+                              },
+                              {
+                                "name": "app",
+                                "addressPrefix": "10.0.5.0/24"
+                              },
+                              {
+                                "name": "search",
+                                "addressPrefix": "10.0.6.0/24"
+                              },
+                              {
+                                "name": "mgmt",
+                                "addressPrefix": "10.0.0.128/25"
+                              },
+                              {
+                                "name": "GatewaySubnet",
+                                "addressPrefix": "10.0.255.224/27"
+                              }
+                            ],
+                            "dnsServers": [
+                              "10.0.4.4",
+                              "10.0.4.5",
+                              "168.63.129.16"
+                            ]
+                        }                        
+                    ]
+                },                
+                {
+                    "type": "VirtualNetworkGateway",
+                    "settings":[
+                        {
+                            "name": "ra-onprem-vpn-vgw",
+                            "resourceGroupName": "ra-onprem-sp2016-rg",
+                            "gatewayType": "Vpn",
+                            "vpnType": "RouteBased",
+                            "sku": "Basic",
+                            "isPublic": true,
+                            "virtualNetwork": {
+                                "name": "ra-onprem-vnet",
+                                "resourceGroupName": "ra-onprem-sp2016-rg"
+                            }
+                        },
+                        {
+                            "name": "ra-adds-vpn-vgw",
+                            "resourceGroupName": "ra-sp2016-network-rg",
+                            "gatewayType": "Vpn",
+                            "vpnType": "RouteBased",
+                            "sku": "Basic",
+                            "isPublic": true,
+                            "virtualNetwork": {
+                                "name": "ra-sp2016-vnet",
+                                "resourceGroupName": "ra-sp2016-network-rg"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "Connection",
+                    "settings":[
+                        {
+                            "name": "ra-adds-vpn-cn",
+                            "connectionType": "Vnet2Vnet",
+                            "sharedKey": "123secret",
+                            "routingWeight": 100,
+                            "resourceGroupName": "ra-sp2016-network-rg",
+                            "virtualNetworkGateway1": {
+                              "name": "ra-adds-vpn-vgw",
+                              "resourceGroupName": "ra-sp2016-network-rg"
+                            },
+                            "virtualNetworkGateway2": {
+                              "name": "ra-onprem-vpn-vgw",
+                              "resourceGroupName": "ra-onprem-sp2016-rg"
+                            }        
+                        },
+                        {
+                            "name": "ra-onprem-vpn-cn",
+                            "connectionType": "Vnet2Vnet",
+                            "sharedKey": "123secret",
+                            "resourceGroupName": "ra-onprem-sp2016-rg",
+                            "routingWeight": 101,
+                            "virtualNetworkGateway1": {
+                              "name": "ra-onprem-vpn-vgw",
+                              "resourceGroupName": "ra-onprem-sp2016-rg"
+                            },
+                            "virtualNetworkGateway2": {
+                              "name": "ra-adds-vpn-vgw",
+                              "resourceGroupName": "ra-sp2016-network-rg"
+                            }                            
+                        }
+                    ]
+                },                
+                {
+                    "type": "VirtualMachine",
+                    "resourceGroupName": "ra-onprem-sp2016-rg",
+                    "settings":[
+                        {
+                            "vmCount": 2,
+                            "namePrefix": "ra-onprem",
+                            "computerNamePrefix": "ad",
+                            "size": "Standard_DS3_v2",
+                            "osType": "windows",
+                            "adminUsername": "onpremuser",
+                            "adminPassword": "AweS0me@PW",
+                            "virtualNetwork": {
+                                "name": "ra-onprem-vnet",
+                                "resourceGroupName": "ra-onprem-sp2016-rg"                                                        
+                            },
+                            "nics": [
+                              {
+                                "isPublic": true,
+                                "subnetName": "adds",
+                                "privateIPAllocationMethod": "Static",
+                                "startingIPAddress": "192.168.0.4",
+                                "enableIPForwarding": false,
+                                "isPrimary": true,
+                                "dnsServers": [
+                                    "168.63.129.16",
+                                    "192.168.0.4",
+                                    "192.168.0.5"
+                                ]
+                              }
+                            ],
+                            "imageReference": {
+                              "publisher": "MicrosoftWindowsServer",
+                              "offer": "WindowsServer",
+                              "sku": "2012-R2-Datacenter",
+                              "version": "latest"
+                            },
+                            "dataDisks": {
+                              "count": 1
+                            }                           
+                        }
+                    ]
+                },
+                {
+                  "type": "VirtualMachineExtension",
+                  "resourceGroupName": "ra-onprem-sp2016-rg",
+                  "settings":[
+                    {
+                      "vms": [
+                        "ra-onprem-vm1"
+                      ],
+                      "extensions": [
+                        {
+                          "name": "addsc",
+                          "publisher": "Microsoft.Powershell",
+                          "type": "DSC",
+                          "typeHandlerVersion": "2.1",
+                          "autoUpgradeMinorVersion": true,
+                          "settings": {
+                            "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/adds.zip",
+                            "ConfigurationFunction":"adds-forest-site.ps1\\CreateForest",
+                            "Properties": {
+                                "DomainName": "fabrikam.com",
+                                "DomainNetbiosName": "fabrikam",
+                                "SiteName": "Azure-Vnet-Site",
+                                "OnpremSiteName": "Default-First-Site-Name",
+                                "Cidr": "10.0.0.0/16",
+                                "ReplicationFrequency": 10,                                
+                                "AdminCreds": {
+                                    "UserName": "onpremuser",
+                                    "Password": "PrivateSettingsRef:AdminPassword"
+                                },
+                                "SafeModeAdminCreds": {
+                                    "UserName": "testsafeuser",
+                                    "Password": "PrivateSettingsRef:SafeModeAdminPassword"
+                                }
+                            }
+                          },
+                          "protectedSettings": {
+                            "Items": {
+                                "AdminPassword": "AweS0me@PW",
+                                "SafeModeAdminPassword": "Saf3M0de@PW"
+                            }
+                          }              
+                        }
+                      ]
+                    },
+                    {
+                      "vms": [
+                        "ra-onprem-vm2"
+                      ],
+                      "extensions": [
+                        {
+                          "name": "addsc",
+                          "publisher": "Microsoft.Powershell",
+                          "type": "DSC",
+                          "typeHandlerVersion": "2.1",
+                          "autoUpgradeMinorVersion": true,
+                          "settings": {
+                            "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/adds.zip",
+                            "ConfigurationFunction":"adds.ps1\\CreateDomainController",
+                            "Properties": {
+                              "DomainName": "fabrikam.com",
+                              "SiteName": "Default-First-Site-Name",
+                              "PrimaryDcIpAddress": "192.168.0.4",
+                              "AdminCreds": {
+                                "UserName": "onpremuser",
+                                "Password": "PrivateSettingsRef:AdminPassword"
+                              },
+                              "SafeModeAdminCreds": {
+                                "UserName": "testsafeuser",
+                                "Password": "PrivateSettingsRef:SafeModeAdminPassword"
+                              }
+                            }
+                          },
+                          "protectedSettings": {
+                            "Items": {
+                                "AdminPassword": "AweS0me@PW",
+                                "SafeModeAdminPassword": "Saf3M0de@PW"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+
+
+                {
+                    "type": "VirtualNetwork",
+                    "resourceGroupName": "ra-onprem-sp2016-rg",
+                    "settings":[
+                        {
+                            "name": "ra-onprem-vnet",
+                            "addressPrefixes": [
+                              "192.168.0.0/16"
+                            ],
+                            "subnets": [
+                              {
+                                "name": "user",
+                                "addressPrefix": "192.168.1.0/24"
+                              },          
+                              {
+                                "name": "adds",
+                                "addressPrefix": "192.168.0.0/24"
+                              },
+                              {
+                                "name": "GatewaySubnet",
+                                "addressPrefix": "192.168.255.224/27"
+                              }
+                            ],
+                            "dnsServers": [
+                              "192.168.0.4",
+                              "192.168.0.5",
+                              "10.0.4.4",
+                              "10.0.4.5",
+                              "168.63.129.16"
+                            ]                            
+                        }
+                    ]
+                },
+                {
+                    "type": "VirtualMachine",
+                    "resourceGroupName": "ra-sp2016-network-rg",
+                    "settings":[
+                        {
+                            "namePrefix": "ra-sp-jb",
+                            "computerNamePrefix": "jb",
+                            "size": "Standard_DS1_v2",
+                            "osType": "windows",
+                            "adminUsername": "testuser",
+                            "adminPassword": "AweS0me@PW",
+                            "virtualNetwork": {
+                                "name": "ra-sp2016-vnet",
+                                "resourceGroupName": "ra-sp2016-network-rg"                                                        
+                            },
+                            "nics": [
+                              {
+                                "isPublic": true,
+                                "isPrimary": true,
+                                "subnetName": "mgmt",
+                                "privateIPAllocationMethod": "Dynamic",
+                                "publicIPAllocationMethod": "Static",
+                                "enableIPForwarding": false
+                              }
+                            ],
+                            "imageReference": {
+                              "publisher": "MicrosoftWindowsServer",
+                              "offer": "WindowsServer",
+                              "sku": "2012-R2-Datacenter",
+                              "version": "latest"
+                            },
+                            "dataDisks": {
+                              "count": 1
+                            }                            
+                        }
+                    ]
+                },
+                {
+                    "type": "VirtualMachine",
+                    "resourceGroupName": "ra-sp2016-network-rg",
+                    "settings":[
+                        {
+                            "vmCount": 2,
+                            "namePrefix": "ra-sp-ad",
+                            "computerNamePrefix": "ad",
+                            "size": "Standard_DS1_v2",
+                            "osType": "windows",
+                            "adminUsername": "testuser",
+                            "adminPassword": "AweS0me@PW",
+                            "virtualNetwork": {
+                                "name": "ra-sp2016-vnet",
+                                "resourceGroupName": "ra-sp2016-network-rg"                                                        
+                            },
+                            "nics": [
+                              {
+                                "isPublic": true,
+                                "isPrimary": true,
+                                "subnetName": "ad",
+                                "privateIPAllocationMethod": "Static",
+                                "startingIPAddress": "10.0.4.4",
+                                "enableIPForwarding": false
+                              }
+                            ],
+                            "imageReference": {
+                              "publisher": "MicrosoftWindowsServer",
+                              "offer": "WindowsServer",
+                              "sku": "2012-R2-Datacenter",
+                              "version": "latest"
+                            },
+                            "dataDisks": {
+                              "count": 1
+                            }                            
+                        }
+                    ]
+                },
+                {
+                    "type": "VirtualMachineExtension",
+                    "resourceGroupName": "ra-sp2016-network-rg",
+                    "settings":[
+                      {
+                        "vms": [
+                          "ra-sp-ad-vm1"
+                        ],
+                        "extensions": [
+                          {
+                            "name": "addsc",
+                            "publisher": "Microsoft.Powershell",
+                            "type": "DSC",
+                            "typeHandlerVersion": "2.1",
+                            "autoUpgradeMinorVersion": true,
+                            "settings": {
+                              "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/adds.zip",
+                              "ConfigurationFunction":"adds-forest.ps1\\CreateForest",
+                              "Properties": {
+                                "DomainName": "contoso.local",
+                                "DomainNetbiosName": "contoso",
+                                "AdminCreds": {
+                                  "UserName": "testuser",
+                                  "Password": "PrivateSettingsRef:AdminPassword"
+                                },
+                                "SafeModeAdminCreds": {
+                                  "UserName": "testsafeuser",
+                                  "Password": "PrivateSettingsRef:SafeModeAdminPassword"
+                                }
+                              }
+                            },
+                            "protectedSettings": {
+                              "Items": {
+                                  "AdminPassword": "AweS0me@PW",
+                                  "SafeModeAdminPassword": "Saf3M0de@PW"
+                              }
+                            }              
+                          }
+                        ]
+                      },
+                      {
+                        "vms": [
+                          "ra-sp-ad-vm2"
+                        ],
+                        "extensions": [
+                          {
+                            "name": "addsc",
+                            "publisher": "Microsoft.Powershell",
+                            "type": "DSC",
+                            "typeHandlerVersion": "2.1",
+                            "autoUpgradeMinorVersion": true,
+                            "settings": {
+                              "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/adds.zip",
+                              "ConfigurationFunction":"adds.ps1\\CreateDomainController",
+                              "Properties": {
+                                "DomainName": "contoso.local",
+                                "SiteName": "Default-First-Site-Name",
+                                "PrimaryDcIpAddress": "10.0.4.4",
+                                "AdminCreds": {
+                                  "UserName": "testuser",
+                                  "Password": "PrivateSettingsRef:AdminPassword"
+                                },
+                                "SafeModeAdminCreds": {
+                                  "UserName": "testsafeuser",
+                                  "Password": "PrivateSettingsRef:SafeModeAdminPassword"
+                                }
+                              }
+                            },
+                            "protectedSettings": {
+                              "Items": {
+                                  "AdminPassword": "AweS0me@PW",
+                                  "SafeModeAdminPassword": "Saf3M0de@PW"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                },
+                {
+                    "type": "VirtualNetwork",
+                    "resourceGroupName": "ra-sp2016-network-rg",
+                    "settings":[
+                        {
+                            "name": "ra-sp2016-vnet",
+                            "addressPrefixes": [
+                              "10.0.0.0/16"
+                            ],
+                            "subnets": [
+                              {
+                                "name": "web",
+                                "addressPrefix": "10.0.1.0/24"
+                              },
+                              {
+                                "name": "cache",
+                                "addressPrefix": "10.0.2.0/24"
+                              },
+                              {
+                                "name": "sql",
+                                "addressPrefix": "10.0.3.0/24"
+                              },
+                              {
+                                "name": "ad",
+                                "addressPrefix": "10.0.4.0/24"
+                              },
+                              {
+                                "name": "app",
+                                "addressPrefix": "10.0.5.0/24"
+                              },
+                              {
+                                "name": "search",
+                                "addressPrefix": "10.0.6.0/24"
+                              },
+                              {
+                                "name": "mgmt",
+                                "addressPrefix": "10.0.0.128/25"
+                              },
+                              {
+                                "name": "GatewaySubnet",
+                                "addressPrefix": "10.0.255.224/27"
+                              }
+                            ],
+                            "dnsServers": [
+                              "10.0.4.4",
+                              "10.0.4.5"
+                            ]
+                        }
+                    ]
+                },               
+                {
+                    "type": "VirtualMachine",
+                    "resourceGroupName": "ra-sp2016-network-rg",
+                    "settings":[
+                        {
+                            "vmCount": 2,
+                            "namePrefix": "ra-sp-sql",
+                            "computerNamePrefix": "sql",
+                            "size": "Standard_DS3_v2",
+                            "osType": "windows",
+                            "adminUsername": "testuser",
+                            "adminPassword": "AweS0me@PW",
+                            "virtualNetwork": {
+                                "name": "ra-sp2016-vnet",
+                                "resourceGroupName": "ra-sp2016-network-rg"                                                        
+                            },
+                            "nics": [
+                              {
+                                "isPublic": true,
+                                "isPrimary": true,
+                                "subnetName": "sql",
+                                "privateIPAllocationMethod": "Dynamic",
+                                "enableIPForwarding": false,
+                                "backendPoolNames": [
+                                  "ra-sp-sql-lb-bep1"
+                                ]
+                              }
+                            ],
+                            "imageReference": {
+                              "publisher": "MicrosoftSQLServer",
+                              "offer": "SQL2016-WS2012R2",
+                              "sku": "Enterprise",
+                              "version": "latest"
+                            },
+                            "dataDisks": {
+                              "count": 2,
+                              "diskSizeGB": 1000
+                            },
+                            "loadBalancerSettings": {
+                                "name": "ra-sp-sql-lb",
+                                "frontendIPConfigurations": [
+                                  {
+                                    "name": "ra-sp-sql-lbfe1",
+                                    "loadBalancerType": "Internal",
+                                    "internalLoadBalancerSettings": {
+                                      "privateIPAddress": "10.0.3.100",
+                                      "subnetName": "sql"
+                                    }
+                                  }
+                                ],
+                                "loadBalancingRules": [
+                                  {
+                                    "name": "SQLAlwaysOnEndPointListener",
+                                    "frontendPort": 1433,
+                                    "backendPort": 1433,
+                                    "protocol": "Tcp",
+                                    "backendPoolName": "ra-sp-sql-lb-bep1",
+                                    "frontendIPConfigurationName": "ra-sp-sql-lbfe1",
+                                    "enableFloatingIP": true,
+                                    "probeName": "ra-sp-sql-lbp1"
+                                  }
+                                ],
+                                "probes": [
+                                  {
+                                    "name": "ra-sp-sql-lbp1",
+                                    "port": 59999,
+                                    "protocol": "Tcp",
+                                    "requestPath": null
+                                  }
+                                ],
+                                "backendPools": [
+                                  {
+                                    "name": "ra-sp-sql-lb-bep1",
+                                    "nicIndex": 0
+                                  }
+                                ]                                
+                            },
+                            "extensions": [
+                              {
+                                "name": "join-ad-domain",
+                                "publisher": "Microsoft.Compute",
+                                "type": "JsonADDomainExtension",
+                                "typeHandlerVersion": "1.3",
+                                "autoUpgradeMinorVersion": true,
+                                "settings": {
+                                  "Name": "contoso.local",
+                                  "OUPath": "",
+                                  "User": "contoso.local\\testuser",
+                                  "Restart": true,
+                                  "Options": 3
+                                },
+                                "protectedSettings": {
+                                  "Password": "AweS0me@PW"
+                                }
+                              }
+                            ]                            
+                        }
+                    ]
+                },
+                {
+                    "type": "VirtualMachine",
+                    "resourceGroupName": "ra-sp2016-network-rg",
+                    "settings":[
+                        {
+                            "namePrefix": "ra-sp-fsw",
+                            "computerNamePrefix": "fsw",
+                            "size": "Standard_DS1_v2",
+                            "osType": "windows",
+                            "adminUsername": "testuser",
+                            "adminPassword": "AweS0me@PW",
+                            "virtualNetwork": {
+                                "name": "ra-sp2016-vnet",
+                                "resourceGroupName": "ra-sp2016-network-rg"
+                            },
+                            "nics": [
+                              {
+                                "isPublic": true,
+                                "isPrimary": true,
+                                "subnetName": "sql",
+                                "privateIPAllocationMethod": "Dynamic",
+                                 "enableIPForwarding": false
+                              }
+                            ],
+                            "imageReference": {
+                              "publisher": "MicrosoftWindowsServer",
+                              "offer": "WindowsServer",
+                              "sku": "2012-R2-Datacenter",
+                              "version": "latest"
+                            },
+                            "dataDisks": {
+                              "count": 1
+                            },
+                            "extensions": [
+                              {
+                                "name": "join-ad-domain",
+                                "publisher": "Microsoft.Compute",
+                                "type": "JsonADDomainExtension",
+                                "typeHandlerVersion": "1.3",
+                                "autoUpgradeMinorVersion": true,
+                                "settings": {
+                                  "Name": "contoso.local",
+                                  "OUPath": "",
+                                  "User": "contoso.local\\testuser",
+                                  "Restart": true,
+                                  "Options": 3
+                                },
+                                "protectedSettings": {
+                                  "Password": "AweS0me@PW"
+                                }
+                              },
+                              {
+                                "name": "CreateFileShareWitness",
+                                "publisher": "Microsoft.Powershell",
+                                "type": "DSC",
+                                "typeHandlerVersion": "2.1",
+                                "autoUpgradeMinorVersion": false,
+                                "settings": {
+                                  "ModulesUrl": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/sharepoint/sharepoint-2016/extensions/CreateFileShareWitness.ps1.zip",
+                                  "ConfigurationFunction": "CreateFileShareWitness.ps1\\CreateFileShareWitness",
+                                  "properties": {
+                                    "domainName": "contoso.local",
+                                    "SharePath": "sql-fs",
+                                    "adminCreds": {
+                                      "userName": "testuser",
+                                      "password": "privateSettingsRef:adminPassword"
+                                    }
+                                  }
+                                },
+                                "protectedSettings": {
+                                  "items": {
+                                    "adminPassword": "AweS0me@PW"
+                                  }
+                                }
+                              }
+                            ]                            
+                        }
+                    ]
+                },
+                {
+                  "type": "VirtualMachineExtension",
+                  "resourceGroupName": "ra-sp2016-network-rg",
+                  "settings":[
+                      {
+                          "vms": [ "ra-sp-sql-vm1" ],
+                          "extensions": [
+                            {
+                              "name": "sqlAOPrepare",
+                              "publisher": "Microsoft.Powershell",
+                              "type": "DSC",
+                              "typeHandlerVersion": "2.1",
+                              "autoUpgradeMinorVersion": false,
+                              "settings": {
+                                "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/PrepareAlwaysOnSqlServer.zip",
+                                "ConfigurationFunction": "PrepareAlwaysOnSqlServer.ps1\\PrepareAlwaysOnSqlServer",
+                                "properties": {
+                                  "domainName": "contoso.local",
+                                  "AOEndpointName": "ra-sp2016-sql-hadr",
+                                  "adminCreds": {
+                                    "userName": "testuser",
+                                    "password": "privateSettingsRef:AdminPassword"
+                                  },
+                                  "sqlServiceCreds": {
+                                    "userName": "sqlservicetestuser",
+                                    "password": "privateSettingsRef:SqlServerServiceAccountPassword"
+                                  },
+                                  "NumberOfDisks": "2",
+                                  "WorkloadType": "GENERAL"
+                                }
+                              },
+                              "protectedSettings": {
+                                "items": {
+                                  "adminPassword": "AweS0me@PW",
+                                  "sqlServerServiceAccountPassword": "AweS0me@SQLServicePW"
+                                }
+                              }
+                
+                            }
+                          ]                                              
+                      }
+                  ]
+                }
+                
+            ]
+        }
+    }
+}
