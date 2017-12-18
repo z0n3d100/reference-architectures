@@ -9,7 +9,6 @@
           "settings": [
             {
               "name": "ra-sap-hana-vnet",
-              "resourceGroupName": "pw-sap-hana-inf2",
               "addressPrefixes": [
                 "10.0.0.0/16"
               ],
@@ -52,7 +51,6 @@
               "adminUsername": "testuser",
               "adminPassword": "AweS0me@PW",
               "osType": "windows",
-              "resourceGroupName": "pw-sap-hana-inf2",
               "nics": [
                 {
                   "isPublic": true,
@@ -75,8 +73,7 @@
                 "version": "latest"
               },
               "virtualNetwork": {
-                "name": "ra-sap-hana-vnet",
-                "resourceGroupName": "pw-sap-hana-inf2"
+                "name": "ra-sap-hana-vnet"
               }
             },
             {
@@ -87,7 +84,6 @@
               "osType": "windows",
               "adminUsername": "testuser",
               "adminPassword": "AweS0me@PW",
-              "resourceGroupName": "pw-sap-hana-inf2",
               "nics": [
                 {
                   "isPublic": true,
@@ -111,15 +107,13 @@
                 "count": 1
               },
               "virtualNetwork": {
-                "name": "ra-sap-hana-vnet",
-                "resourceGroupName": "pw-sap-hana-inf2"
+                "name": "ra-sap-hana-vnet"
               }
             }
           ]
         },
         {
           "type": "VirtualMachineExtension",
-          "resourceGroupName": "pw-sap-hana-inf2",
           "settings":[
             {
               "vms": [

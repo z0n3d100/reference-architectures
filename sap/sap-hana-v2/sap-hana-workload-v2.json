@@ -16,8 +16,7 @@
               "adminPassword": "AweS0me@PW",
               "osType": "windows",
               "virtualNetwork": {
-                "name": "ra-sap-hana-vnet",
-                "resourceGroupName": "pw-sap-hana-inf2"                
+                "name": "ra-sap-hana-vnet"
               },
               "nics": [
                 {
@@ -126,8 +125,7 @@
               "adminPassword": "AweS0me@PW",
               "osType": "windows",
               "virtualNetwork": {
-                "name": "ra-sap-hana-vnet",
-                "resourceGroupName": "pw-sap-hana-inf2"                        
+                "name": "ra-sap-hana-vnet"
               },
               "nics": [
                 {
@@ -195,8 +193,7 @@
               "adminPassword": "AweS0me@PW",
               "osType": "windows",
               "virtualNetwork": {
-                "name": "ra-sap-hana-vnet",
-                "resourceGroupName": "pw-sap-hana-inf2"
+                "name": "ra-sap-hana-vnet"
               },
               "nics": [
                 {
@@ -425,8 +422,7 @@
               "adminPassword": "AweS0me@PW",
               "osType": "windows",
               "virtualNetwork": {
-                "name": "ra-sap-hana-vnet",
-                "resourceGroupName": "pw-sap-hana-inf2"
+                "name": "ra-sap-hana-vnet"
               },
               "nics": [
                 {
@@ -496,8 +492,7 @@
               "osType": "linux",
               "osAuthenticationType": "password",
               "virtualNetwork": {
-                "name": "ra-sap-hana-vnet",
-                "resourceGroupName": "pw-sap-hana-inf2"                        
+                "name": "ra-sap-hana-vnet"
               },
               "nics": [
                 {
