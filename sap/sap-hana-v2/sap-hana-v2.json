@@ -1,0 +1,196 @@
+{
+  "$schema": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/schemas/buildingBlocks.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "buildingBlocks": {
+      "value": [
+        {
+          "type": "VirtualNetwork",
+          "settings": [
+            {
+              "name": "ra-sap-hana-vnet",
+              "addressPrefixes": [
+                "10.0.0.0/16"
+              ],
+              "subnets": [
+                {
+                  "name": "GatewaySubnet",
+                  "addressPrefix": "10.0.255.224/27"
+                },
+                {
+                  "name": "SAPAppsSubnet",
+                  "addressPrefix": "10.0.1.0/24"
+                },
+                {
+                  "name": "SAPDataSubnet",
+                  "addressPrefix": "10.0.2.0/24"
+                },
+                {
+                  "name": "MgmtSubnet",
+                  "addressPrefix": "10.0.3.0/24"
+                },
+                {
+                  "name": "ADSubnet",
+                  "addressPrefix": "10.0.4.0/27"
+                }
+              ],
+              "dnsServers": [
+                "10.0.4.4",
+                "10.0.4.5"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "VirtualMachine",
+          "settings":[
+            {
+              "namePrefix": "ra-sap-jumpbox",
+              "computerNamePrefix": "jumpbox",
+              "size": "Standard_DS1_v2",
+              "adminUsername": "testuser",
+              "adminPassword": "AweS0me@PW",
+              "osType": "windows",
+              "nics": [
+                {
+                  "isPublic": true,
+                  "isPrimary": true,
+                  "subnetName": "MgmtSubnet",
+                  "privateIPAllocationMethod": "Dynamic",
+                  "publicIPAllocationMethod": "Static",
+                  "enableIPForwarding": false,
+                  "dnsServers": [ 
+                    "10.0.4.4",
+                    "10.0.4.5",
+                    "168.63.129.16"
+                  ]
+                }
+              ],
+              "imageReference": {
+                "publisher": "MicrosoftWindowsServer",
+                "offer": "WindowsServer",
+                "sku": "2012-R2-Datacenter",
+                "version": "latest"
+              },
+              "virtualNetwork": {
+                "name": "ra-sap-hana-vnet"
+              }
+            },
+            {
+              "vmCount": 2,
+              "namePrefix": "ra-sap-ad",
+              "computerNamePrefix": "ad",
+              "size": "Standard_DS1_v2",
+              "osType": "windows",
+              "adminUsername": "testuser",
+              "adminPassword": "AweS0me@PW",
+              "nics": [
+                {
+                  "isPublic": true,
+                  "isPrimary": true,
+                  "subnetName": "ADSubnet",
+                  "privateIPAllocationMethod": "Static",
+                  "startingIPAddress": "10.0.4.4",
+                  "enableIPForwarding": false,
+                  "dnsServers": [ 
+                    "168.63.129.16"
+                  ]                  
+                }
+              ],
+              "imageReference": {
+                "publisher": "MicrosoftWindowsServer",
+                "offer": "WindowsServer",
+                "sku": "2012-R2-Datacenter",
+                "version": "latest"
+              },
+              "dataDisks": {
+                "count": 1
+              },
+              "virtualNetwork": {
+                "name": "ra-sap-hana-vnet"
+              }
+            }
+          ]
+        },
+        {
+          "type": "VirtualMachineExtension",
+          "settings":[
+            {
+              "vms": [
+                "ra-sap-ad-vm1"
+              ],
+              "extensions": [
+                {
+                  "name": "addsc",
+                  "publisher": "Microsoft.Powershell",
+                  "type": "DSC",
+                  "typeHandlerVersion": "2.1",
+                  "autoUpgradeMinorVersion": true,
+                  "settings": {
+                    "ModulesUrl": "https://github.com/woodp/reference-architectures/blob/sap-azbb/sap/sap-hana-v2/adds.zip?raw=true",
+                    "ConfigurationFunction":"adds-forest.ps1\\CreateForest",
+                    "Properties": {
+                      "DomainName": "contoso.com",
+                      "DomainNetbiosName": "contoso",
+                      "AdminCreds": {
+                        "UserName": "testuser",
+                        "Password": "PrivateSettingsRef:AdminPassword"
+                      },
+                      "SafeModeAdminCreds": {
+                        "UserName": "testsafeuser",
+                        "Password": "PrivateSettingsRef:SafeModeAdminPassword"
+                      }
+                    }
+                  },
+                  "protectedSettings": {
+                    "Items": {
+                        "AdminPassword": "AweS0me@PW",
+                        "SafeModeAdminPassword": "Saf3M0de@PW"
+                    }
+                  }              
+                }
+              ]
+            },
+            {
+              "vms": [
+                "ra-sap-ad-vm2"
+              ],
+              "extensions": [
+                {
+                  "name": "addsc",
+                  "publisher": "Microsoft.Powershell",
+                  "type": "DSC",
+                  "typeHandlerVersion": "2.1",
+                  "autoUpgradeMinorVersion": true,
+                  "settings": {
+                    "ModulesUrl": "https://github.com/woodp/reference-architectures/blob/sap-azbb/sap/sap-hana-v2/adds.zip?raw=true",
+                    "ConfigurationFunction":"adds.ps1\\CreateDomainController",
+                    "Properties": {
+                      "DomainName": "contoso.com",
+                      "SiteName": "Default-First-Site-Name",
+                      "PrimaryDcIpAddress": "10.0.4.4",
+                      "AdminCreds": {
+                        "UserName": "testuser",
+                        "Password": "PrivateSettingsRef:AdminPassword"
+                      },
+                      "SafeModeAdminCreds": {
+                        "UserName": "testsafeuser",
+                        "Password": "PrivateSettingsRef:SafeModeAdminPassword"
+                      }
+                    }
+                  },
+                  "protectedSettings": {
+                    "Items": {
+                        "AdminPassword": "AweS0me@PW",
+                        "SafeModeAdminPassword": "Saf3M0de@PW"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
