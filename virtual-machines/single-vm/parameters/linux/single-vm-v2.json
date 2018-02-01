@@ -85,8 +85,6 @@
                   "autoUpgradeMinorVersion": true,
                   "settings": {
                     "fileUris": [
-                      "https://raw.githubusercontent.com/woodp/reference-architectures/woodp/single-vm-linux/virtual-machines/single-vm/extensions/linux/format-disk.sh",
-                      "https://raw.githubusercontent.com/woodp/reference-architectures/woodp/single-vm-linux/virtual-machines/single-vm/extensions/linux/format-disk.1.sh",
                       "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/linux/install-apache.sh",
                       "https://raw.githubusercontent.com/mspnp/reference-architectures/master/virtual-machines/single-vm/extensions/linux/single-vm.sh"
                     ]
