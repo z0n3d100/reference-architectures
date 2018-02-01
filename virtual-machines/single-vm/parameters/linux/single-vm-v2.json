@@ -52,8 +52,8 @@
             "namePrefix": "ra-single-linux",
             "computerNamePrefix": "web",
             "size": "Standard_DS1_v2",
-            "adminUsername": "",
-            "sshPublicKey":"",
+            "adminUsername": "testUser",
+            "adminPassword": "sdf45F$TGRD",
             "virtualNetwork": {
               "name": "ra-single-linux-vm-vnet"
             },
@@ -85,7 +85,7 @@
                   "autoUpgradeMinorVersion": true,
                   "settings": {
                     "fileUris": [
-                      "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/linux/format-disk.sh",
+                      "https://raw.githubusercontent.com/woodp/reference-architectures/woodp/single-vm-linux/virtual-machines/single-vm/extensions/linux/format-disk.sh",
                       "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/linux/install-apache.sh",
                       "https://raw.githubusercontent.com/mspnp/reference-architectures/master/virtual-machines/single-vm/extensions/linux/single-vm.sh"
                     ]

@@ -13,8 +13,8 @@ echo 1
 echo
 echo
 echo w
-)|fdisk /dev/sdc
+)|fdisk /dev/sdd
 partprobe
-mkfs -t ext3 /dev/sdc1
-mkdir /data1
-mount /dev/sdc1 /data1
+mkfs -t ext3 /dev/sdd1
+mkdir /data2
+mount /dev/sdd1 /data2
