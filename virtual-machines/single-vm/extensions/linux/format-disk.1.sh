@@ -5,15 +5,7 @@
 
 partprobe
 # Format and mount drive 
-(
-echo o
-echo n
-echo p
-echo 1
-echo
-echo
-echo w
-)|fdisk /dev/sdd
+echo ';' | sfdisk /dev/sdd
 partprobe
 mkfs -t ext3 /dev/sdd1
 mkdir /data2
