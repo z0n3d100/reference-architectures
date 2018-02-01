@@ -7,6 +7,10 @@ partprobe
 # Format and mount drive 
 echo ';' | sfdisk /dev/sdd
 partprobe
-mkfs -t ext3 /dev/sdd1
+mkfs -t ext3 /dev/sdd1 --no-reread
 mkdir -p /data2
-mount /dev/sdd1 /data2
+if grep -qs '/data2' /proc/mounts; then
+    echo "already mounted."
+else
+    mount /dev/sdc1 /data1
+fi
