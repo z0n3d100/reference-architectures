@@ -52,8 +52,8 @@
             "namePrefix": "ra-single-linux",
             "computerNamePrefix": "web",
             "size": "Standard_DS1_v2",
-            "adminUsername": "testUser",
-            "adminPassword": "sdf45F$TGRD",
+            "adminUsername": "",
+            "sshPublicKey": "",
             "virtualNetwork": {
               "name": "ra-single-linux-vm-vnet"
             },
