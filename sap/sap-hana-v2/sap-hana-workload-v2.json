@@ -33,18 +33,6 @@
                     "10.0.4.4",
                     "10.0.4.5"
                   ]
-                },
-                {
-                  "isPublic": true,
-                  "isPrimary": false,
-                  "subnetName": "MgmtSubnet",
-                  "privateIPAllocationMethod": "Static",
-                  "startingIPAddress": "10.0.3.25",
-                  "enableIPForwarding": false,
-                  "dnsServers": [
-                    "10.0.4.4",
-                    "10.0.4.5"
-                  ]
                 }
               ],
               "imageReference": {
@@ -139,18 +127,6 @@
                     "10.0.4.4",
                     "10.0.4.5"
                   ]
-                },
-                {
-                  "isPublic": true,
-                  "isPrimary": false,
-                  "subnetName": "MgmtSubnet",
-                  "privateIPAllocationMethod": "Static",
-                  "startingIPAddress": "10.0.3.30",
-                  "enableIPForwarding": false,
-                  "dnsServers": [
-                    "10.0.4.4",
-                    "10.0.4.5"
-                  ]
                 }
               ],
               "imageReference": {
@@ -206,18 +182,6 @@
                   "backendPoolNames": [
                     "backend-pool"
                   ],
-                  "dnsServers": [
-                    "10.0.4.4",
-                    "10.0.4.5"
-                  ]
-                },
-                {
-                  "isPublic": true,
-                  "isPrimary": false,
-                  "subnetName": "MgmtSubnet",
-                  "privateIPAllocationMethod": "Static",
-                  "startingIPAddress": "10.0.3.5",
-                  "enableIPForwarding": false,
                   "dnsServers": [
                     "10.0.4.4",
                     "10.0.4.5"
@@ -431,20 +395,6 @@
                   "subnetName": "SAPAppsSubnet",
                   "privateIPAllocationMethod": "Static",
                   "startingIPAddress": "10.0.1.10",
-                  "publicIPAllocationMethod": "Static",
-                  "enableIPForwarding": false,
-                  "domainNameLabelPrefix": "",
-                  "dnsServers": [
-                    "10.0.4.4",
-                    "10.0.4.5"
-                  ]
-                },
-                {
-                  "isPublic": true,
-                  "isPrimary": false,
-                  "subnetName": "MgmtSubnet",
-                  "privateIPAllocationMethod": "Static",
-                  "startingIPAddress": "10.0.3.10",
                   "publicIPAllocationMethod": "Static",
                   "enableIPForwarding": false,
                   "domainNameLabelPrefix": "",
