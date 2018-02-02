@@ -478,10 +478,7 @@
                     "Password": "AweS0me@PW"
                   }
                 }
-              ],
-              "availabilitySet": {
-                "name": "sap-centralsvc-as"
-              }              
+              ]
             },
             {
               "namePrefix": "sap-han",
