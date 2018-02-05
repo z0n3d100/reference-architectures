@@ -127,7 +127,7 @@
                   "typeHandlerVersion": "2.1",
                   "autoUpgradeMinorVersion": true,
                   "settings": {
-                    "ModulesUrl": "https://github.com/woodp/reference-architectures/blob/sap-azbb/sap/sap-hana-v2/adds.zip?raw=true",
+                    "ModulesUrl": "https://github.com/mspnp/reference-architectures/blob/master/sap/sap-hana-v2/adds.zip?raw=true",
                     "ConfigurationFunction":"adds-forest.ps1\\CreateForest",
                     "Properties": {
                       "DomainName": "contoso.com",
@@ -163,7 +163,7 @@
                   "typeHandlerVersion": "2.1",
                   "autoUpgradeMinorVersion": true,
                   "settings": {
-                    "ModulesUrl": "https://github.com/woodp/reference-architectures/blob/sap-azbb/sap/sap-hana-v2/adds.zip?raw=true",
+                    "ModulesUrl": "https://github.com/mspnp/reference-architectures/blob/master/sap/sap-hana-v2/adds.zip?raw=true",
                     "ConfigurationFunction":"adds.ps1\\CreateDomainController",
                     "Properties": {
                       "DomainName": "contoso.com",
