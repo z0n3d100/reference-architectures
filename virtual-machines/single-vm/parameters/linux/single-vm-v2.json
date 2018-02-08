@@ -53,7 +53,7 @@
             "computerNamePrefix": "web",
             "size": "Standard_DS1_v2",
             "adminUsername": "",
-            "sshPublicKey":"",
+            "sshPublicKey": "",
             "virtualNetwork": {
               "name": "ra-single-linux-vm-vnet"
             },
@@ -85,7 +85,6 @@
                   "autoUpgradeMinorVersion": true,
                   "settings": {
                     "fileUris": [
-                      "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/linux/format-disk.sh",
                       "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/linux/install-apache.sh",
                       "https://raw.githubusercontent.com/mspnp/reference-architectures/master/virtual-machines/single-vm/extensions/linux/single-vm.sh"
                     ]
