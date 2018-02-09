@@ -11,3 +11,5 @@ Run the following azbb templates:
 4. sharepoint-2016-v2-create-farm-ext.json (create sharepoint farm primary node)
 
 5. sharepoint-2016-v2-part2-extensions.json (create sharepoint cache, search and web)
+
+6. sharepoint-2016-v2-security.json (create network security groups)
