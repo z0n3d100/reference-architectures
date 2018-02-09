@@ -1,3 +1,12 @@
+# DomainName                   - Active Directory Domain FDQN e.g.: contoso.local
+# AdminCreds                   - A PSCredentials object that contains username and password that will be assigned to the Domain Administrator account
+# SQLServiceCreds              - SQL service user PSCredentials object
+# SQLAuthCreds                 - SQL sa PSCredentials object
+# AOEndpointName               - SQL Always On endpoint name
+# DomainNetbiosName            - Active Directory Domain NetBios name, it is calculated from the DomainName parameter
+# DatabaseEnginePort           - Database Port
+# RetryCount                   - Defines how many retries should be performed while waiting for the domain to be provisioned
+# RetryIntervalSec             - Defines the seconds between each retry to check if the domain has been provisioned
 Configuration PrepareAlwaysOnSqlServer
 {
     param
@@ -11,18 +20,10 @@ Configuration PrepareAlwaysOnSqlServer
         [Parameter(Mandatory)]
         [System.Management.Automation.PSCredential]$SQLServicecreds,
 
-        [System.Management.Automation.PSCredential]$SQLAuthCreds,
-
         [Parameter(Mandatory)]
         [String]$AOEndpointName,
 
         [UInt32]$DatabaseEnginePort = 1433,
-
-        [Parameter(Mandatory)]
-        [UInt32]$NumberOfDisks,
-
-        [Parameter(Mandatory)]
-        [String]$WorkloadType,
 
         [String]$DomainNetbiosName=(Get-NetBIOSName -DomainName $DomainName),
 
@@ -36,18 +37,6 @@ Configuration PrepareAlwaysOnSqlServer
     [System.Management.Automation.PSCredential]$DomainFQDNCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
     [System.Management.Automation.PSCredential]$SQLCreds = New-Object System.Management.Automation.PSCredential ("${DomainNetbiosName}\$($SQLServicecreds.UserName)", $SQLServicecreds.Password)
 
-    $RebootVirtualMachine = $false
-
-    if ($DomainName)
-    {
-        $RebootVirtualMachine = $true
-    }
-
-    #Finding the next avaiable disk letter for Add disk
-    $NewDiskLetter = ls function:[f-z]: -n | ?{ !(test-path $_) } | select -First 1 
-
-    $NextAvailableDiskLetter = $NewDiskLetter[0]
-    
     WaitForSqlSetup
 
     Node localhost
@@ -183,26 +172,6 @@ Configuration PrepareAlwaysOnSqlServer
             DependsOn = "[xADUser]CreateSqlServerServiceAccount"
         }
         
-        # xSQLServerAlwaysOnService ConfigureSqlServerSecondaryWithAlwaysOn
-        # {
-        #     Ensure               = 'Present'
-        #     SQLServer            = $env:ComputerName
-        #     SQLInstanceName      = 'MSSQLSERVER'
-        #     RestartTimeout       = 120
-        #     PsDscRunAsCredential = $Admincreds
-        #     DependsOn = "[xSQLServerLogin]AddSqlServerServiceAccountToSysadminServerRole"
-        # }
-        
-        # xSQLServerEndpoint SqlSecondaryAlwaysOnEndpoint
-        # {
-        #     SQLServer            = $env:ComputerName
-        #     SQLInstanceName      = 'MSSQLSERVER'
-        #     EndpointName         = $AOEndpointName
-        #     Port                 = 5022
-        #     PsDscRunAsCredential = $Admincreds
-        #     DependsOn ="[xSQLServerAlwaysOnService]ConfigureSqlServerSecondaryWithAlwaysOn"
-        # }
-
         xPendingReboot Reboot1
         { 
             Name = "RebootServer"

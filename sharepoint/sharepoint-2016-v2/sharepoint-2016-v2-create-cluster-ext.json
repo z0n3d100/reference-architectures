@@ -29,10 +29,6 @@
                                   "SQLServiceCreds": {
                                     "userName": "sqlservicetestuser",
                                     "password": "privateSettingsRef:sqlServerServiceAccountPassword"
-                                  },
-                                  "SQLAuthCreds": {
-                                    "userName": "sqlsa",
-                                    "password": "privateSettingsRef:sqlAuthPassword"
                                   },                                  
                                   "ClusterName": "ra-ntier-sql-fc",
                                   "SharePath": "\\\\fsw1\\sql-fs",

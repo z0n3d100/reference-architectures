@@ -1,3 +1,20 @@
+# DomainName                    - Active Directory Domain e.g.: contoso
+# DomainFQDNName                - FQDN for the Active Directory Domain e.g.: contoso.local
+# SqlAlwaysOnEndpointName       - SQL Always On endpoint name
+# ServerRole                    - Server role, one of: Application | DistributedCache | WebFrontEnd | Search
+# driveletter                   - Drive letter for the Data disk e.g.: F
+# CentralAdmin                  - Indicates if the server is the central admin or not: "True" or "False"
+# Passphrase                    - Passphrase PSCredentials object
+# FarmAccount                   - Farm account PSCredentials object 
+# SPSetupAccount                - A PSCredentials object with rights to create the farm
+# ServicePoolManagedAccount     - Service Pool PSCredentials object
+# WebPoolManagedAccount         - Web Pool PSCredentials object
+# SuperUserAlias                - Super User alias
+# SuperReaderAlias              - Super Reader alias
+# webAppPoolName                - Web App Pool name
+# serviceAppPoolName            - Service App Pool name
+# RetryCount                    - Defines how many retries should be performed while waiting for the domain to be provisioned
+# RetryIntervalSec              - Defines the seconds between each retry to check if the domain has been provisioned
 configuration CreateJoinFarm
 {
     param

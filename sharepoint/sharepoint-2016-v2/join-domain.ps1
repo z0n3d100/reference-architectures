@@ -1,3 +1,5 @@
+# DomainName   - Active Directory Domain e.g.: contoso
+# AdminCreds   - Active Directory Domain Admin PSCredentials object
 Configuration JoinDomain {
     param
     #v1.4

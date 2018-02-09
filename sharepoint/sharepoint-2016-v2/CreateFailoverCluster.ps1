@@ -1,7 +1,21 @@
-#
-# Copyright="Ã‚Â© Microsoft Corporation. All rights reserved."
-#
-
+# DomainName                   - Active Directory Domain e.g.: contoso
+# AdminCreds                   - Active Directory Domain Admin PSCredentials object
+# SQLServiceCreds              - SQL service user PSCredentials object
+# ClusterName                  - FailOver Cluster name
+# SharePath                    - FailOver Cluster resource path
+# AvGroupName                  - Availability Group name
+# AvListenerName               - Availability Group Listener name
+# AvListenerPort               - Availability Group Listener port
+# LBName                       - Load Balancer name
+# LBAddress                    - Load Balancer IP Address
+# PrimaryReplica               - Failover Cluster Primary Replica name
+# SecondaryReplica             - Failover Cluster Secondary Replica name
+# AOEndpointName               - SQL Always On endpoint name
+# DNSServerName                - DNS Server name
+# DatabaseNames                - Database Names
+# DatabaseEnginePort           - Database Port
+# RetryCount                   - Defines how many retries should be performed while waiting for the domain to be provisioned
+# RetryIntervalSec             - Defines the seconds between each retry to check if the domain has been provisioned
 configuration CreateFailoverCluster
 {
     param
@@ -14,9 +28,6 @@ configuration CreateFailoverCluster
 
         [Parameter(Mandatory)]
         [System.Management.Automation.PSCredential]$SQLServiceCreds,
-
-        [Parameter(Mandatory)]
-        [System.Management.Automation.PSCredential]$SQLAuthCreds,
 
         [Parameter(Mandatory)]
         [String]$ClusterName,
@@ -67,18 +78,6 @@ configuration CreateFailoverCluster
     [string]$LBFQName="${LBName}.${DomainName}"
 
     Enable-CredSSPNTLM -DomainName $DomainName
-    
-    $RebootVirtualMachine = $false
-
-    if ($DomainName)
-    {
-        $RebootVirtualMachine = $true
-    }
-
-    #Finding the next avaiable disk letter for Add disk
-    $NewDiskLetter = ls function:[f-z]: -n | ?{ !(test-path $_) } | select -First 1 
-
-    $NextAvailableDiskLetter = $NewDiskLetter[0]
     
     WaitForSqlSetup
 
@@ -225,22 +224,6 @@ configuration CreateFailoverCluster
             DependsOn = "[xADUser]CreateSqlServerServiceAccount"
         }
         
-        # xSQLServerEndpoint AddSqlServerEndpoint
-        # {
-        #     EndpointName = "SQL"
-        #     Port = $DatabaseEnginePort
-        #     SQLServer = $env:ComputerName
-        #     SQLInstanceName = "MSSQLSERVER"
-        #     PsDscRunAsCredential = $Admincreds
-        #     DependsOn = "[xSQLServerLogin]AddSqlServerServiceAccountToSysadminServerRole"
-        # }
-
-        # xCluster FailoverCluster
-        # {
-        #     Name = $ClusterName
-        #     StaticIPAddress = "10.0.3.7"
-        #     DomainAdministratorCredential = $DomainCreds
-        # }
         $Nodes = $PrimaryReplica, $SecondaryReplica
 
         xFOCluster FailoverCluster
@@ -260,14 +243,6 @@ configuration CreateFailoverCluster
             DependsOn        = "[xFOCluster]FailoverCluster"
         }
         
-        # xClusterQuorum FailoverClusterQuorum
-        # {
-        #     IsSingleInstance = 'Yes'
-        #     Type             = 'NodeAndFileShareMajority'
-        #     Resource         = $SharePath
-        #     DependsOn        = '[xWaitForCluster]WaitForCluster'
-        # }        
-
         xSQLServerAlwaysOnService ConfigureSqlServerWithAlwaysOn
         {
             Ensure               = 'Present'
@@ -325,17 +300,6 @@ configuration CreateFailoverCluster
             PsDscRunAsCredential = $Admincreds
         }
 
-        # Create a DatabaseMirroring endpoint
-#        xSQLServerEndpoint HADREndpoint
-#        {
-#            EndPointName         = 'HADR'
-#            Ensure               = 'Present'
-#            Port                 = 5022
-#            SQLServer            = $env:ComputerName
-#            SQLInstanceName      = 'MSSQLSERVER'
-#            PsDscRunAsCredential = $Admincreds
-#        }
-
         xSQLServerAlwaysOnAvailabilityGroup SqlAG
         {
             Ensure               = 'Present'
@@ -368,7 +332,6 @@ configuration CreateFailoverCluster
             IpAddress            = "$LBAddress/255.255.255.0"
             Port                 = $AvListenerPort
             PsDscRunAsCredential = $Admincreds
-#            DependsOn = "[xSQLServerAlwaysOnAvailabilityGroupDatabaseMembership]SQLAGDatabases"
         }
 
         Script SetClusterProbePort
@@ -382,7 +345,6 @@ configuration CreateFailoverCluster
                 Write-Verbose -Message 'Adding Probe Port.'
 
                 Write-Verbose -Message 'Get IP Address resource name'
-                # $IPResourceName = "alwayson-ag_10.0.3.100" # the IP Address resource name
                 $IPResourceName = ''
                 $resources = Get-ClusterResource
                 Foreach ($res IN $resources)
@@ -522,4 +484,3 @@ function Enable-CredSSPNTLM
 
     Write-Verbose "DONE:Setting up CredSSP for NTLM"
 }
-
