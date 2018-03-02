@@ -19,7 +19,7 @@
                       "autoUpgradeMinorVersion": false,
                       "publisher": "Microsoft.Powershell",
                       "settings": {
-                          "ModulesUrl": "",
+                          "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sap-update/sap/sap-hana-v2/CreateFailoverCluster.zip",
                           "ConfigurationFunction": "CreateFailoverCluster",
                           "Properties": {
                               "DomainName": "contoso.com",
@@ -56,7 +56,7 @@
                       "autoUpgradeMinorVersion": false,
                       "publisher": "Microsoft.Powershell",
                       "settings": {
-                          "ModulesUrl": "",
+                          "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sap-update/sap/sap-hana-v2/CreateFailoverCluster.zip",
                           "ConfigurationFunction": "CreateFailoverCluster",
                           "Properties": {
                               "DomainName": "contoso.com",
@@ -93,7 +93,7 @@
                         "autoUpgradeMinorVersion": false,
                         "publisher": "Microsoft.Powershell",
                         "settings": {
-                            "ModulesUrl": "",
+                            "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sap-update/sap/sap-hana-v2/CreateFailoverCluster.zip",
                             "ConfigurationFunction": "CreateFailoverCluster",
                             "Properties": {
                                 "DomainName": "contoso.com",
