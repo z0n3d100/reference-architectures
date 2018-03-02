@@ -1,0 +1,121 @@
+{
+  "$schema": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/schemas/buildingBlocks.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "buildingBlocks": {
+      "value": [
+        {
+          "type": "VirtualMachineExtension",
+          "settings":[
+            {
+              "vms": [
+                "sap-wdp-vm1"
+              ],
+              "extensions":[
+                  {
+                      "name": "cluster",
+                      "type": "DSC",
+                      "typeHandlerVersion": "2.1",
+                      "autoUpgradeMinorVersion": false,
+                      "publisher": "Microsoft.Powershell",
+                      "settings": {
+                          "ModulesUrl": "",
+                          "ConfigurationFunction": "CreateFailoverCluster",
+                          "Properties": {
+                              "DomainName": "contoso.com",
+                              "AdminCreds": {
+                                "UserName": "testuser",
+                                "Password": "PrivateSettingsRef:AdminPassword"
+                              },
+                              "ClusterName": "WebDispatcherCluster",
+                              "Nodes": "sap-wdp1, sap-wdp2"
+                          },
+                          "protectedSettings": {
+                            "Items": {
+                                "AdminPassword": "AweS0me@PW"
+                            }
+                        }
+                      }
+                  }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "VirtualMachineExtension",
+          "settings":[
+            {
+              "vms": [
+                "sap-app-vm1"
+              ],
+              "extensions":[
+                  {
+                      "name": "cluster",
+                      "type": "DSC",
+                      "typeHandlerVersion": "2.1",
+                      "autoUpgradeMinorVersion": false,
+                      "publisher": "Microsoft.Powershell",
+                      "settings": {
+                          "ModulesUrl": "",
+                          "ConfigurationFunction": "CreateFailoverCluster",
+                          "Properties": {
+                              "DomainName": "contoso.com",
+                              "AdminCreds": {
+                                "UserName": "testuser",
+                                "Password": "PrivateSettingsRef:AdminPassword"
+                              },
+                              "ClusterName": "AppCluster",
+                              "Nodes": "sap-app1, sap-app2, sap-app3"
+                          },
+                          "protectedSettings": {
+                            "Items": {
+                                "AdminPassword": "AweS0me@PW"
+                            }
+                        }
+                      }
+                  }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "VirtualMachineExtension",
+          "settings":[
+            {
+                "vms": [
+                    "sap-scs-vm1"
+                ],
+                "extensions":[
+                    {
+                        "name": "cluster",
+                        "type": "DSC",
+                        "typeHandlerVersion": "2.1",
+                        "autoUpgradeMinorVersion": false,
+                        "publisher": "Microsoft.Powershell",
+                        "settings": {
+                            "ModulesUrl": "",
+                            "ConfigurationFunction": "CreateFailoverCluster",
+                            "Properties": {
+                                "DomainName": "contoso.com",
+                                "AdminCreds": {
+                                  "UserName": "testuser",
+                                  "Password": "PrivateSettingsRef:AdminPassword"
+                                },
+                                "ClusterName": "ScsCluster",
+                                "Nodes": "sap-scs1, sap-scs2"
+                            },
+                            "protectedSettings": {
+                              "Items": {
+                                  "AdminPassword": "AweS0me@PW"
+                              }
+                          }
+                        }
+                    }
+                ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

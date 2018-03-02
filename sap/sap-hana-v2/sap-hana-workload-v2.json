@@ -38,7 +38,7 @@
               "imageReference": {
                 "publisher": "MicrosoftWindowsServer",
                 "offer": "WindowsServer",
-                "sku": "2012-R2-Datacenter",
+                "sku": "2016-Datacenter",
                 "version": "latest"
               },
               "loadBalancerSettings": {
@@ -132,7 +132,7 @@
               "imageReference": {
                 "publisher": "MicrosoftWindowsServer",
                 "offer": "WindowsServer",
-                "sku": "2012-R2-Datacenter",
+                "sku": "2016-Datacenter",
                 "version": "latest"
               },
               "extensions": [
@@ -191,7 +191,7 @@
               "imageReference": {
                 "publisher": "MicrosoftWindowsServer",
                 "offer": "WindowsServer",
-                "sku": "2012-R2-Datacenter",
+                "sku": "2016-Datacenter",
                 "version": "latest"
               },
               "dataDisks": {
@@ -407,7 +407,7 @@
               "imageReference": {
                 "publisher": "MicrosoftWindowsServer",
                 "offer": "WindowsServer",
-                "sku": "2012-R2-Datacenter",
+                "sku": "2016-Datacenter",
                 "version": "latest"
               },
               "extensions": [
