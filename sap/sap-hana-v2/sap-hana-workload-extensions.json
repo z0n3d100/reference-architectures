@@ -19,8 +19,8 @@
                       "autoUpgradeMinorVersion": false,
                       "publisher": "Microsoft.Powershell",
                       "settings": {
-                          "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sap-update/sap/sap-hana-v2/CreateFailoverCluster.zip",
-                          "ConfigurationFunction": "CreateFailoverCluster",
+                          "ModulesUrl": "https://pwscripts.blob.core.windows.net/scripts/CreateFailoverCluster.zip",
+                          "ConfigurationFunction": "CreateFailoverCluster.ps1\\CreateFailoverCluster",
                           "Properties": {
                               "DomainName": "contoso.com",
                               "AdminCreds": {
@@ -29,13 +29,13 @@
                               },
                               "ClusterName": "WebDispatcherCluster",
                               "Nodes": "sap-wdp1, sap-wdp2"
-                          },
-                          "protectedSettings": {
-                            "Items": {
-                                "AdminPassword": "AweS0me@PW"
-                            }
+                          }
+                      },
+                    "protectedSettings": {
+                        "Items": {
+                            "AdminPassword": "AweS0me@PW"
                         }
-                      }
+                    }
                   }
               ]
             }
@@ -56,8 +56,8 @@
                       "autoUpgradeMinorVersion": false,
                       "publisher": "Microsoft.Powershell",
                       "settings": {
-                          "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sap-update/sap/sap-hana-v2/CreateFailoverCluster.zip",
-                          "ConfigurationFunction": "CreateFailoverCluster",
+                          "ModulesUrl": "https://pwscripts.blob.core.windows.net/scripts/CreateFailoverCluster.zip",
+                          "ConfigurationFunction": "CreateFailoverCluster.ps1\\CreateFailoverCluster",
                           "Properties": {
                               "DomainName": "contoso.com",
                               "AdminCreds": {
@@ -66,13 +66,13 @@
                               },
                               "ClusterName": "AppCluster",
                               "Nodes": "sap-app1, sap-app2, sap-app3"
-                          },
-                          "protectedSettings": {
-                            "Items": {
-                                "AdminPassword": "AweS0me@PW"
-                            }
+                          }
+                      },
+                      "protectedSettings": {
+                        "Items": {
+                            "AdminPassword": "AweS0me@PW"
                         }
-                      }
+                      }                      
                   }
               ]
             }
@@ -93,8 +93,8 @@
                         "autoUpgradeMinorVersion": false,
                         "publisher": "Microsoft.Powershell",
                         "settings": {
-                            "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sap-update/sap/sap-hana-v2/CreateFailoverCluster.zip",
-                            "ConfigurationFunction": "CreateFailoverCluster",
+                            "ModulesUrl": "https://pwscripts.blob.core.windows.net/scripts/CreateFailoverCluster.zip",
+                            "ConfigurationFunction": "CreateFailoverCluster.ps1\\CreateFailoverCluster",
                             "Properties": {
                                 "DomainName": "contoso.com",
                                 "AdminCreds": {
@@ -103,13 +103,13 @@
                                 },
                                 "ClusterName": "ScsCluster",
                                 "Nodes": "sap-scs1, sap-scs2"
-                            },
-                            "protectedSettings": {
-                              "Items": {
-                                  "AdminPassword": "AweS0me@PW"
-                              }
-                          }
-                        }
+                            }
+                          },
+                          "protectedSettings": {
+                            "Items": {
+                                "AdminPassword": "AweS0me@PW"
+                            }
+                        }                        
                     }
                 ]
             }

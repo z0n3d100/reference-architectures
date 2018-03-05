@@ -87,20 +87,20 @@ configuration CreateFailoverCluster
             Ensure = "Present"
         }
 
-        xWaitforDisk Disk2
-        {
-             DiskId = 2
-             RetryIntervalSec = 60
-             RetryCount = 60
-        }
+        # xWaitforDisk Disk2
+        # {
+        #      DiskId = 2
+        #      RetryIntervalSec = 60
+        #      RetryCount = 60
+        # }
 
-        xDisk FVolume
-        {
-             DiskId = 2
-             DriveLetter = "F"
-             Size = 1023GB
-             DependsOn = "[xWaitForDisk]Disk2"
-        }
+        # xDisk FVolume
+        # {
+        #      DiskId = 2
+        #      DriveLetter = "F"
+        #      Size = 1023GB
+        #      DependsOn = "[xWaitForDisk]Disk2"
+        # }
         
         xWaitForADDomain DscForestWait 
         { 

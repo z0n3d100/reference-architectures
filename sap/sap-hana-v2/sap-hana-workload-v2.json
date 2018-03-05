@@ -78,26 +78,7 @@
                     "nicIndex": 0
                   }
                 ]                
-              },
-              "extensions": [
-                {
-                  "name": "join-ad-domain",
-                  "publisher": "Microsoft.Compute",
-                  "type": "JsonADDomainExtension",
-                  "typeHandlerVersion": "1.3",
-                  "autoUpgradeMinorVersion": true,
-                  "settings": {
-                    "Name": "contoso.com",
-                    "OUPath": "",
-                    "User": "contoso.com\\testuser",
-                    "Restart": true,
-                    "Options": 3
-                  },
-                  "protectedSettings": {
-                    "Password": "AweS0me@PW"
-                  }
-                }
-              ]
+              }
             }
           ]
         },
@@ -134,26 +115,7 @@
                 "offer": "WindowsServer",
                 "sku": "2016-Datacenter",
                 "version": "latest"
-              },
-              "extensions": [
-                {
-                  "name": "join-ad-domain",
-                  "publisher": "Microsoft.Compute",
-                  "type": "JsonADDomainExtension",
-                  "typeHandlerVersion": "1.3",
-                  "autoUpgradeMinorVersion": true,
-                  "settings": {
-                    "Name": "contoso.com",
-                    "OUPath": "",
-                    "User": "contoso.com\\testuser",
-                    "Restart": true,
-                    "Options": 3
-                  },
-                  "protectedSettings": {
-                    "Password": "AweS0me@PW"
-                  }
-                }
-              ]       
+              }
             }
           ]
         },
@@ -335,43 +297,7 @@
                     "nicIndex": 0
                   }
                 ]                
-              },
-              "extensions": [
-                {
-                  "name": "join-ad-domain",
-                  "publisher": "Microsoft.Compute",
-                  "type": "JsonADDomainExtension",
-                  "typeHandlerVersion": "1.3",
-                  "autoUpgradeMinorVersion": true,
-                  "settings": {
-                    "Name": "contoso.com",
-                    "OUPath": "",
-                    "User": "contoso.com\\testuser",
-                    "Restart": true,
-                    "Options": 3
-                  },
-                  "protectedSettings": {
-                    "Password": "AweS0me@PW"
-                  }
-                },
-                {
-                  "name": "PrepareWSFC",
-                  "publisher": "Microsoft.Powershell",
-                  "type": "DSC",
-                  "typeHandlerVersion": "2.16",
-                  "autoUpgradeMinorVersion": false,
-                  "settings": {
-                    "modulesURL": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/sap/sap-hana/extensions/PrepareWSFC.ps1.zip",
-                    "configurationFunction": "PrepareWSFC.ps1\\PrepareWSFC",
-                    "properties": {}
-                  },
-                  "protectedSettings": {
-                    "items": {
-                      "adminPassword": "AweS0me@PW"
-                    }
-                  }
-                }
-              ]              
+              }              
             }
           ]
         },
