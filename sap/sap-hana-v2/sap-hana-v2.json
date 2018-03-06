@@ -49,7 +49,7 @@
               "computerNamePrefix": "jumpbox",
               "size": "Standard_DS1_v2",
               "adminUsername": "testuser",
-              "adminPassword": "AweS0me@PW",
+              "adminPassword": "",
               "osType": "windows",
               "nics": [
                 {
@@ -69,7 +69,7 @@
               "imageReference": {
                 "publisher": "MicrosoftWindowsServer",
                 "offer": "WindowsServer",
-                "sku": "2012-R2-Datacenter",
+                "sku": "2016-Datacenter",
                 "version": "latest"
               },
               "virtualNetwork": {
@@ -83,7 +83,7 @@
               "size": "Standard_DS1_v2",
               "osType": "windows",
               "adminUsername": "testuser",
-              "adminPassword": "AweS0me@PW",
+              "adminPassword": "",
               "nics": [
                 {
                   "isPublic": true,
@@ -100,7 +100,7 @@
               "imageReference": {
                 "publisher": "MicrosoftWindowsServer",
                 "offer": "WindowsServer",
-                "sku": "2012-R2-Datacenter",
+                "sku": "2016-Datacenter",
                 "version": "latest"
               },
               "dataDisks": {
@@ -144,7 +144,7 @@
                   },
                   "protectedSettings": {
                     "Items": {
-                        "AdminPassword": "AweS0me@PW",
+                        "AdminPassword": "",
                         "SafeModeAdminPassword": "Saf3M0de@PW"
                     }
                   }              
@@ -181,7 +181,7 @@
                   },
                   "protectedSettings": {
                     "Items": {
-                        "AdminPassword": "AweS0me@PW",
+                        "AdminPassword": "",
                         "SafeModeAdminPassword": "Saf3M0de@PW"
                     }
                   }

@@ -13,7 +13,7 @@
               "computerNamePrefix": "sap-wdp",
               "size": "Standard_DS11_v2",
               "adminUsername": "testuser",
-              "adminPassword": "AweS0me@PW",
+              "adminPassword": "",
               "osType": "windows",
               "virtualNetwork": {
                 "name": "ra-sap-hana-vnet"
@@ -38,7 +38,7 @@
               "imageReference": {
                 "publisher": "MicrosoftWindowsServer",
                 "offer": "WindowsServer",
-                "sku": "2012-R2-Datacenter",
+                "sku": "2016-Datacenter",
                 "version": "latest"
               },
               "loadBalancerSettings": {
@@ -94,7 +94,7 @@
                     "Options": 3
                   },
                   "protectedSettings": {
-                    "Password": "AweS0me@PW"
+                    "Password": ""
                   }
                 }
               ]
@@ -110,7 +110,7 @@
               "computerNamePrefix": "sap-app",
               "size": "Standard_DS11_v2",
               "adminUsername": "testuser",
-              "adminPassword": "AweS0me@PW",
+              "adminPassword": "",
               "osType": "windows",
               "virtualNetwork": {
                 "name": "ra-sap-hana-vnet"
@@ -132,7 +132,7 @@
               "imageReference": {
                 "publisher": "MicrosoftWindowsServer",
                 "offer": "WindowsServer",
-                "sku": "2012-R2-Datacenter",
+                "sku": "2016-Datacenter",
                 "version": "latest"
               },
               "extensions": [
@@ -150,7 +150,7 @@
                     "Options": 3
                   },
                   "protectedSettings": {
-                    "Password": "AweS0me@PW"
+                    "Password": ""
                   }
                 }
               ]       
@@ -166,7 +166,7 @@
               "computerNamePrefix": "sap-scs",
               "size": "Standard_DS11_v2",
               "adminUsername": "testuser",
-              "adminPassword": "AweS0me@PW",
+              "adminPassword": "",
               "osType": "windows",
               "virtualNetwork": {
                 "name": "ra-sap-hana-vnet"
@@ -191,7 +191,7 @@
               "imageReference": {
                 "publisher": "MicrosoftWindowsServer",
                 "offer": "WindowsServer",
-                "sku": "2012-R2-Datacenter",
+                "sku": "2016-Datacenter",
                 "version": "latest"
               },
               "dataDisks": {
@@ -351,7 +351,7 @@
                     "Options": 3
                   },
                   "protectedSettings": {
-                    "Password": "AweS0me@PW"
+                    "Password": ""
                   }
                 },
                 {
@@ -367,7 +367,7 @@
                   },
                   "protectedSettings": {
                     "items": {
-                      "adminPassword": "AweS0me@PW"
+                      "adminPassword": ""
                     }
                   }
                 }
@@ -383,7 +383,7 @@
               "computerNamePrefix": "sap-wit",
               "size": "Standard_DS11_v2",
               "adminUsername": "testuser",
-              "adminPassword": "AweS0me@PW",
+              "adminPassword": "",
               "osType": "windows",
               "virtualNetwork": {
                 "name": "ra-sap-hana-vnet"
@@ -407,7 +407,7 @@
               "imageReference": {
                 "publisher": "MicrosoftWindowsServer",
                 "offer": "WindowsServer",
-                "sku": "2012-R2-Datacenter",
+                "sku": "2016-Datacenter",
                 "version": "latest"
               },
               "extensions": [
@@ -425,7 +425,7 @@
                     "Options": 3
                   },
                   "protectedSettings": {
-                    "Password": "AweS0me@PW"
+                    "Password": ""
                   }
                 }
               ]
@@ -435,7 +435,7 @@
               "computerNamePrefix": "sap-han",
               "size": "Standard_DS2",
               "adminUsername": "testuser",
-              "adminPassword": "AweS0me@PW",
+              "adminPassword": "",
               "osType": "linux",
               "osAuthenticationType": "password",
               "virtualNetwork": {
