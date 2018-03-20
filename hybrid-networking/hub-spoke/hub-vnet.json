@@ -70,7 +70,7 @@
                         {
                             "connectionType": "Vnet2Vnet",
                             "name": "hub-onprem-conn",
-                            "sharedKey": "sdfsdf6545654dfgdfgdf345435sdfgregruyiyi234",
+                            "sharedKey": "",
                             "routingWeight": 1,
                             "virtualNetworkGateway1": {
                                 "resourceGroupName": "onprem-vnet-rg",
