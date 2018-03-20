@@ -6,6 +6,7 @@
             "value": [
                 {
                     "type": "VirtualNetwork",
+                    "resourceGroupName": "hub-vnet-rg",
                     "settings": [
                         {
                             "name": "hub-vnet",

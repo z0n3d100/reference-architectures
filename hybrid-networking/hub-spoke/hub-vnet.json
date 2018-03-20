@@ -6,6 +6,7 @@
             "value": [
                 {
                     "type": "VirtualNetwork",
+                    "resourceGroupName": "hub-vnet-rg",
                     "settings": [
                         {
                             "name": "hub-vnet",
@@ -32,13 +33,13 @@
                 {
                     "type": "VirtualMachine",
                     "settings": {
-                        "resourceGroupName": "hub-jb-rg",
+                        "resourceGroupName": "hub-vnet-rg",
                         "vmCount": 1,
                         "namePrefix": "hubjb",
                         "computerNamePrefix": "hubjb",
                         "adminUsername": "",
                         "adminPassword": "",
-                        "osType": "",
+                        "osType": "windows",
                         "virtualNetwork": {
                             "name": "hub-vnet"
                         },
@@ -69,7 +70,7 @@
                         {
                             "connectionType": "Vnet2Vnet",
                             "name": "hub-onprem-conn",
-                            "sharedKey": "",
+                            "sharedKey": "sdfsdf6545654dfgdfgdf345435sdfgregruyiyi234",
                             "routingWeight": 1,
                             "virtualNetworkGateway1": {
                                 "resourceGroupName": "onprem-vnet-rg",

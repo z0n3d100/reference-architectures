@@ -6,6 +6,7 @@
             "value": [           
                 {
                     "type": "VirtualNetwork",
+                    "resourceGroupName": "spoke1-vnet-rg",
                     "settings": [
                         {
                             "name": "spoke1-vnet",
@@ -40,13 +41,13 @@
                 {
                     "type": "VirtualMachine",
                     "settings": {
-                        "resourceGroupName": "spoke1-jb-rg",
+                        "resourceGroupName": "spoke1-vnet-rg",
                         "vmCount": 1,
                         "namePrefix": "s1jb",
                         "computerNamePrefix": "s1jb",
                         "adminUsername": "",
                         "adminPassword": "",
-                        "osType": "",
+                        "osType": "windows",
                         "virtualNetwork": {
                             "resourceGroupName": "spoke1-vnet-rg",
                             "name": "spoke1-vnet"
