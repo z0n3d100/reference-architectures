@@ -96,7 +96,7 @@
                   "name": "iis-config-ext",
                   "publisher": "Microsoft.Powershell",
                   "type": "DSC",
-                  "typeHandlerVersion": "2.1",
+                  "typeHandlerVersion": "2.75",
                   "autoUpgradeMinorVersion": true,
                   "settings": {
                     "ModulesUrl": "https://github.com/mspnp/reference-architectures/raw/master/scripts/windows/dsc/iisaspnet.ps1.zip",
