@@ -46,7 +46,7 @@
                   "name": "addsc",
                   "publisher": "Microsoft.Powershell",
                   "type": "DSC",
-                  "typeHandlerVersion": "2.19",
+                  "typeHandlerVersion": "2.75",
                   "autoUpgradeMinorVersion": true,
                   "settings": {
                        "Modulesurl": "https://github.com/woodp/reference-architectures/blob/ad-forest-dsc/identity/adds-extend-domain-v2/adds.zip?raw=true",

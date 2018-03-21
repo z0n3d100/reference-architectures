@@ -25,7 +25,7 @@
                   "name": "addsc",
                   "publisher": "Microsoft.Powershell",
                   "type": "DSC",
-                  "typeHandlerVersion": "2.19",
+                  "typeHandlerVersion": "2.75",
                   "autoUpgradeMinorVersion": true,
                   "settings": {
                        "Modulesurl": "https://github.com/repo/path/adds.zip?raw=true",

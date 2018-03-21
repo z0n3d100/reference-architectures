@@ -142,7 +142,7 @@
                     "name": "addsc",
                     "publisher": "Microsoft.Powershell",
                     "type": "DSC",
-                    "typeHandlerVersion": "2.1",
+                    "typeHandlerVersion": "2.75",
                     "autoUpgradeMinorVersion": true,
                     "settings": {
                          "ModulesUrl": "https://github.com/woodp/reference-architectures/blob/ad-forest-dsc/identity/adds-extend-domain-v2/adds.zip?raw=true",
@@ -187,7 +187,7 @@
                     "name": "addsc",
                     "publisher": "Microsoft.Powershell",
                     "type": "DSC",
-                    "typeHandlerVersion": "2.1",
+                    "typeHandlerVersion": "2.75",
                     "autoUpgradeMinorVersion": true,
                     "settings": {
                          "ModulesUrl": "https://github.com/woodp/reference-architectures/blob/ad-forest-dsc/identity/adds-extend-domain-v2/adds.zip?raw=true",
