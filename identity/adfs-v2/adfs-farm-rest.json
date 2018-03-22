@@ -16,7 +16,7 @@
                       "name": "addsc",
                       "publisher": "Microsoft.Powershell",
                       "type": "DSC",
-                      "typeHandlerVersion": "2.1",
+                      "typeHandlerVersion": "2.75",
                       "autoUpgradeMinorVersion": true,
                       "settings": {
                         "ModulesUrl": "https://github.com/woodp/reference-architectures/blob/adfs/identity/adfs-v2/adfs-v2.zip?raw=true",
