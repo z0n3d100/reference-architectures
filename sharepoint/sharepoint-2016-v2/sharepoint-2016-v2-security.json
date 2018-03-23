@@ -6,6 +6,7 @@
             "value": [
                 {
                     "type": "NetworkSecurityGroup",
+                    "resourceGroupName": "ra-sp2016-network-rg",
                     "settings":[
                         {
                             "name": "ra-sp2016-sql-nsg",
@@ -102,7 +103,9 @@
                             "name": "ra-sp2016-mgmt-nsg",
                             "subnets": [ ],
                             "networkInterfaces": [
-                              "ra-sp2016-jb-vm1-nic1"
+                              {
+                                "name": "ra-sp-jb-vm1-nic1"
+                              }
                             ],
                             "securityRules": [
                               {

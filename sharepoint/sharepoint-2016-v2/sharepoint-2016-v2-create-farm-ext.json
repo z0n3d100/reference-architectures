@@ -6,6 +6,7 @@
             "value": [
               {
                 "type": "VirtualMachineExtension",
+                "resourceGroupName": "ra-sp2016-network-rg",
                 "settings":[
                     {
                         "vms": ["ra-sp-app-vm1"],
@@ -14,7 +15,7 @@
                             "name": "configSPservers",
                             "publisher": "Microsoft.Powershell",
                             "type": "DSC",
-                            "typeHandlerVersion": "2.1",
+                            "typeHandlerVersion": "2.75",
                             "autoUpgradeMinorVersion": false,
                             "settings": {
                               "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/Create-Join-Farm.zip",

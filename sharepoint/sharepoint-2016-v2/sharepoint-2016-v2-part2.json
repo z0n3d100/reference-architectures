@@ -58,6 +58,7 @@
                 },
                 {
                     "type": "VirtualMachine",
+                    "resourceGroupName": "ra-sp2016-network-rg",
                     "settings":[
                         {
                             "vmCount": 2,
@@ -69,7 +70,7 @@
                             "osType": "windows",
                             "virtualNetwork": {
                                 "name": "ra-sp2016-vnet",
-                                "resourceGroupName": "ra-sp2016-network-rg"                                                
+                                "resourceGroupName": "ra-sp2016-network-rg"
                             },
                             "nics": [
                                 {
@@ -95,6 +96,7 @@
                 },
                 {
                     "type": "VirtualMachine",
+                    "resourceGroupName": "ra-sp2016-network-rg",
                     "settings":[
                         {
                             "vmCount": 2,
@@ -183,6 +185,7 @@
                 },
                 {
                     "type": "VirtualMachine",
+                    "resourceGroupName": "ra-sp2016-network-rg",
                     "settings":[
                         {
                             "vmCount": 2,
@@ -220,6 +223,7 @@
                 },
                 {
                     "type": "VirtualMachine",
+                    "resourceGroupName": "ra-sp2016-network-rg",
                     "settings":[
                         {
                             "vmCount": 2,

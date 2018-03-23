@@ -207,7 +207,7 @@
                           "name": "addsc",
                           "publisher": "Microsoft.Powershell",
                           "type": "DSC",
-                          "typeHandlerVersion": "2.1",
+                          "typeHandlerVersion": "2.75",
                           "autoUpgradeMinorVersion": true,
                           "settings": {
                             "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/adds.zip",
@@ -247,7 +247,7 @@
                           "name": "addsc",
                           "publisher": "Microsoft.Powershell",
                           "type": "DSC",
-                          "typeHandlerVersion": "2.1",
+                          "typeHandlerVersion": "2.75",
                           "autoUpgradeMinorVersion": true,
                           "settings": {
                             "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/adds.zip",
@@ -458,7 +458,7 @@
                             "name": "addsc",
                             "publisher": "Microsoft.Powershell",
                             "type": "DSC",
-                            "typeHandlerVersion": "2.1",
+                            "typeHandlerVersion": "2.75",
                             "autoUpgradeMinorVersion": true,
                             "settings": {
                               "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/adds.zip",
@@ -494,7 +494,7 @@
                             "name": "addsc",
                             "publisher": "Microsoft.Powershell",
                             "type": "DSC",
-                            "typeHandlerVersion": "2.1",
+                            "typeHandlerVersion": "2.75",
                             "autoUpgradeMinorVersion": true,
                             "settings": {
                               "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/adds.zip",
@@ -728,7 +728,7 @@
                                 "name": "CreateFileShareWitness",
                                 "publisher": "Microsoft.Powershell",
                                 "type": "DSC",
-                                "typeHandlerVersion": "2.1",
+                                "typeHandlerVersion": "2.75",
                                 "autoUpgradeMinorVersion": false,
                                 "settings": {
                                   "ModulesUrl": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/sharepoint/sharepoint-2016/extensions/CreateFileShareWitness.ps1.zip",
@@ -763,7 +763,7 @@
                               "name": "sqlAOPrepare",
                               "publisher": "Microsoft.Powershell",
                               "type": "DSC",
-                              "typeHandlerVersion": "2.1",
+                              "typeHandlerVersion": "2.75",
                               "autoUpgradeMinorVersion": false,
                               "settings": {
                                 "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/PrepareAlwaysOnSqlServer.zip",
