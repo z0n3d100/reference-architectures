@@ -35,7 +35,7 @@
                         "size": "Standard_DS1_v2",
                         "adminUsername": "",
                         "adminPassword": "",
-                        "osType": "",
+                        "osType": "windows",
                         "virtualNetwork": {
                             "resourceGroupName": "onprem-vnet-rg",
                             "name": "onprem-vnet"

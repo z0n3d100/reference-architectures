@@ -6,6 +6,7 @@
             "value": [
                 {
                     "type": "VirtualNetwork",
+                    "resourceGroupName": "hub-vnet-rg",
                     "settings": [
                         {
                             "name": "hub-vnet",
@@ -32,13 +33,13 @@
                 {
                     "type": "VirtualMachine",
                     "settings": {
-                        "resourceGroupName": "hub-jb-rg",
+                        "resourceGroupName": "hub-vnet-rg",
                         "vmCount": 1,
                         "namePrefix": "hubjb",
                         "computerNamePrefix": "hubjb",
                         "adminUsername": "",
                         "adminPassword": "",
-                        "osType": "",
+                        "osType": "windows",
                         "virtualNetwork": {
                             "name": "hub-vnet"
                         },
