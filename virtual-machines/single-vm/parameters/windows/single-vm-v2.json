@@ -52,8 +52,8 @@
             "namePrefix": "ra-single-windows",
             "computerNamePrefix": "web",
             "size": "Standard_DS1_v2",
-            "adminUsername": "",
-            "adminPassword": "",
+            "adminUsername": "testuser",
+            "adminPassword": "AweS0me@PW",
             "virtualNetwork": {
               "name": "ra-single-windows-vm-vnet"
             },
@@ -96,11 +96,14 @@
                   "name": "iis-config-ext",
                   "publisher": "Microsoft.Powershell",
                   "type": "DSC",
-                  "typeHandlerVersion": "2.75",
+                  "typeHandlerVersion": "2.7",
                   "autoUpgradeMinorVersion": true,
                   "settings": {
-                    "ModulesUrl": "https://github.com/mspnp/reference-architectures/raw/master/scripts/windows/dsc/iisaspnet.ps1.zip",
-                    "ConfigurationFunction": "iisaspnet.ps1\\iisaspnet"
+                    "configuration": {
+                      "url": "https://github.com/mspnp/reference-architectures/raw/master/scripts/windows/dsc/iisaspnet.ps1.zip",
+                      "script": "iisaspnet.ps1",
+                      "function": "iisaspnet"
+                    }
                   },
                   "protectedSettings": {}
                 }                
