@@ -20,6 +20,10 @@
                 {
                   "name": "adds",
                   "addressPrefix": "192.168.0.0/24"
+                },
+                {
+                  "name": "GatewaySubnet",
+                  "addressPrefix": "192.168.255.224/27"
                 }
               ],
               "dnsServers": [
@@ -29,64 +33,19 @@
               ]
             }
           ]
-        },        
+        },
         {
-          "type": "VirtualNetwork",
-          "settings": [
-            {
-              "name": "adds-vnet",
-              "addressPrefixes": [
-                "10.0.0.0/16"
-              ],
-              "subnets": [
-                {
-                  "name": "mgmt",
-                  "addressPrefix": "10.0.0.128/25"
-                },
-                {
-                  "name": "dmz-in",
-                  "addressPrefix": "10.0.0.64/27"
-                },
-                {
-                  "name": "dmz-out",
-                  "addressPrefix": "10.0.0.96/27"
-                },
-                {
-                  "name": "web",
-                  "addressPrefix": "10.0.1.0/24"
-                },
-                {
-                  "name": "biz",
-                  "addressPrefix": "10.0.2.0/24"
-                },
-                {
-                  "name": "data",
-                  "addressPrefix": "10.0.3.0/24"
-                },
-                {
-                  "name": "adds",
-                  "addressPrefix": "10.0.4.0/27"
-                }
-              ],
-              "dnsServers": [
-                "168.63.129.16",
-                "10.0.4.4",
-                "10.0.4.5",
-                "192.168.0.4",
-                "192.168.0.5"
-              ],
-              "virtualNetworkPeerings": [
-                {
-                    "remoteVirtualNetwork": {
-                        "name": "onpremise-vnet"
-                    },
-                    "allowForwardedTraffic": true,
-                    "allowGatewayTransit": true,
-                    "useRemoteGateways": false
-                }
-              ]
+          "type": "VirtualNetworkGateway",
+          "settings":{
+            "name": "ra-adds-onpremise-vpn-vgw",
+            "gatewayType": "Vpn",
+            "vpnType": "RouteBased",
+            "sku": "VpnGw1",
+            "isPublic": true,
+            "virtualNetwork": {
+              "name": "onpremise-vnet"
             }
-          ]
+          }
         },
         {
           "type": "VirtualMachine",
@@ -122,7 +81,7 @@
             "imageReference": {
               "publisher": "MicrosoftWindowsServer",
               "offer": "WindowsServer",
-              "sku": "2012-R2-Datacenter",
+              "sku": "2016-Datacenter",
               "version": "latest"
             },
             "dataDisks": {
@@ -139,37 +98,36 @@
               ],
               "extensions": [
                 {
-                    "name": "addsc",
-                    "publisher": "Microsoft.Powershell",
-                    "type": "DSC",
-                    "typeHandlerVersion": "2.75",
-                    "autoUpgradeMinorVersion": true,
-                    "settings": {
-                         "ModulesUrl": "https://github.com/woodp/reference-architectures/blob/ad-forest-dsc/identity/adds-extend-domain-v2/adds.zip?raw=true",
-                         "ConfigurationFunction":"onprem-primary.ps1\\CreateForest",
-                         "Properties": {
-                              "DomainName": "contoso.com",
-                              "DomainNetbiosName": "CONTOSO",
-                              "SiteName": "Azure-Vnet-Site",
-                              "OnpremSiteName": "Default-First-Site-Name",
-                              "Cidr": "10.0.0.0/16",
-                              "ReplicationFrequency": 10,
-                              "AdminCreds": {
-                                "UserName": "testadminuser",
-                                "Password": "PrivateSettingsRef:AdminPassword"
-                              },
-                              "SafeModeAdminCreds": {
-                                "UserName": "testsafeadminuser",
-                                "Password": "PrivateSettingsRef:SafeModeAdminPassword"
-                             }                       
-                         }
-                    },
-                    "protectedSettings": {
-                        "Items": {
-                            "AdminPassword": "test$!Passw0rd111",
-                            "SafeModeAdminPassword": "SafeModeP@ssw0rd"
-                        }
+                  "name": "addsc",
+                  "publisher": "Microsoft.Powershell",
+                  "type": "DSC",
+                  "typeHandlerVersion": "2.7",
+                  "autoUpgradeMinorVersion": true,
+                  "settings": {
+                      "configuration": {
+                        "url": "https://github.com/woodp/reference-architectures/blob/ad-forest-dsc/identity/adds-extend-domain-v2/adds.zip?raw=true",
+                        "script":"onprem-primary.ps1",
+                        "function": "CreateForest"
                     }
+                  },
+                  "protectedSettings": {
+                    "configurationArguments": {
+                      "DomainName": "contoso.com",
+                      "DomainNetbiosName": "CONTOSO",
+                      "SiteName": "Azure-Vnet-Site",
+                      "OnpremSiteName": "Default-First-Site-Name",
+                      "Cidr": "10.0.0.0/16",
+                      "ReplicationFrequency": 10,
+                      "AdminCreds": {
+                        "UserName": "testadminuser",
+                        "Password": "test$!Passw0rd111"
+                      },
+                      "SafeModeAdminCreds": {
+                        "UserName": "testsafeadminuser",
+                        "Password": "SafeModeP@ssw0rd"
+                      }
+                    }
+                  }
                 }
               ]
             }
@@ -184,69 +142,33 @@
               ],
               "extensions": [
                 {
-                    "name": "addsc",
-                    "publisher": "Microsoft.Powershell",
-                    "type": "DSC",
-                    "typeHandlerVersion": "2.75",
-                    "autoUpgradeMinorVersion": true,
-                    "settings": {
-                         "ModulesUrl": "https://github.com/woodp/reference-architectures/blob/ad-forest-dsc/identity/adds-extend-domain-v2/adds.zip?raw=true",
-                         "ConfigurationFunction":"onprem-secondary.ps1\\CreateDomainController",
-                         "Properties": {
-                              "DomainName": "contoso.com",
-                              "DomainNetbiosName": "CONTOSO",
-                              "PrimaryDcIpAddress": "192.168.0.4",
-                              "AdminCreds": {
-                                "UserName": "testadminuser",
-                                "Password": "PrivateSettingsRef:AdminPassword"
-                              },
-                              "SafeModeAdminCreds": {
-                                "UserName": "testsafeadminuser",
-                                "Password": "PrivateSettingsRef:SafeModeAdminPassword"
-                             }                       
-                         }
-                    },
-                    "protectedSettings": {
-                        "Items": {
-                            "AdminPassword": "test$!Passw0rd111",
-                            "SafeModeAdminPassword": "SafeModeP@ssw0rd"
-                        }
+                  "name": "addsc",
+                  "publisher": "Microsoft.Powershell",
+                  "type": "DSC",
+                  "typeHandlerVersion": "2.7",
+                  "autoUpgradeMinorVersion": true,
+                  "settings": {
+                    "configuration": {
+                        "url": "https://github.com/woodp/reference-architectures/blob/ad-forest-dsc/identity/adds-extend-domain-v2/adds.zip?raw=true",
+                        "script":"onprem-secondary.ps1",
+                        "function": "CreateDomainController"
                     }
-                }
-              ]
-            }
-          ]
-        },        
-        {
-          "type": "VirtualNetwork",
-          "settings": [
-            {
-              "name": "onpremise-vnet",
-              "addressPrefixes": [
-                "192.168.0.0/16"
-              ],
-              "subnets": [
-                {
-                  "name": "mgmt",
-                  "addressPrefix": "192.168.1.128/25"
-                },
-                {
-                  "name": "adds",
-                  "addressPrefix": "192.168.0.0/24"
-                }
-              ],
-              "dnsServers": [
-                "192.168.0.4",
-                "192.168.0.5"
-              ],
-              "virtualNetworkPeerings": [
-                {
-                    "remoteVirtualNetwork": {
-                        "name": "adds-vnet"
-                    },
-                    "allowForwardedTraffic": true,
-                    "allowGatewayTransit": true,
-                    "useRemoteGateways": false
+                  },
+                  "protectedSettings": {
+                    "configurationArguments": {
+                      "DomainName": "contoso.com",
+                      "DomainNetbiosName": "CONTOSO",
+                      "PrimaryDcIpAddress": "192.168.0.4",
+                      "AdminCreds": {
+                        "UserName": "testadminuser",
+                        "Password": "test$!Passw0rd111"
+                      },
+                      "SafeModeAdminCreds": {
+                        "UserName": "testsafeadminuser",
+                        "Password": "SafeModeP@ssw0rd"
+                      }
+                    }
+                  }
                 }
               ]
             }

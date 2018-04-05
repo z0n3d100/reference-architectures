@@ -43,9 +43,6 @@ Configuration CreateForest {
 
     Import-DscResource -ModuleName xStorage, xActiveDirectory, xNetworking, xPendingReboot
 
-    # $AdminSecPass = ConvertTo-SecureString $AdminCreds.Password -AsPlainText -Force
-    # $SafeSecPass = ConvertTo-SecureString $SafeModeAdminCreds.Password -AsPlainText -Force
-    
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($AdminCreds.UserName)", $AdminCreds.Password)
     [System.Management.Automation.PSCredential ]$SafeDomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($SafeModeAdminCreds.UserName)", $SafeModeAdminCreds.Password)
 
@@ -164,9 +161,6 @@ Configuration CreateForest {
                 $Location="azure subnet location"
                 $SitelinkName = "AzureToOnpremLink"
 
-                # $AdminSecPass = ConvertTo-SecureString $AdminCreds.Password -AsPlainText -Force
-                # [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$(get-AdminCreds.UserName)", $AdminSecPass)
-                
                 Write-Verbose -Message ('Installing ReplicationSite')
                 New-ADReplicationSite -Name $using:SiteName -Description $Description # -Credential $DomainCreds 
 

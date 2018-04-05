@@ -23,9 +23,6 @@ Configuration CreateDomainController {
 
     Import-DscResource -ModuleName xStorage, xActiveDirectory, xNetworking, xPendingReboot
 
-    # $AdminSecPass = ConvertTo-SecureString $AdminCreds.Password -AsPlainText -Force
-    # $SafeSecPass = ConvertTo-SecureString $SafeModeAdminCreds.Password -AsPlainText -Force
-    
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($AdminCreds.UserName)", $AdminCreds.Password)
     [System.Management.Automation.PSCredential ]$SafeDomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($SafeModeAdminCreds.UserName)", $SafeModeAdminCreds.Password)
 
