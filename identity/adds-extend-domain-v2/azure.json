@@ -105,7 +105,7 @@
             },
             "nics": [
               {
-                "isPublic": true,
+                "isPublic": false,
                 "subnetName": "adds",
                 "privateIPAllocationMethod": "Static",
                 "startingIPAddress": "10.0.4.4"
@@ -130,7 +130,7 @@
                 "settings": {
                       "configuration": 
                       {
-                      "url": "https://github.com/woodp/reference-architectures/blob/ad-forest-dsc/identity/adds-extend-domain-v2/adds.zip?raw=true",
+                      "url": "https://github.com/mspnp/reference-architectures/raw/master/identity/adds-extend-domain-v2/adds.zip",
                       "script":"azure.ps1",
                       "function": "CreateDomainController"
                       }
