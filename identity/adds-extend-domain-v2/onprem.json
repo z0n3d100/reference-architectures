@@ -55,7 +55,7 @@
             "namePrefix": "ad",
             "size": "Standard_DS3_v2",
             "adminUsername": "testadminuser",
-            "adminPassword": "test$!Passw0rd111",
+            "adminPassword": "",
             "virtualNetwork": {
               "name": "onpremise-vnet"
             },
@@ -120,11 +120,11 @@
                       "ReplicationFrequency": 10,
                       "AdminCreds": {
                         "UserName": "testadminuser",
-                        "Password": "test$!Passw0rd111"
+                        "Password": ""
                       },
                       "SafeModeAdminCreds": {
                         "UserName": "testsafeadminuser",
-                        "Password": "SafeModeP@ssw0rd"
+                        "Password": ""
                       }
                     }
                   }
@@ -161,15 +161,44 @@
                       "PrimaryDcIpAddress": "192.168.0.4",
                       "AdminCreds": {
                         "UserName": "testadminuser",
-                        "Password": "test$!Passw0rd111"
+                        "Password": ""
                       },
                       "SafeModeAdminCreds": {
                         "UserName": "testsafeadminuser",
-                        "Password": "SafeModeP@ssw0rd"
+                        "Password": ""
                       }
                     }
                   }
                 }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "VirtualNetwork",
+          "settings": [
+            {
+              "name": "onpremise-vnet",
+              "addressPrefixes": [
+                "192.168.0.0/16"
+              ],
+              "subnets": [
+                {
+                  "name": "mgmt",
+                  "addressPrefix": "192.168.1.128/25"
+                },
+                {
+                  "name": "adds",
+                  "addressPrefix": "192.168.0.0/24"
+                },
+                {
+                  "name": "GatewaySubnet",
+                  "addressPrefix": "192.168.255.224/27"
+                }
+              ],
+              "dnsServers": [
+                "192.168.0.4",
+                "192.168.0.5"
               ]
             }
           ]
