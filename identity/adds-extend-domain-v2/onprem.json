@@ -175,6 +175,26 @@
           ]
         },
         {
+          "type": "VirtualMachine",
+          "settings":{
+            "namePrefix": "ra-onpremise-mgmt",
+            "computerNamePrefix": "jumpbox",
+            "virtualNetwork": {
+              "name": "onpremise-vnet"
+            },            
+            "osType": "windows",
+            "adminUsername": "testuser",
+            "adminPassword": "",
+            "nics": [
+              {
+                "subnetName": "mgmt",
+                "privateIPAllocationMethod": "Static",
+                "startingIPAddress": "192.168.1.7"
+              }
+            ]
+          }
+        },        
+        {
           "type": "VirtualNetwork",
           "settings": [
             {

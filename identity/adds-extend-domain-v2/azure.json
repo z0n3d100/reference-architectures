@@ -186,13 +186,7 @@
                 ]
               }
             ],
-            "osType": "linux",
-            "imageReference": {
-              "publisher": "Canonical",
-              "offer": "UbuntuServer",
-              "sku": "14.04.5-LTS",
-              "version": "latest"
-            },
+            "osType": "windows",
             "dataDisks": {
               "count": 1,
               "properties": {
@@ -203,18 +197,37 @@
             },
             "extensions": [
               {
-                "name": "apache-config-ext",
-                "publisher": "Microsoft.Azure.Extensions",
-                "type": "CustomScript",
-                "typeHandlerVersion": "2.0",
+                "name": "iis-config-ext",
+                "settingsConfigMapperUri": "https://raw.githubusercontent.com/mspnp/template-building-blocks/v1.0.0/templates/resources/Microsoft.Compute/virtualMachines/extensions/vm-extension-passthrough-settings-mapper.json",
+                "publisher": "Microsoft.Powershell",
+                "type": "DSC",
+                "typeHandlerVersion": "2.7",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
-                  "fileUris": [
-                    "https://raw.githubusercontent.com/mspnp/reference-architectures/master/virtual-machines/multi-vm/extensions/linux/install-apache.sh"
-                  ],
-                  "commandToExecute": "sh install-apache.sh"
+                  "configuration": {
+                    "modulesUrl": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/identity/adds-forest/extensions/iisaspnet.ps1.zip",
+                    "script": "iisaspnet.ps1",
+                    "function": "iisaspnet"
+                  }
                 },
-                "protectedSettings": {}
+                "protectedSettings": { }
+              },
+              {
+                "name": "join-ad-domain",
+                "publisher": "Microsoft.Compute",
+                "type": "JsonADDomainExtension",
+                "typeHandlerVersion": "1.3",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                  "Name": "contoso.com",
+                  "OUPath": "",
+                  "User": "contoso.com\\testadminuser",
+                  "Restart": true,
+                  "Options": 3
+                },
+                "protectedSettings": {
+                  "Password": "AweS0me@PW"
+                }
               }
             ],
             "loadBalancerSettings": {
@@ -238,31 +251,35 @@
                   "frontendIPConfigurationName": "dmz-lb-fe-config1",
                   "enableFloatingIP": false,
                   "probeName": "lbp1"
-                }
+                },
+                {
+                  "name": "lbr1",
+                  "frontendPort": 443,
+                  "backendPort": 443,
+                  "protocol": "Tcp",
+                  "backendPoolName": "dmz-vm-lb-bep1",
+                  "frontendIPConfigurationName": "dmz-lb-fe-config1",
+                  "enableFloatingIP": false,
+                  "probeName": "lbp1"
+                }                
               ],
               "probes": [
                 {
                   "name": "lbp1",
                   "port": 80,
-                  "protocol": "Http",
-                  "requestPath": "/"
+                  "protocol": "Tcp",
+                  "requestPath": null
+                },
+                {
+                  "name": "lbp1",
+                  "port": 443,
+                  "protocol": "Tcp",
+                  "requestPath": null
                 }
               ],
               "backendPools": [
                 {
                   "name": "dmz-vm-lb-bep1",
-                  "nicIndex": 0
-                }
-              ],
-              "inboundNatRules": [
-                {
-                  "name": "dmz-vm-lb-ibnr1",
-                  "namePrefix": "ssh",
-                  "frontendIPConfigurationName": "dmz-lb-fe-config1",
-                  "startingFrontendPort": 50000,
-                  "backendPort": 22,
-                  "natRuleType": "All",
-                  "protocol": "Tcp",
                   "nicIndex": 0
                 }
               ]
