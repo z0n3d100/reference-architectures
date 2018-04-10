@@ -58,7 +58,7 @@
           "settings":{
             "name": "ra-adds-vpn-cn",
             "connectionType": "Vnet2Vnet",
-            "sharedKey": "",
+            "sharedKey": "abc123hiJ$3",
             "routingWeight": 100,
             "virtualNetworkGateway1": {
               "name": "ra-adds-vpn-vgw"
@@ -74,7 +74,7 @@
           {
             "name": "ra-adds-onpremise-vpn-cn",
             "connectionType": "Vnet2Vnet",
-            "sharedKey": "",
+            "sharedKey": "abc123hiJ$3",
             "routingWeight": 100,
             "virtualNetworkGateway1": {
               "name": "ra-adds-onpremise-vpn-vgw"
@@ -95,7 +95,7 @@
             },
             "size": "Standard_DS3_v2",
             "adminUsername": "testadminuser",
-            "adminPassword": "",
+            "adminPassword": "AweS0me@PW",
             "osType": "windows",
             "imageReference": {
               "publisher": "MicrosoftWindowsServer",
@@ -130,7 +130,7 @@
                 "settings": {
                       "configuration": 
                       {
-                      "url": "https://github.com/mspnp/reference-architectures/raw/master/identity/adds-extend-domain-v2/adds.zip",
+                      "url": "https://github.com/woodp/reference-architectures/raw/adds-extend-domain/identity/adds-extend-domain-v2/adds.zip",
                       "script":"azure.ps1",
                       "function": "CreateDomainController"
                       }
@@ -142,11 +142,11 @@
                       "PrimaryDcIpAddress": "192.168.0.4",
                       "AdminCreds": {
                             "UserName": "testadminuser",
-                            "Password": ""
+                            "Password": "AweS0me@PW"
                       },
                       "SafeModeAdminCreds": {
                             "UserName": "safeadminuser",
-                            "Password": ""
+                            "Password": "SAweS0me@PW"
                       }
                     }
                   }
@@ -162,7 +162,7 @@
             "size": "Standard_DS1_v2",
             "computerNamePrefix": "web",
             "adminUsername": "testadminuser",
-            "adminPassword": "",
+            "adminPassword": "AweS0me@PW",
             "virtualNetwork": {
               "name": "adds-vnet"
             },
@@ -180,9 +180,6 @@
                 "subnetName": "web",
                 "backendPoolsNames": [
                   "dmz-vm-lb-bep1"
-                ],
-                "inboundNatRulesNames": [
-                  "dmz-vm-lb-ibnr1"
                 ]
               }
             ],
@@ -296,7 +293,7 @@
             },            
             "osType": "windows",
             "adminUsername": "testuser",
-            "adminPassword": "",
+            "adminPassword": "AweS0me@PW",
             "nics": [
               {
                 "subnetName": "mgmt",

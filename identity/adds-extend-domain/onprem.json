@@ -70,7 +70,7 @@
             },
             "nics": [
               {
-                "isPublic": true,
+                "isPublic": false,
                 "isPrimary": true,
                 "privateIPAllocationMethod": "Static",
                 "subnetName": "adds",
@@ -78,15 +78,29 @@
               }
             ],
             "osType": "windows",
-            "imageReference": {
-              "publisher": "MicrosoftWindowsServer",
-              "offer": "WindowsServer",
-              "sku": "2016-Datacenter",
-              "version": "latest"
-            },
             "dataDisks": {
               "count": 1
             }
+          }
+        },
+        {
+          "type": "VirtualMachine",
+          "settings":{
+            "namePrefix": "ra-onpremise-mgmt",
+            "computerNamePrefix": "jumpbox",
+            "virtualNetwork": {
+              "name": "onpremise-vnet"
+            },            
+            "osType": "windows",
+            "adminUsername": "testuser",
+            "adminPassword": "",
+            "nics": [
+              {
+                "subnetName": "mgmt",
+                "privateIPAllocationMethod": "Static",
+                "startingIPAddress": "192.168.1.139"
+              }
+            ]
           }
         },
         {
@@ -105,7 +119,7 @@
                   "autoUpgradeMinorVersion": true,
                   "settings": {
                       "configuration": {
-                        "url": "https://github.com/mspnp/reference-architectures/raw/master/identity/adds-extend-domain-v2/adds.zip",
+                        "url": "https://github.com/mspnp/reference-architectures/raw/tree/master/identity/adds-extend-domain/adds.zip",
                         "script":"onprem-primary.ps1",
                         "function": "CreateForest"
                     }
@@ -149,7 +163,7 @@
                   "autoUpgradeMinorVersion": true,
                   "settings": {
                     "configuration": {
-                        "url": "https://github.com/mspnp/reference-architectures/raw/master/identity/adds-extend-domain-v2/adds.zip",
+                        "url": "https://github.com/mspnp/reference-architectures/raw/tree/master/identity/adds-extend-domain/adds.zip",
                         "script":"onprem-secondary.ps1",
                         "function": "CreateDomainController"
                     }
@@ -174,26 +188,6 @@
             }
           ]
         },
-        {
-          "type": "VirtualMachine",
-          "settings":{
-            "namePrefix": "ra-onpremise-mgmt",
-            "computerNamePrefix": "jumpbox",
-            "virtualNetwork": {
-              "name": "onpremise-vnet"
-            },            
-            "osType": "windows",
-            "adminUsername": "testuser",
-            "adminPassword": "",
-            "nics": [
-              {
-                "subnetName": "mgmt",
-                "privateIPAllocationMethod": "Static",
-                "startingIPAddress": "192.168.1.7"
-              }
-            ]
-          }
-        },        
         {
           "type": "VirtualNetwork",
           "settings": [
@@ -222,7 +216,7 @@
               ]
             }
           ]
-        }
+        }        
       ]
     }
   }
