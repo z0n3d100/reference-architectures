@@ -48,7 +48,6 @@ Configuration Config {
             Address        = @('127.0.0.1', $PrimaryDcIpAddress)
             InterfaceAlias = $InterfaceAlias
             AddressFamily  = 'IPv4'
-            DependsOn = "[xADDomainController]SecondaryDC"
         }
 
         #Install the IIS Role
