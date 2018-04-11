@@ -3,9 +3,6 @@
 - Complete all passwords and shared secret keys on the 2 connections. Optionally change the user names.
 - Run azbb with 
     - onprem.json
-    - onprem-primary-ext.json
-    - onprem-secondary-ext.json
-    - onprem-vnet-dns.json
     - azure.json
 
 ## More info
