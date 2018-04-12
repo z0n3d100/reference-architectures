@@ -39,7 +39,7 @@ Configuration Config {
         {
             DomainName = $DomainName
             Credential = $DomainCreds
-            Name = "localhost"
+            Name = $env:COMPUTERNAME
         }
 
         # Now make sure this computer uses itself as a DNS source
