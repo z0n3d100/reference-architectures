@@ -41,7 +41,7 @@
         {
           "type": "VirtualNetworkGateway",
           "settings":{
-            "name": "ra-adtrust-vpn-vgw",
+            "name": "ra-adt-vpn-vgw",
             "gatewayType": "Vpn",
             "vpnType": "RouteBased",
             "sku": "VpnGw1",
@@ -54,12 +54,12 @@
         {
           "type": "Connection",
           "settings":{
-            "name": "ra-adtrust-vpn-cn",
+            "name": "ra-adt-vpn-cn",
             "connectionType": "Vnet2Vnet",
-            "sharedKey": "123secret",
+            "sharedKey": "",
             "routingWeight": 100,
             "virtualNetworkGateway1": {
-              "name": "ra-adtrust-vpn-vgw"
+              "name": "ra-adt-vpn-vgw"
             },
             "virtualNetworkGateway2": {
               "name": "ra-adtrust-onpremise-vpn-vgw"
@@ -70,15 +70,15 @@
           "type": "Connection",
           "settings":
           {
-            "name": "ra-adtrust-onpremise-vpn-cn",
+            "name": "ra-adt-onpremise-vpn-cn",
             "connectionType": "Vnet2Vnet",
-            "sharedKey": "123secret",
+            "sharedKey": "",
             "routingWeight": 100,
             "virtualNetworkGateway1": {
               "name": "ra-adtrust-onpremise-vpn-vgw"
             },
             "virtualNetworkGateway2": {
-              "name": "ra-adtrust-vpn-vgw"
+              "name": "ra-adt-vpn-vgw"
             }               
           }
         },
@@ -86,14 +86,14 @@
           "type": "VirtualMachine",
           "settings": {
             "vmCount": 2,
-            "namePrefix": "ra-adtrust-ad",
+            "namePrefix": "ra-adt-ad",
             "computerNamePrefix": "aad",
             "virtualNetwork": {
               "name": "ra-adtrust-vnet"
             },
             "size": "Standard_DS3_v2",
             "adminUsername": "testuser",
-            "adminPassword": "AweS0me@PW",
+            "adminPassword": "",
             "osType": "windows",
             "nics": [
               {
@@ -110,13 +110,114 @@
         },
         {
           "type": "VirtualMachine",
+          "settings":{
+            "namePrefix": "ra-adt-mgmt",
+            "computerNamePrefix": "jumpbox",
+            "virtualNetwork": {
+              "name": "ra-adtrust-vnet"
+            },            
+            "osType": "windows",
+            "adminUsername": "testuser",
+            "adminPassword": "",
+            "nics": [
+              {
+                "subnetName": "mgmt",
+                "privateIPAllocationMethod": "Static",
+                "startingIPAddress": "10.0.0.132"
+              }
+            ]
+          }
+        },
+        {
+          "type": "VirtualMachineExtension",
+          "settings": [
+            {
+              "vms": [
+                "ra-adt-ad-vm1"
+              ],
+              "extensions": [
+                {
+                  "name": "addsc",
+                  "publisher": "Microsoft.Powershell",
+                  "type": "DSC",
+                  "typeHandlerVersion": "2.7",
+                  "autoUpgradeMinorVersion": true,
+                  "settings": {
+                      "configuration": {
+                        "url": "https://github.com/mspnp/reference-architectures/raw/master/identity/adds-forest/adds-forest-v2.zip",
+                        "script":"create-forest.ps1",
+                        "function": "CreateForest"
+                    }
+                  },
+                  "protectedSettings": {
+                    "configurationArguments": {
+                      "DomainName": "treyresearch.net",
+                      "DomainNetbiosName": "TREYRESEARCH",
+                      "AdminCreds": {
+                        "UserName": "testuser",
+                        "Password": ""
+                      },
+                      "SafeModeAdminCreds": {
+                        "UserName": "safeadminuser",
+                        "Password": ""
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "VirtualMachineExtension",
+          "settings": [
+            {
+              "vms": [
+                "ra-adt-ad-vm2"
+              ],
+              "extensions": [
+                {
+                  "name": "addsc",
+                  "publisher": "Microsoft.Powershell",
+                  "type": "DSC",
+                  "typeHandlerVersion": "2.7",
+                  "autoUpgradeMinorVersion": true,
+                  "settings": {
+                    "configuration": {
+                        "url": "https://github.com/mspnp/reference-architectures/raw/master/identity/adds-forest/adds-forest-v2.zip",
+                        "script":"add-controller.ps1",
+                        "function": "CreateDomainController"
+                    }
+                  },
+                  "protectedSettings": {
+                    "configurationArguments": {
+                      "DomainName": "treyresearch.net",
+                      "DomainNetbiosName": "TREYRESEARCH",
+                      "PrimaryDcIpAddress": "10.0.4.4",
+                      "AdminCreds": {
+                        "UserName": "testuser",
+                        "Password": ""
+                      },
+                      "SafeModeAdminCreds": {
+                        "UserName": "testsafeadminuser",
+                        "Password": ""
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "VirtualMachine",
           "settings": {
             "vmCount": 2,
-            "namePrefix": "ra-adtrust-web",
+            "namePrefix": "ra-adt-web",
             "size": "Standard_DS1_v2",
             "computerNamePrefix": "web",
             "adminUsername": "testuser",
-            "adminPassword": "AweS0me@PW",
+            "adminPassword": "",
             "osType": "windows",
             "virtualNetwork": {
               "name": "ra-adtrust-vnet"
@@ -127,7 +228,7 @@
                 "privateIPAllocationMethod": "Dynamic",
                 "subnetName": "web",
                 "backendPoolsNames": [
-                  "ra-adtrust-web-lb-bep"
+                  "ra-adt-web-lb-bep"
                 ]
               }
             ],
@@ -142,38 +243,28 @@
                 "typeHandlerVersion": "2.7",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
-                  "configuration": 
-                    {
-                      "url": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/identity/adds-forest/extensions/iisaspnet.ps1.zip",
-                      "script":"iisaspnet.ps1",
-                      "function": "iisaspnet"
-                    }
-                  },
-                  "protectedSettings": {
+                  "configuration": {
+                    "url": "https://github.com/mspnp/reference-architectures/raw/master/identity/adds-forest/adds-forest-v2.zip",
+                    "script": "config.ps1",
+                    "function": "Config"
                   }
-              },
-              {
-                "name": "join-ad-domain",
-                "publisher": "Microsoft.Compute",
-                "type": "JsonADDomainExtension",
-                "typeHandlerVersion": "1.3",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                  "Name": "treyresearch.net",
-                  "OUPath": "",
-                  "User": "treyresearch.net\\testuser",
-                  "Restart": true,
-                  "Options": 3
                 },
-                "protectedSettings": {
-                  "Password": "AweS0me@PW"
+                "protectedSettings": { 
+                  "configurationArguments": {
+                    "DomainName": "treyresearch.net",
+                    "PrimaryDcIpAddress": "10.0.4.4",
+                    "AdminCreds": {
+                          "UserName": "testuser",
+                          "Password": ""
+                    }                  
+                  }
                 }
               }
             ],
             "loadBalancerSettings": {
               "frontendIPConfigurations": [
                 {
-                  "name": "ra-adtrust-web-lb-fe",
+                  "name": "ra-adt-web-lb-fe",
                   "loadBalancerType": "Internal",
                   "internalLoadBalancerSettings": {
                     "privateIPAddress": "10.0.1.254",
@@ -183,7 +274,7 @@
               ],
               "backendPools": [
                 {
-                  "name": "ra-adtrust-web-lb-bep",
+                  "name": "ra-adt-web-lb-bep",
                   "nicIndex": 0                        
                 }
               ],              
@@ -193,8 +284,8 @@
                   "frontendPort": 80,
                   "backendPort": 80,
                   "protocol": "Tcp",
-                  "backendPoolName": "ra-adtrust-web-lb-bep",
-                  "frontendIPConfigurationName": "ra-adtrust-web-lb-fe",
+                  "backendPoolName": "ra-adt-web-lb-bep",
+                  "frontendIPConfigurationName": "ra-adt-web-lb-fe",
                   "probeName": "http-probe",
                   "enableFloatingIP": false
                 },
@@ -203,8 +294,8 @@
                   "frontendPort": 443,
                   "backendPort": 443,
                   "protocol": "Tcp",
-                  "backendPoolName": "ra-adtrust-web-lb-bep",
-                  "frontendIPConfigurationName": "ra-adtrust-web-lb-fe",
+                  "backendPoolName": "ra-adt-web-lb-bep",
+                  "frontendIPConfigurationName": "ra-adt-web-lb-fe",
                   "probeName": "https-probe",
                   "enableFloatingIP": false
                 }      
@@ -227,127 +318,29 @@
           }
         },
         {
-          "type": "VirtualMachine",
-          "settings":{
-            "namePrefix": "ra-adtrust-mgmt",
-            "computerNamePrefix": "jumpbox",
-            "virtualNetwork": {
-              "name": "ra-adtrust-vnet"
-            },            
-            "osType": "windows",
-            "adminUsername": "testuser",
-            "adminPassword": "AweS0me@PW",
-            "nics": [
-              {
-                "subnetName": "mgmt",
-                "privateIPAllocationMethod": "Static",
-                "startingIPAddress": "10.0.0.132"
-              }
-            ]
-          }
-        },
-        {
           "type": "VirtualMachineExtension",
-          "settings": [
+          "settings":[
             {
-              "vms": [
-                "ra-adtrust-ad-vm1"
-              ],
+              "vms": [ "ra-adt-web-vm1", "ra-adt-web-vm2" ],
               "extensions": [
                 {
-                  "name": "addsc",
-                  "publisher": "Microsoft.Powershell",
-                  "type": "DSC",
-                  "typeHandlerVersion": "2.7",
-                  "autoUpgradeMinorVersion": true,
+                  "name": "enable-windows-auth",
+                  "publisher": "Microsoft.Compute",
+                  "type": "CustomScriptExtension",
+                  "typeHandlerVersion": "1.8",
+                  "autoUpgradeMinorVersion": false,
                   "settings": {
-                      "configuration": {
-                        "url": "https://github.com/woodp/reference-architectures/blob/ad-forest-dsc/identity/adds-extend-domain-v2/adds.zip?raw=true",
-                        "script":"create-forest.ps1",
-                        "function": "CreateForest"
-                    }
+                    "fileUris": [
+                      "https://raw.githubusercontent.com/mspnp/reference-architectures/master/identity/adds-forest/extensions/enable-windows-auth.ps1"
+                    ]
                   },
                   "protectedSettings": {
-                    "configurationArguments": {
-                      "DomainName": "treyresearch.net",
-                      "DomainNetbiosName": "TREYRESEARCH",
-                      "AdminCreds": {
-                        "UserName": "testuser",
-                        "Password": "AweS0me@PW"
-                      },
-                      "SafeModeAdminCreds": {
-                        "UserName": "safeadminuser",
-                        "Password": "Saf3M0de@PW"
-                      }
-                    }
+                    "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File enable-windows-auth.ps1"
                   }
                 }
-              ]
+              ]            
             }
           ]
-        },
-        {
-          "type": "VirtualMachineExtension",
-          "settings": [
-            {
-              "vms": [
-                "ra-adtrust-ad-vm2"
-              ],
-              "extensions": [
-                {
-                  "name": "addsc",
-                  "publisher": "Microsoft.Powershell",
-                  "type": "DSC",
-                  "typeHandlerVersion": "2.7",
-                  "autoUpgradeMinorVersion": true,
-                  "settings": {
-                    "configuration": {
-                        "url": "https://github.com/woodp/reference-architectures/blob/ad-forest-dsc/identity/adds-extend-domain-v2/adds.zip?raw=true",
-                        "script":"add-controller.ps1",
-                        "function": "CreateDomainController"
-                    }
-                  },
-                  "protectedSettings": {
-                    "configurationArguments": {
-                      "DomainName": "treyresearch.net",
-                      "DomainNetbiosName": "TREYRESEARCH",
-                      "PrimaryDcIpAddress": "10.0.4.4",
-                      "AdminCreds": {
-                        "UserName": "testuser",
-                        "Password": "AweS0me@PW"
-                      },
-                      "SafeModeAdminCreds": {
-                        "UserName": "testsafeadminuser",
-                        "Password": "Saf3M0de@PW"
-                      }
-                    }
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "VirtualMachineExtension",
-          "settings":{
-            "vms": [ "ra-adtrust-web-vm1", "ra-adtrust-web-vm2" ],
-            "extensions": [
-              {
-                "name": "enable-windows-auth",
-                "publisher": "Microsoft.Compute",
-                "type": "CustomScriptExtension",
-                "typeHandlerVersion": "1.8",
-                "autoUpgradeMinorVersion": false,
-                "settings": {
-                  "fileUris": [
-                    "https://raw.githubusercontent.com/mspnp/reference-architectures/master/identity/adds-forest/extensions/enable-windows-auth.ps1"
-                  ]
-                },
-                "protectedSettings": {
-                }
-              }
-            ]            
-          }
         },
         {
           "type": "VirtualNetwork",
