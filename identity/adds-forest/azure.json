@@ -356,7 +356,7 @@
                   "autoUpgradeMinorVersion": false,
                   "settings": {
                     "fileUris": [
-                      "https://raw.githubusercontent.com/mspnp/reference-architectures/master/identity/adds-forest/extensions/incoming-trust.ps1"
+                      "https://raw.githubusercontent.com/mspnp/reference-architectures/master/identity/adds-forest/incoming-trust.ps1"
                     ]
                   },
                   "protectedSettings": {
@@ -381,7 +381,7 @@
                   "autoUpgradeMinorVersion": false,
                   "settings": {
                     "fileUris": [
-                      "https://raw.githubusercontent.com/mspnp/reference-architectures/master/identity/adds-forest/extensions/outgoing-trust.ps1"
+                      "https://raw.githubusercontent.com/mspnp/reference-architectures/master/identity/adds-forest/outgoing-trust.ps1"
                     ]
                   },
                   "protectedSettings": {
