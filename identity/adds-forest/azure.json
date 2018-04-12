@@ -343,6 +343,56 @@
           ]
         },
         {
+          "type": "VirtualMachineExtension",
+          "settings":[
+            {
+              "vms": [ "ra-adtrust-onpremise-ad-vm1" ],
+              "extensions": [
+                {
+                  "name": "incoming-trust",
+                  "publisher": "Microsoft.Compute",
+                  "type": "CustomScriptExtension",
+                  "typeHandlerVersion": "1.8",
+                  "autoUpgradeMinorVersion": false,
+                  "settings": {
+                    "fileUris": [
+                      "https://raw.githubusercontent.com/mspnp/reference-architectures/master/identity/adds-forest/extensions/incoming-trust.ps1"
+                    ]
+                  },
+                  "protectedSettings": {
+                    "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File incoming-trust.ps1"
+                  }
+                }
+              ]            
+            }
+          ]
+        },
+        {
+          "type": "VirtualMachineExtension",
+          "settings":[
+            {
+              "vms": [ "ra-adt-ad-vm1" ],
+              "extensions": [
+                {
+                  "name": "outgoing-trust",
+                  "publisher": "Microsoft.Compute",
+                  "type": "CustomScriptExtension",
+                  "typeHandlerVersion": "1.8",
+                  "autoUpgradeMinorVersion": false,
+                  "settings": {
+                    "fileUris": [
+                      "https://raw.githubusercontent.com/mspnp/reference-architectures/master/identity/adds-forest/extensions/outgoing-trust.ps1"
+                    ]
+                  },
+                  "protectedSettings": {
+                    "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File outgoing-trust.ps1"
+                  }
+                }
+              ]            
+            }
+          ]
+        },        
+        {
           "type": "VirtualNetwork",
           "settings": [
             {
