@@ -40,7 +40,7 @@
             "namePrefix": "ra-onpremise-mgmt",
             "computerNamePrefix": "jumpbox",
             "virtualNetwork": {
-              "name": "onpremise-vnet"
+              "name": "ra-adtrust-onpremise-vnet"
             },            
             "osType": "windows",
             "adminUsername": "testuser",
