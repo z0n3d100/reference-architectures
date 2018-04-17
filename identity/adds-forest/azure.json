@@ -331,7 +331,7 @@
                   "autoUpgradeMinorVersion": false,
                   "settings": {
                     "fileUris": [
-                      "https://raw.githubusercontent.com/mspnp/reference-architectures/master/identity/adds-forest/extensions/enable-windows-auth.ps1"
+                      "https://raw.githubusercontent.com/mspnp/reference-architectures/master/identity/adds-forest/enable-windows-auth.ps1"
                     ]
                   },
                   "protectedSettings": {
