@@ -37,7 +37,7 @@
                 },
                 {
                     "type": "VirtualMachine",
-                    "resourceGroupName": "onprem-jb-rg",
+                    "resourceGroupName": "onprem-vnet-rg",
                     "settings": {
                         "vmCount": 1,
                         "namePrefix": "jb",
@@ -46,7 +46,6 @@
                         "adminPassword": "",
                         "osType": "windows",
                         "virtualNetwork": {
-                            "resourceGroupName": "onprem-vnet-rg",
                             "name": "onprem-vnet"
                         },
                         "nics": [
@@ -58,7 +57,7 @@
                 },
                 {
                     "type": "VirtualMachine",
-                    "resourceGroupName": "onprem-adds-rg",
+                    "resourceGroupName": "onprem-vnet-rg",
                     "settings": {
                         "vmCount": 2,
                         "computerNamePrefix": "ad",
@@ -68,7 +67,6 @@
                         "adminPassword": "",
                         "osType": "windows",
                         "virtualNetwork": {
-                            "resourceGroupName": "onprem-vnet-rg",
                             "name": "onprem-vnet"
                         },
                         "nics": [
@@ -86,7 +84,7 @@
                 },
                 {
                     "type": "VirtualMachineExtension",
-                    "resourceGroupName": "onprem-adds-rg",
+                    "resourceGroupName": "onprem-vnet-rg",
                     "settings": [
                         {
                             "vms": [
@@ -95,17 +93,30 @@
                             "extensions": [
                                 {
                                     "name": "install-adds",
-                                    "publisher": "Microsoft.Compute",
-                                    "type": "CustomScriptExtension",
-                                    "typeHandlerVersion": "1.8",
+                                    "publisher": "Microsoft.Powershell",
+                                    "type": "DSC",
+                                    "typeHandlerVersion": "2.7",
                                     "autoUpgradeMinorVersion": true,
                                     "settings": {
-                                        "fileUris": [
-                                            "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/windows/ad/adds-forest.ps1"
-                                        ]
+                                        "configuration": {
+                                            "url": "https://github.com/woodp/reference-architectures/raw/woodp/shared-services/hybrid-networking/shared-services-stack/shared-services-stack.zip",
+                                            "script": "create-forest.ps1",
+                                            "function": "CreateForest"
+                                        }
                                     },
                                     "protectedSettings": {
-                                        "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File adds-forest.ps1 -DomainName contoso.com -DomainNetbiosName contoso -SafeModePassword Saf3M0de@PW"
+                                        "configurationArguments": {
+                                            "DomainName": "contoso.com",
+                                            "DomainNetbiosName": "CONTOSO",
+                                            "AdminCreds": {
+                                              "UserName": "",
+                                              "Password": ""
+                                            },
+                                            "SafeModeAdminCreds": {
+                                              "UserName": "",
+                                              "Password": ""
+                                            }
+                                        }
                                     }
                                 }
                             ]
@@ -114,7 +125,7 @@
                 },
                 {
                     "type": "VirtualMachineExtension",
-                    "resourceGroupName": "onprem-adds-rg",
+                    "resourceGroupName": "onprem-vnet-rg",
                     "settings": [
                         {
                             "vms": [
@@ -122,37 +133,34 @@
                             ],
                             "extensions": [
                                 {
-                                    "name": "join-ad-domain",
-                                    "publisher": "Microsoft.Compute",
-                                    "type": "JsonADDomainExtension",
-                                    "typeHandlerVersion": "1.3",
+                                    "name": "addsc",
+                                    "publisher": "Microsoft.Powershell",
+                                    "type": "DSC",
+                                    "typeHandlerVersion": "2.7",
                                     "autoUpgradeMinorVersion": true,
                                     "settings": {
-                                        "Name": "contoso.com",
-                                        "OUPath": "",
-                                        "User": "contoso.com\\adminuser",
-                                        "Restart": true,
-                                        "Options": 3
+                                      "configuration": {
+                                          "url": "https://github.com/woodp/reference-architectures/raw/woodp/shared-services/hybrid-networking/shared-services-stack/shared-services-stack.zip",
+                                          "script":"add-controller.ps1",
+                                          "function": "CreateDomainController"
+                                      }
                                     },
                                     "protectedSettings": {
-                                        "Password": "test$!Passw0rd"
+                                      "configurationArguments": {
+                                        "DomainName": "contoso.com",
+                                        "DomainNetbiosName": "CONTOSO",
+                                        "PrimaryDcIpAddress": "192.168.0.4",
+                                        "AdminCreds": {
+                                          "UserName": "",
+                                          "Password": ""
+                                        },
+                                        "SafeModeAdminCreds": {
+                                          "UserName": "",
+                                          "Password": ""
+                                        }
+                                      }
                                     }
-                                },
-                                {
-                                    "name": "install-adds",
-                                    "publisher": "Microsoft.Compute",
-                                    "type": "CustomScriptExtension",
-                                    "typeHandlerVersion": "1.8",
-                                    "autoUpgradeMinorVersion": true,
-                                    "settings": {
-                                        "fileUris": [
-                                            "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/windows/ad/adds.ps1"
-                                        ]
-                                    },
-                                    "protectedSettings": {
-                                        "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File adds.ps1 -DomainName contoso.com -DomainNetbiosName contoso -SafeModePassword Saf3M0de@PW -AdminUser adminuser -AdminPassword test$!Passw0rd -SiteName Default-First-Site-Name"
-                                    }
-                                }
+                                }                                
                             ]
                         }
                     ]

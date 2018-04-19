@@ -6,6 +6,7 @@
             "value": [
                 {
                     "type": "VirtualMachine",
+                    "resourceGroupName": "hub-nva-rg",
                     "settings": {
                         "vmCount": 1,
                         "namePrefix": "nva",
@@ -25,11 +26,28 @@
                                 "subnetName": "dmz",
                                 "enableIPForwarding": true
                             }
-                        ]
+                        ],
+                        "extensions": [
+                            {
+                                "name": "enable-iptables-routes",
+                                "publisher": "Microsoft.Azure.Extensions",
+                                "type": "CustomScript",
+                                "typeHandlerVersion": "2.0",
+                                "autoUpgradeMinorVersion": true,
+                                "settings": {
+                                    "fileUris": [
+                                        "https://raw.githubusercontent.com/woodp/reference-architectures/woodp/shared-services/hybrid-networking/shared-services-stack/enable-ip-forwarding.sh"
+                                    ],
+                                    "commandToExecute": "bash enable-ip-forwarding.sh 10.0.0.36"
+                                },
+                                "protectedSettings": {}
+                            }
+                        ]                        
                     }
                 },
                 {
                     "type": "RouteTable",
+                    "resourceGroupName": "hub-nva-rg",
                     "settings":[
                         {
                             "name": "hub-gateway-rt",
@@ -40,10 +58,15 @@
                                     "nextHop": "VnetLocal"
                                 },
                                 {
-                                    "name": "toSpokes",
-                                    "addressPrefix": "0.0.0.0/0",
+                                    "name": "toSpoke1",
+                                    "addressPrefix": "10.1.0.0/16",
                                     "nextHop": "10.0.0.36"
-                                }                                
+                                },
+                                {
+                                    "name": "toSpoke2",
+                                    "addressPrefix": "10.2.0.0/16",
+                                    "nextHop": "10.0.0.36"
+                                }                             
                             ],
                             "virtualNetworks": [
                                 {
@@ -59,6 +82,7 @@
                 },
                 {
                     "type": "RouteTable",
+                    "resourceGroupName": "hub-nva-rg",
                     "settings":[
                         {
                             "name": "spoke1-rt",
@@ -89,6 +113,7 @@
                 },
                 {
                     "type": "RouteTable",
+                    "resourceGroupName": "hub-nva-rg",
                     "settings":[
                         {
                             "name": "spoke2-rt",
