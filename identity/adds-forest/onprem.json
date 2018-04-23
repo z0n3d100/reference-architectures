@@ -44,7 +44,7 @@
             },            
             "osType": "windows",
             "adminUsername": "testuser",
-            "adminPassword": "",
+            "adminPassword": "AweS0me@PW",
             "nics": [
               {
                 "subnetName": "mgmt",
@@ -63,7 +63,7 @@
             "size": "Standard_DS3_v2",
             "osType": "windows",
             "adminUsername": "testuser",
-            "adminPassword": "",
+            "adminPassword": "AweS0me@PW",
             "virtualNetwork": {
               "name": "ra-adtrust-onpremise-vnet"
             },
@@ -109,7 +109,7 @@
                   "autoUpgradeMinorVersion": true,
                   "settings": {
                       "configuration": {
-                        "url": "https://github.com/mspnp/reference-architectures/raw/master/identity/adds-forest/adds-forest-v2.zip",
+                        "url": "https://github.com/woodp/reference-architectures/raw/woodp/adds-forest/identity/adds-forest/adds-forest-v2.zip",
                         "script":"create-forest.ps1",
                         "function": "CreateForest"
                     }
@@ -118,13 +118,15 @@
                     "configurationArguments": {
                       "DomainName": "contoso.com",
                       "DomainNetbiosName": "CONTOSO",
+                      "TargetDomainName": "treyresearch.net",
+                      "ForwardIpAddress": "10.0.4.4,10.0.4.5",
                       "AdminCreds": {
                         "UserName": "testuser",
-                        "Password": ""
+                        "Password": "AweS0me@PW"
                       },
                       "SafeModeAdminCreds": {
                         "UserName": "safeadminuser",
-                        "Password": ""
+                        "Password": "SAweS0me@PW"
                       }
                     }
                   }
@@ -161,11 +163,11 @@
                       "PrimaryDcIpAddress": "192.168.0.4",
                       "AdminCreds": {
                         "UserName": "testuser",
-                        "Password": ""
+                        "Password": "AweS0me@PW"
                       },
                       "SafeModeAdminCreds": {
                         "UserName": "testsafeadminuser",
-                        "Password": ""
+                        "Password": "SAweS0me@PW"
                       }
                     }
                   }
