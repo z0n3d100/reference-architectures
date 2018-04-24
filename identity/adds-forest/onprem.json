@@ -118,6 +118,8 @@
                     "configurationArguments": {
                       "DomainName": "contoso.com",
                       "DomainNetbiosName": "CONTOSO",
+                      "TargetDomainName": "treyresearch.net",
+                      "ForwardIpAddress": "10.0.4.4,10.0.4.5",
                       "AdminCreds": {
                         "UserName": "testuser",
                         "Password": ""

@@ -145,7 +145,7 @@
                   "settings": {
                       "configuration": {
                         "url": "https://github.com/mspnp/reference-architectures/raw/master/identity/adds-forest/adds-forest-v2.zip",
-                        "script":"create-forest.ps1",
+                        "script":"create-forest-2.ps1",
                         "function": "CreateForest"
                     }
                   },
@@ -153,6 +153,8 @@
                     "configurationArguments": {
                       "DomainName": "treyresearch.net",
                       "DomainNetbiosName": "TREYRESEARCH",
+                      "TargetDomainName": "contoso.com",
+                      "ForwardIpAddress": "192.168.0.4,192.168.0.5",                      
                       "AdminCreds": {
                         "UserName": "testuser",
                         "Password": ""
@@ -199,7 +201,7 @@
                         "Password": ""
                       },
                       "SafeModeAdminCreds": {
-                        "UserName": "testsafeadminuser",
+                        "UserName": "safeadminuser",
                         "Password": ""
                       }
                     }
@@ -342,56 +344,6 @@
             }
           ]
         },
-        {
-          "type": "VirtualMachineExtension",
-          "settings":[
-            {
-              "vms": [ "ra-adtrust-onpremise-ad-vm1" ],
-              "extensions": [
-                {
-                  "name": "incoming-trust",
-                  "publisher": "Microsoft.Compute",
-                  "type": "CustomScriptExtension",
-                  "typeHandlerVersion": "1.8",
-                  "autoUpgradeMinorVersion": false,
-                  "settings": {
-                    "fileUris": [
-                      "https://raw.githubusercontent.com/mspnp/reference-architectures/master/identity/adds-forest/incoming-trust.ps1"
-                    ]
-                  },
-                  "protectedSettings": {
-                    "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File incoming-trust.ps1"
-                  }
-                }
-              ]            
-            }
-          ]
-        },
-        {
-          "type": "VirtualMachineExtension",
-          "settings":[
-            {
-              "vms": [ "ra-adt-ad-vm1" ],
-              "extensions": [
-                {
-                  "name": "outgoing-trust",
-                  "publisher": "Microsoft.Compute",
-                  "type": "CustomScriptExtension",
-                  "typeHandlerVersion": "1.8",
-                  "autoUpgradeMinorVersion": false,
-                  "settings": {
-                    "fileUris": [
-                      "https://raw.githubusercontent.com/mspnp/reference-architectures/master/identity/adds-forest/outgoing-trust.ps1"
-                    ]
-                  },
-                  "protectedSettings": {
-                    "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File outgoing-trust.ps1"
-                  }
-                }
-              ]            
-            }
-          ]
-        },        
         {
           "type": "VirtualNetwork",
           "settings": [
