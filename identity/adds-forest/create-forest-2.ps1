@@ -154,26 +154,28 @@ Configuration CreateForest {
             }
         }
 
-        xADDomainTrust SetInboundDomainTrust {
-            Ensure = 'Present'
-            SourceDomainName = $TargetDomainName
-            TargetDomainName = $DomainName
-            TargetDomainAdministratorCredential = $DomainCreds
-            TrustType = 'External'
-            TrustDirection = 'Inbound'
-            DependsOn = "[xADDomainController]PrimaryDC"
-        }
-        
         xADDomainTrust SetOutboundDomainTrust {
             Ensure = 'Present'
             SourceDomainName = $DomainName
             TargetDomainName = $TargetDomainName
-            TargetDomainAdministratorCredential = $DomainCreds
+            TargetDomainAdministratorCredential = $AdminCreds
             TrustType = 'External'
             TrustDirection = 'Outbound'
+            PsDscRunAsCredential = $AdminCreds
             DependsOn = "[xADDomainController]PrimaryDC"
         }
-
+        
+        # xADDomainTrust SetInboundDomainTrust {
+        #     Ensure = 'Present'
+        #     SourceDomainName = $TargetDomainName
+        #     TargetDomainName = $DomainName
+        #     TargetDomainAdministratorCredential = $AdminCreds
+        #     TrustType = 'External'
+        #     TrustDirection = 'Inbound'
+        #     PsDscRunAsCredential = $AdminCreds
+        #     DependsOn = "[xADDomainController]PrimaryDC"
+        # }
+        
         xPendingReboot Reboot1
         { 
             Name = "RebootServer"

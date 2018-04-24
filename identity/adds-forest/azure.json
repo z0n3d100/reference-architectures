@@ -56,7 +56,7 @@
           "settings":{
             "name": "ra-adt-vpn-cn",
             "connectionType": "Vnet2Vnet",
-            "sharedKey": "",
+            "sharedKey": "shared1234",
             "routingWeight": 100,
             "virtualNetworkGateway1": {
               "name": "ra-adt-vpn-vgw"
@@ -72,7 +72,7 @@
           {
             "name": "ra-adt-onpremise-vpn-cn",
             "connectionType": "Vnet2Vnet",
-            "sharedKey": "",
+            "sharedKey": "shared1234",
             "routingWeight": 100,
             "virtualNetworkGateway1": {
               "name": "ra-adtrust-onpremise-vpn-vgw"
@@ -145,7 +145,7 @@
                   "settings": {
                       "configuration": {
                         "url": "https://github.com/woodp/reference-architectures/raw/woodp/adds-forest/identity/adds-forest/adds-forest-v2.zip",
-                        "script":"create-forest.ps1",
+                        "script":"create-forest-2.ps1",
                         "function": "CreateForest"
                     }
                   },
