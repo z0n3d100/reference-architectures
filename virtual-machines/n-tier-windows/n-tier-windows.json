@@ -265,7 +265,12 @@
                         },
                         "dataDisks": {
                             "count": 2,
-                            "diskSizeGB": 1000
+                            "diskSizeGB": 1023,
+                            "caching": "ReadOnly",
+                            "createOption": "empty",
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS"
+                            }
                         },
                         "virtualNetwork": {
                             "name": "ra-ntier-vnet"
@@ -362,7 +367,7 @@
                                     "autoUpgradeMinorVersion": true,
                                     "settings": {
                                         "AutoTelemetrySettings": {
-                                            "Region": "West US 2"
+                                            "Region": "Central US"
                                         },
                                         "AutoPatchingSettings": {
                                             "PatchCategory": "WindowsMandatoryUpdates",
@@ -375,6 +380,28 @@
                                             "Enable": false,
                                             "RetentionPeriod": "30",
                                             "EnableEncryption": false
+                                        },
+                                        "KeyVaultCredentialSettings": {
+                                            "Enable": false,
+                                            "CredentialName": ""
+                                        },
+                                        "ServerConfigurationsManagementSettings": {
+                                            "SQLConnectivityUpdateSettings": {
+                                                "ConnectivityType": "Private",
+                                                "Port": "1433"
+                                            },
+                                            "SQLWorkloadTypeUpdateSettings": {
+                                                "SQLWorkloadType": "GENERAL"
+                                            },
+                                            "SQLStorageUpdateSettings": {
+                                                "DiskCount": "2",
+                                                "NumberOfColumns": "2",
+                                                "StartingDeviceID": "2",
+                                                "DiskConfigurationType": "NEW"
+                                            },
+                                            "AdditionalFeaturesServerConfigurations": {
+                                                "IsRServicesEnabled": "false"
+                                            }
                                         }
                                     },
                                     "protectedSettings": {}

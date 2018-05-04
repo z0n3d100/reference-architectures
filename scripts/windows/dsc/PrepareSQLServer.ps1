@@ -32,7 +32,7 @@ configuration SQLServerPrepareDsc
         [Int]$RetryIntervalSec=30
     )
 
-    Import-DscResource -ModuleName xComputerManagement, xNetworking, xActiveDirectory, xStorage, xFailoverCluster, SqlServer, SqlServerDsc
+    Import-DscResource -ModuleName PSDesiredStateConfiguration, xComputerManagement, xNetworking, xActiveDirectory, xFailoverCluster, SqlServer, SqlServerDsc
     [System.Management.Automation.PSCredential]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainNetbiosName}\$($Admincreds.UserName)", $Admincreds.Password)
 
     $ipcomponents = $ClusterIP.Split('.')
@@ -49,9 +49,32 @@ configuration SQLServerPrepareDsc
     $computerName = $env:COMPUTERNAME
     $domainUserName = $DomainCreds.UserName.ToString()
 
+    # $RebootVirtualMachine = $false
+
+    # if ($DomainName)
+    # {
+    #     $RebootVirtualMachine = $true
+    # }
+
+    # #Finding the next avaiable disk letter for Add disk
+    # $NewDiskLetter = ls function:[f-z]: -n | ?{ !(test-path $_) } | select -First 1 
+
+    # $NextAvailableDiskLetter = $NewDiskLetter[0]
+    
+    WaitForSqlSetup
+
     Node localhost
     {
-        
+        # xSqlCreateVirtualDataDisk NewVirtualDisk
+        # {
+        #     NumberOfDisks = $NumberOfDisks
+        #     NumberOfColumns = $NumberOfDisks
+        #     DiskLetter = $NextAvailableDiskLetter
+        #     OptimizationType = $WorkloadType
+        #     StartingDeviceID = 2
+        #     RebootVirtualMachine = $RebootVirtualMachine
+        # }
+
 		xFirewall DatabaseEngineFirewallRule
         {
             Direction = "Inbound"
@@ -418,6 +441,23 @@ function Get-NetBIOSName
         }
         else {
             return $DomainName
+        }
+    }
+}
+
+function WaitForSqlSetup
+{
+    # Wait for SQL Server Setup to finish before proceeding.
+    while ($true)
+    {
+        try
+        {
+            Get-ScheduledTaskInfo "\ConfigureSqlImageTasks\RunConfigureImage" -ErrorAction Stop
+            Start-Sleep -Seconds 5
+        }
+        catch
+        {
+            break
         }
     }
 }
