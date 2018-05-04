@@ -1,0 +1,69 @@
+{
+    "$schema": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/schemas/buildingBlocks.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "buildingBlocks": {
+            "value": [
+              {
+                "type": "VirtualMachineExtension",
+                "resourceGroupName": "ra-sp2016-network-rg",
+                "settings":[
+                    {
+                        "vms": ["ra-sp-app-vm1"],
+                        "extensions": [
+                          {
+                            "name": "configSPservers",
+                            "publisher": "Microsoft.Powershell",
+                            "type": "DSC",
+                            "typeHandlerVersion": "2.75",
+                            "autoUpgradeMinorVersion": false,
+                            "settings": {
+                              "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/Create-Join-Farm.zip",
+                              "ConfigurationFunction": "create-join-farm.ps1\\CreateJoinFarm",
+                              "properties": {
+                                "domainName": "contoso",
+                                "DomainFQDNName": "contoso.local",
+                                "sqlAlwaysOnEndpointName": "ao-ag-listener",
+                                "ServerRole": "Application",
+                                "driveletter": "F",
+                                "CentralAdmin": "True",
+                                "Passphrase": {
+                                  "userName": "testuser",
+                                  "password": "privateSettingsRef:PassPhrasePassword"
+                                },
+                                "FarmAccount": {
+                                  "userName": "sp_farm",
+                                  "password": "privateSettingsRef:FarmPassword"
+                                },
+                                "SPSetupAccount": {
+                                  "userName": "testuser",
+                                  "password": "privateSettingsRef:SPSetupAccountPassword"
+                                },
+                                "ServicePoolManagedAccount": {
+                                  "userName": "sp_svcpool",
+                                  "password": "privateSettingsRef:ServicePoolManagedAccount"
+                                },
+                                "WebPoolManagedAccount": {
+                                  "userName": "sp_webpool",
+                                  "password": "privateSettingsRef:WebPoolManagedAccount"
+                                }
+                              }
+                            },
+                            "protectedSettings": {
+                              "items": {
+                                "PassPhrasePassword": "AweS0me@PW",
+                                "FarmPassword": "AweS0me@PW",
+                                "SPSetupAccountPassword": "AweS0me@PW",
+                                "ServicePoolManagedAccount": "AweS0me@PW",
+                                "WebPoolManagedAccount": "AweS0me@PW"
+                              }
+                            }
+                          }
+                        ]                            
+                    }
+                  ]
+                }
+            ]
+        }
+    }
+}
