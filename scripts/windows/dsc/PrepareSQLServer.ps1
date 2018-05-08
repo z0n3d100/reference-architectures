@@ -32,7 +32,7 @@ configuration SQLServerPrepareDsc
         [Int]$RetryIntervalSec=30
     )
 
-    Import-DscResource -ModuleName PSDesiredStateConfiguration, xComputerManagement, xNetworking, xActiveDirectory, xFailoverCluster, SqlServer, SqlServerDsc
+    Import-DscResource -ModuleName PSDesiredStateConfiguration, xSmbShare, xComputerManagement, xNetworking, xActiveDirectory, xFailoverCluster, SqlServer, SqlServerDsc
     [System.Management.Automation.PSCredential]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainNetbiosName}\$($Admincreds.UserName)", $Admincreds.Password)
 
     $ipcomponents = $ClusterIP.Split('.')
@@ -396,21 +396,52 @@ configuration SQLServerPrepareDsc
                   DependsOn                  = "[SqlServerEndpoint]HADREndpoint","[SqlServerRole]AddDomainAdminAccountToSysAdmin"
               }
       
-                # Add the availability group replica to the availability group
-                SqlAGReplica AddReplica
-                {
-                    Ensure                     = 'Present'
-                    Name                       = $env:COMPUTERNAME
-                    AvailabilityGroupName      = $ClusterName
-                    ServerName                 = $env:COMPUTERNAME
-                    InstanceName               = 'MSSQLSERVER'
-                    PrimaryReplicaServerName   = $ClusterOwnerNode
-                    PrimaryReplicaInstanceName = 'MSSQLSERVER'
-                    PsDscRunAsCredential = $DomainCreds
-                    AvailabilityMode     = "SynchronousCommit"
-                    FailoverMode         = "Automatic"
-                    DependsOn            = "[SqlWaitForAG]WaitForAG"     
-                }
+            # Add the availability group replica to the availability group
+            SqlAGReplica AddReplica
+            {
+                Ensure                     = 'Present'
+                Name                       = $env:COMPUTERNAME
+                AvailabilityGroupName      = $ClusterName
+                ServerName                 = $env:COMPUTERNAME
+                InstanceName               = 'MSSQLSERVER'
+                PrimaryReplicaServerName   = $ClusterOwnerNode
+                PrimaryReplicaInstanceName = 'MSSQLSERVER'
+                PsDscRunAsCredential = $DomainCreds
+                AvailabilityMode     = "SynchronousCommit"
+                FailoverMode         = "Automatic"
+                DependsOn            = "[SqlWaitForAG]WaitForAG"     
+            }
+
+            File BackupDirectory
+            {
+                Ensure = "Present" 
+                Type = "Directory" 
+                DestinationPath = "F:\Backup"
+                DependsOn = '[SqlAGReplica]AddReplica'    
+            }
+
+            xSMBShare DBBackupShare
+            {
+                Name = "DBBackup"
+                Path = "F:\Backup"
+                Ensure = "Present"
+                FullAccess = $DomainCreds.UserName
+                Description = "Backup share for SQL Server"
+                DependsOn = "[File]BackupDirectory"
+            }
+
+            SqlAGDatabase AddDatabaseToAG
+            {
+                AvailabilityGroupName   = $ClusterName
+                BackupPath              = "\\" + $env:COMPUTERNAME + "\DBBackup"
+                DatabaseName            = 'Ha-Sample'
+                InstanceName            = 'MSSQLSERVER'
+                ServerName              = $env:COMPUTERNAME
+                Ensure                  = 'Present'
+                ProcessOnlyOnActiveNode = $true
+                PsDscRunAsCredential    = $DomainCreds
+                DependsOn               = "[xSMBShare]DBBackupShare"
+            }
         }
 
 
