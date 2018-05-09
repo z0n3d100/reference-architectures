@@ -455,7 +455,7 @@ configuration SQLServerPrepareDsc
 
                 } 
                 TestScript = { return $false } 
-                GetScript = { @{ Result = ("") } 
+                GetScript = { @{ Result = ("") } }
                 DependsOn = "[SqlDatabase]Create_Database"
                 PsDscRunAsCredential    = $DomainCreds
             }
