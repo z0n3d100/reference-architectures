@@ -430,6 +430,36 @@ configuration SQLServerPrepareDsc
                 DependsOn = "[File]BackupDirectory"
             }
 
+            SqlDatabase Create_Database
+            {
+                Ensure       = 'Present'
+                ServerName   = $env:COMPUTERNAME
+                InstanceName = 'MSSQLSERVER'
+                Name         = 'Ha-Sample'
+                PsDscRunAsCredential    = $DomainCreds
+                DependsOn               = "[xSMBShare]DBBackupShare"
+            }
+
+            Script BackupDB
+            { 
+                SetScript = 
+                { 
+                    import-module sqlps;
+                    $container = "\\" + $env:COMPUTERNAME + "\DBBackup";
+                    $FileName = 'Ha-Sample.bak';
+                    $database = 'Ha-Sample';
+                    $BackupFile = $container + '/' + $FileName;
+                    $serverInstance = $env:COMPUTERNAME + '/' + 'MSSQLSERVER'
+
+                    Backup-SqlDatabase -ServerInstance $serverInstance –Database $database -BackupFile $BackupFile;
+
+                } 
+                TestScript = { return $false } 
+                GetScript = { @{ Result = ("") } 
+                DependsOn = "[SqlDatabase]Create_Database"
+                PsDscRunAsCredential    = $DomainCreds
+            }
+
             SqlAGDatabase AddDatabaseToAG
             {
                 AvailabilityGroupName   = $ClusterName
@@ -440,7 +470,7 @@ configuration SQLServerPrepareDsc
                 Ensure                  = 'Present'
                 ProcessOnlyOnActiveNode = $true
                 PsDscRunAsCredential    = $DomainCreds
-                DependsOn               = "[xSMBShare]DBBackupShare"
+                DependsOn               = "[Script]BackupDB"
             }
         }
 
