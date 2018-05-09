@@ -74,7 +74,7 @@
                             },
                             "nics": [
                                 {
-                                    "isPublic": true,
+                                    "isPublic": false,
                                     "isPrimary": true,
                                     "subnetName": "app",
                                     "privateIPAllocationMethod": "Static",
@@ -112,7 +112,7 @@
                             },
                             "nics": [
                               {
-                                "isPublic": true,
+                                "isPublic": false,
                                 "isPrimary": true,
                                 "subnetName": "web",
                                 "privateIPAllocationMethod": "Static",
@@ -201,7 +201,7 @@
                             },
                             "nics": [
                                 {
-                                    "isPublic": true,
+                                    "isPublic": false,
                                     "isPrimary": true,
                                     "subnetName": "cache",
                                     "privateIPAllocationMethod": "Static",
@@ -239,7 +239,7 @@
                             },
                             "nics": [
                               {
-                                "isPublic": true,
+                                "isPublic": false,
                                 "isPrimary": true,
                                 "subnetName": "search",
                                 "privateIPAllocationMethod": "Static",

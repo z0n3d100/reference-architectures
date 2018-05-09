@@ -169,7 +169,7 @@
                             },
                             "nics": [
                               {
-                                "isPublic": true,
+                                "isPublic": false,
                                 "subnetName": "adds",
                                 "privateIPAllocationMethod": "Static",
                                 "startingIPAddress": "192.168.0.4",
@@ -207,32 +207,31 @@
                           "name": "addsc",
                           "publisher": "Microsoft.Powershell",
                           "type": "DSC",
-                          "typeHandlerVersion": "2.75",
+                          "typeHandlerVersion": "2.7",
                           "autoUpgradeMinorVersion": true,
                           "settings": {
-                            "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/adds.zip",
-                            "ConfigurationFunction":"adds-forest-site.ps1\\CreateForest",
-                            "Properties": {
-                                "DomainName": "fabrikam.com",
-                                "DomainNetbiosName": "fabrikam",
-                                "SiteName": "Azure-Vnet-Site",
-                                "OnpremSiteName": "Default-First-Site-Name",
-                                "Cidr": "10.0.0.0/16",
-                                "ReplicationFrequency": 10,                                
-                                "AdminCreds": {
-                                    "UserName": "onpremuser",
-                                    "Password": "PrivateSettingsRef:AdminPassword"
-                                },
-                                "SafeModeAdminCreds": {
-                                    "UserName": "testsafeuser",
-                                    "Password": "PrivateSettingsRef:SafeModeAdminPassword"
-                                }
+                            "configuration": {
+                              "url": "https://github.com/mspnp/reference-architectures/raw/master/sharepoint/sharepoint-2016-v2/adds.zip",
+                              "script":"adds-forest-site.ps1",
+                              "function": "CreateForest"
                             }
                           },
                           "protectedSettings": {
-                            "Items": {
-                                "AdminPassword": "AweS0me@PW",
-                                "SafeModeAdminPassword": "Saf3M0de@PW"
+                            "configurationArguments": {
+                              "DomainName": "fabrikam.com",
+                              "DomainNetbiosName": "fabrikam",
+                              "SiteName": "Azure-Vnet-Site",
+                              "OnpremSiteName": "Default-First-Site-Name",
+                              "Cidr": "10.0.0.0/16",
+                              "ReplicationFrequency": 10,                                
+                              "AdminCreds": {
+                                  "UserName": "onpremuser",
+                                  "Password": "AweS0me@PW"
+                              },
+                              "SafeModeAdminCreds": {
+                                  "UserName": "testsafeuser",
+                                  "Password": "Saf3M0de@PW"
+                              }
                             }
                           }              
                         }
@@ -247,29 +246,26 @@
                           "name": "addsc",
                           "publisher": "Microsoft.Powershell",
                           "type": "DSC",
-                          "typeHandlerVersion": "2.75",
+                          "typeHandlerVersion": "2.7",
                           "autoUpgradeMinorVersion": true,
                           "settings": {
-                            "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/adds.zip",
-                            "ConfigurationFunction":"adds.ps1\\CreateDomainController",
-                            "Properties": {
+                            "url": "https://github.com/mspnp/reference-architectures/raw/master/sharepoint/sharepoint-2016-v2/adds.zip",
+                            "script":"adds.ps1",
+                            "function": "CreateDomainController"
+                          },
+                          "protectedSettings": {
+                            "configurationArguments": {
                               "DomainName": "fabrikam.com",
                               "SiteName": "Default-First-Site-Name",
                               "PrimaryDcIpAddress": "192.168.0.4",
                               "AdminCreds": {
                                 "UserName": "onpremuser",
-                                "Password": "PrivateSettingsRef:AdminPassword"
+                                "Password": "AweS0me@PW"
                               },
                               "SafeModeAdminCreds": {
                                 "UserName": "testsafeuser",
-                                "Password": "PrivateSettingsRef:SafeModeAdminPassword"
+                                "Password": "Saf3M0de@PW"
                               }
-                            }
-                          },
-                          "protectedSettings": {
-                            "Items": {
-                                "AdminPassword": "AweS0me@PW",
-                                "SafeModeAdminPassword": "Saf3M0de@PW"
                             }
                           }
                         }
@@ -425,7 +421,7 @@
                             },
                             "nics": [
                               {
-                                "isPublic": true,
+                                "isPublic": false,
                                 "isPrimary": true,
                                 "subnetName": "ad",
                                 "privateIPAllocationMethod": "Static",
@@ -458,29 +454,27 @@
                             "name": "addsc",
                             "publisher": "Microsoft.Powershell",
                             "type": "DSC",
-                            "typeHandlerVersion": "2.75",
+                            "typeHandlerVersion": "2.7",
                             "autoUpgradeMinorVersion": true,
                             "settings": {
-                              "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/adds.zip",
-                              "ConfigurationFunction":"adds-forest.ps1\\CreateForest",
-                              "Properties": {
+                              "configuration": {
+                                "url": "https://github.com/mspnp/reference-architectures/raw/master/sharepoint/sharepoint-2016-v2/adds.zip",
+                                "script":"adds-forest.ps1",
+                                "function": "CreateForest"
+                              }
+                            },
+                            "protectedSettings": {
+                              "configurationArguments": {
                                 "DomainName": "contoso.local",
                                 "DomainNetbiosName": "contoso",
                                 "AdminCreds": {
                                   "UserName": "testuser",
-                                  "Password": "PrivateSettingsRef:AdminPassword"
+                                  "Password": "AweS0me@PW"
                                 },
                                 "SafeModeAdminCreds": {
                                   "UserName": "testsafeuser",
-                                  "Password": "PrivateSettingsRef:SafeModeAdminPassword"
-                                }
-                              }
-                            },
-                            "protectedSettings": {
-                              "Items": {
-                                  "AdminPassword": "AweS0me@PW",
-                                  "SafeModeAdminPassword": "Saf3M0de@PW"
-                              }
+                                  "Password": "Saf3M0de@PW"
+                                }                              }
                             }              
                           }
                         ]
@@ -494,29 +488,28 @@
                             "name": "addsc",
                             "publisher": "Microsoft.Powershell",
                             "type": "DSC",
-                            "typeHandlerVersion": "2.75",
+                            "typeHandlerVersion": "2.7",
                             "autoUpgradeMinorVersion": true,
                             "settings": {
-                              "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/adds.zip",
-                              "ConfigurationFunction":"adds.ps1\\CreateDomainController",
-                              "Properties": {
+                              "configuration": {
+                                "url": "https://github.com/mspnp/reference-architectures/raw/master/sharepoint/sharepoint-2016-v2/adds.zip",
+                                "script":"adds.ps1",
+                                "function": "CreateDomainController"
+                              }
+                            },
+                            "protectedSettings": {
+                              "configurationArguments": {
                                 "DomainName": "contoso.local",
                                 "SiteName": "Default-First-Site-Name",
                                 "PrimaryDcIpAddress": "10.0.4.4",
                                 "AdminCreds": {
                                   "UserName": "testuser",
-                                  "Password": "PrivateSettingsRef:AdminPassword"
+                                  "Password": "AweS0me@PW"
                                 },
                                 "SafeModeAdminCreds": {
                                   "UserName": "testsafeuser",
-                                  "Password": "PrivateSettingsRef:SafeModeAdminPassword"
+                                  "Password": "Saf3M0de@PW"
                                 }
-                              }
-                            },
-                            "protectedSettings": {
-                              "Items": {
-                                  "AdminPassword": "AweS0me@PW",
-                                  "SafeModeAdminPassword": "Saf3M0de@PW"
                               }
                             }
                           }
@@ -592,7 +585,7 @@
                             },
                             "nics": [
                               {
-                                "isPublic": true,
+                                "isPublic": false,
                                 "isPrimary": true,
                                 "subnetName": "sql",
                                 "privateIPAllocationMethod": "Dynamic",
@@ -690,7 +683,7 @@
                             },
                             "nics": [
                               {
-                                "isPublic": true,
+                                "isPublic": false,
                                 "isPrimary": true,
                                 "subnetName": "sql",
                                 "privateIPAllocationMethod": "Dynamic",
@@ -728,23 +721,23 @@
                                 "name": "CreateFileShareWitness",
                                 "publisher": "Microsoft.Powershell",
                                 "type": "DSC",
-                                "typeHandlerVersion": "2.75",
-                                "autoUpgradeMinorVersion": false,
+                                "typeHandlerVersion": "2.7",
+                                "autoUpgradeMinorVersion": true,
                                 "settings": {
-                                  "ModulesUrl": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/sharepoint/sharepoint-2016/extensions/CreateFileShareWitness.ps1.zip",
-                                  "ConfigurationFunction": "CreateFileShareWitness.ps1\\CreateFileShareWitness",
-                                  "properties": {
+                                  "configuration": {
+                                    "url": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/sharepoint/sharepoint-2016/extensions/CreateFileShareWitness.ps1.zip",
+                                    "script": "CreateFileShareWitness.ps1",
+                                    "function": "CreateFileShareWitness"
+                                  }
+                                },
+                                "protectedSettings": {
+                                  "configurationArguments": {
                                     "domainName": "contoso.local",
                                     "SharePath": "sql-fs",
                                     "adminCreds": {
                                       "userName": "testuser",
-                                      "password": "privateSettingsRef:adminPassword"
+                                      "password": "AweS0me@PW"
                                     }
-                                  }
-                                },
-                                "protectedSettings": {
-                                  "items": {
-                                    "adminPassword": "AweS0me@PW"
                                   }
                                 }
                               }
@@ -763,28 +756,27 @@
                               "name": "sqlAOPrepare",
                               "publisher": "Microsoft.Powershell",
                               "type": "DSC",
-                              "typeHandlerVersion": "2.75",
-                              "autoUpgradeMinorVersion": false,
+                              "typeHandlerVersion": "2.7",
+                              "autoUpgradeMinorVersion": true,
                               "settings": {
-                                "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/PrepareAlwaysOnSqlServer.zip",
-                                "ConfigurationFunction": "PrepareAlwaysOnSqlServer.ps1\\PrepareAlwaysOnSqlServer",
-                                "properties": {
+                                "configuration":{
+                                  "url": "https://github.com/mspnp/reference-architectures/raw/master/sharepoint/sharepoint-2016-v2/PrepareAlwaysOnSqlServer.zip",
+                                  "script": "PrepareAlwaysOnSqlServer.ps1",
+                                  "function": "PrepareAlwaysOnSqlServer"
+                                }
+                              },
+                              "protectedSettings": {
+                                "configurationArguments": {
                                   "domainName": "contoso.local",
                                   "AOEndpointName": "ra-sp2016-sql-hadr",
                                   "adminCreds": {
                                     "userName": "testuser",
-                                    "password": "privateSettingsRef:AdminPassword"
+                                    "password": "AweS0me@PW"
                                   },
                                   "sqlServiceCreds": {
                                     "userName": "sqlservicetestuser",
-                                    "password": "privateSettingsRef:SqlServerServiceAccountPassword"
+                                    "password": "AweS0me@SQLServicePW"
                                   }
-                                }
-                              },
-                              "protectedSettings": {
-                                "items": {
-                                  "adminPassword": "AweS0me@PW",
-                                  "sqlServerServiceAccountPassword": "AweS0me@SQLServicePW"
                                 }
                               }
                 
