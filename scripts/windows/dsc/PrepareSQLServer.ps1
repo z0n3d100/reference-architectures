@@ -335,7 +335,6 @@ configuration SQLServerPrepareDsc
                 DependsOn = "[SqlAGListener]AvailabilityGroupListener"
                 PsDscRunAsCredential = $DomainCreds
             }
-
         } else {
             xWaitForCluster WaitForCluster
             {
@@ -375,26 +374,26 @@ configuration SQLServerPrepareDsc
                 DependsOn = "[Script]JoinExistingCluster"
             }
 
-              # Create a DatabaseMirroring endpoint
-              SqlServerEndpoint HADREndpoint
-              {
-                  EndPointName         = 'HADR'
-                  Ensure               = 'Present'
-                  Port                 = 5022
-                  ServerName           = $env:COMPUTERNAME
-                  InstanceName         = 'MSSQLSERVER'
-                  DependsOn            = "[SqlAlwaysOnService]EnableAlwaysOn"
-              }
-    
+            # Create a DatabaseMirroring endpoint
+            SqlServerEndpoint HADREndpoint
+            {
+                EndPointName         = 'HADR'
+                Ensure               = 'Present'
+                Port                 = 5022
+                ServerName           = $env:COMPUTERNAME
+                InstanceName         = 'MSSQLSERVER'
+                DependsOn            = "[SqlAlwaysOnService]EnableAlwaysOn"
+            }
 
-              SqlWaitForAG WaitForAG
-              {
-                  Name                 = $ClusterName
-                  RetryIntervalSec     = 20
-                  RetryCount           = 30
-                  PsDscRunAsCredential = $DomainCreds
-                  DependsOn                  = "[SqlServerEndpoint]HADREndpoint","[SqlServerRole]AddDomainAdminAccountToSysAdmin"
-              }
+
+            SqlWaitForAG WaitForAG
+            {
+                Name                 = $ClusterName
+                RetryIntervalSec     = 20
+                RetryCount           = 30
+                PsDscRunAsCredential = $DomainCreds
+                DependsOn                  = "[SqlServerEndpoint]HADREndpoint","[SqlServerRole]AddDomainAdminAccountToSysAdmin"
+            }
       
             # Add the availability group replica to the availability group
             SqlAGReplica AddReplica
@@ -412,68 +411,7 @@ configuration SQLServerPrepareDsc
                 DependsOn            = "[SqlWaitForAG]WaitForAG"     
             }
 
-            File BackupDirectory
-            {
-                Ensure = "Present" 
-                Type = "Directory" 
-                DestinationPath = "F:\Backup"
-                DependsOn = '[SqlAGReplica]AddReplica'    
-            }
-
-            xSMBShare DBBackupShare
-            {
-                Name = "DBBackup"
-                Path = "F:\Backup"
-                Ensure = "Present"
-                FullAccess = $DomainCreds.UserName
-                Description = "Backup share for SQL Server"
-                DependsOn = "[File]BackupDirectory"
-            }
-
-            SqlDatabase Create_Database
-            {
-                Ensure       = 'Present'
-                ServerName   = $env:COMPUTERNAME
-                InstanceName = 'MSSQLSERVER'
-                Name         = 'Ha-Sample'
-                PsDscRunAsCredential    = $DomainCreds
-                DependsOn               = "[xSMBShare]DBBackupShare"
-            }
-
-            Script BackupDB
-            { 
-                SetScript = 
-                { 
-                    import-module sqlps;
-                    $container = "\\" + $env:COMPUTERNAME + "\DBBackup";
-                    $FileName = 'Ha-Sample.bak';
-                    $database = 'Ha-Sample';
-                    $BackupFile = $container + '/' + $FileName;
-                    $serverInstance = $env:COMPUTERNAME + '/' + 'MSSQLSERVER'
-
-                    Backup-SqlDatabase -ServerInstance $serverInstance –Database $database -BackupFile $BackupFile;
-
-                } 
-                TestScript = { return $false } 
-                GetScript = { @{ Result = ("") } }
-                DependsOn = "[SqlDatabase]Create_Database"
-                PsDscRunAsCredential    = $DomainCreds
-            }
-
-            SqlAGDatabase AddDatabaseToAG
-            {
-                AvailabilityGroupName   = $ClusterName
-                BackupPath              = "\\" + $env:COMPUTERNAME + "\DBBackup"
-                DatabaseName            = 'Ha-Sample'
-                InstanceName            = 'MSSQLSERVER'
-                ServerName              = $env:COMPUTERNAME
-                Ensure                  = 'Present'
-                ProcessOnlyOnActiveNode = $true
-                PsDscRunAsCredential    = $DomainCreds
-                DependsOn               = "[Script]BackupDB"
-            }
         }
-
 
         LocalConfigurationManager 
         {

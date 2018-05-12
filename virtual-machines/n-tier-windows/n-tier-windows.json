@@ -448,6 +448,46 @@
                                     }
                                 }
                             ]
+                        },
+                        {
+                            "vms": [
+                                "sql-vm1"
+                            ],
+                            "extensions": [
+                                {
+                                    "name": "AOSetup",
+                                    "publisher": "Microsoft.Powershell",
+                                    "type": "DSC",
+                                    "typeHandlerVersion": "2.7",
+                                    "autoUpgradeMinorVersion": true,
+                                    "settings": {
+                                        "modulesURL": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/windows/dsc/PrepareSQLServer.ps1.zip",
+                                        "configurationFunction": "PrepareSqlServer-AGDB.ps1\\SQLServerDBDsc",
+                                        "properties": {
+                                            "domainName": "contoso.com",
+                                            "Admincreds": {
+                                                "userName": "adminUser",
+                                                "password": "privateSettingsRef:adminPassword"
+                                            },
+                                            "sqlServiceCreds": {
+                                                "userName": "sqlservicetestuser",
+                                                "password": "privateSettingsRef:sqlServerServiceAccountPassword"
+                                            },
+                                            "ClusterName": "AOCluster",
+                                            "ClusterOwnerNode": "sql1",
+                                            "ClusterIP": "10.0.3.30",
+                                            "witnessStorageBlobEndPoint": "https://[replace-with-storageaccountname].blob.core.windows.net",
+                                            "witnessStorageAccountKey": "[replace-with-storagekey]"
+                                        }
+                                    },
+                                    "protectedSettings": {
+                                        "items": {
+                                            "adminPassword": "testPassw0rd!23",
+                                            "sqlServerServiceAccountPassword": "AweS0me@SQLServicePW"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     ]
                 },
