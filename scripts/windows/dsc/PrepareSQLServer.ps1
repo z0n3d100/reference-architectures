@@ -49,33 +49,11 @@ configuration SQLServerPrepareDsc
     $computerName = $env:COMPUTERNAME
     $domainUserName = $DomainCreds.UserName.ToString()
 
-    # $RebootVirtualMachine = $false
-
-    # if ($DomainName)
-    # {
-    #     $RebootVirtualMachine = $true
-    # }
-
-    # #Finding the next avaiable disk letter for Add disk
-    # $NewDiskLetter = ls function:[f-z]: -n | ?{ !(test-path $_) } | select -First 1 
-
-    # $NextAvailableDiskLetter = $NewDiskLetter[0]
-    
     WaitForSqlSetup
 
     Node localhost
     {
-        # xSqlCreateVirtualDataDisk NewVirtualDisk
-        # {
-        #     NumberOfDisks = $NumberOfDisks
-        #     NumberOfColumns = $NumberOfDisks
-        #     DiskLetter = $NextAvailableDiskLetter
-        #     OptimizationType = $WorkloadType
-        #     StartingDeviceID = 2
-        #     RebootVirtualMachine = $RebootVirtualMachine
-        # }
-
-		xFirewall DatabaseEngineFirewallRule
+        xFirewall DatabaseEngineFirewallRule
         {
             Direction = "Inbound"
             Name = "SQL-Server-Database-Engine-TCP-In"
