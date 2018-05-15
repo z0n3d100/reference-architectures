@@ -2823,9 +2823,7 @@
                             "connectionString": {
                                 "type": "SecureString",
                                 "value": "[parameters('sourceDBConnectionString')]"
-                            },
-                            "userName": "[parameters('sourceDBUserName')]",
-                            "encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIwNjQzMWJiNy04YmM3LTQ1MDItYjk5OS1jYTcyM2Y4MWMyZjciLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+                            }
                         },
                         "connectVia": {
                             "referenceName": "sourceIntegrationRuntime",
@@ -2862,8 +2860,7 @@
                             "connectionString": {
                                 "type": "SecureString",
                                 "value": "[parameters('blobConnectionString')]"
-                            },
-                            "encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJhNjc1ODE2Yi0yZDRmLTRjN2ItOTgyMC04MjRmMjc0MTMxYzIiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+                            }
                         },
                         "connectVia": {
                             "referenceName": "sourceIntegrationRuntime",
