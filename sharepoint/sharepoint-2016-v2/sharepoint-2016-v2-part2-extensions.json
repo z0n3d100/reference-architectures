@@ -78,11 +78,9 @@
                                     "script": "create-join-farm.ps1",
                                     "function": "CreateJoinFarm"
                                   }
-                                  "properties": {
-                                  }
                                 },
                                 "protectedSettings": {
-                                  "items": {
+                                  "configurationArguments": {
                                     "domainName": "contoso",
                                     "DomainFQDNName": "contoso.local",
                                     "sqlAlwaysOnEndpointName": "ao-ag-listener",
@@ -132,7 +130,7 @@
                                   }
                                 },
                                 "protectedSettings": {
-                                  "items": {
+                                  "configurationArguments": {
                                     "domainName": "contoso",
                                     "DomainFQDNName": "contoso.local",
                                     "sqlAlwaysOnEndpointName": "ao-ag-listener",
@@ -188,7 +186,7 @@
                             }
                           },
                           "protectedSettings": {
-                            "items": {
+                            "configurationArguments": {
                               "domainName": "contoso",
                               "DomainFQDNName": "contoso.local",
                               "sqlAlwaysOnEndpointName": "ao-ag-listener",
@@ -201,7 +199,7 @@
                               },
                               "FarmAccount": {
                                 "userName": "sp_farm",
-                                "password": "privateSettingsRef:FarmPassword"
+                                "password": "AweS0me@PW"
                               },
                               "SPSetupAccount": {
                                 "userName": "testuser",
@@ -238,7 +236,7 @@
                             }
                           },
                           "protectedSettings": {
-                            "items": {
+                            "configurationArguments": {
                               "domainName": "contoso",
                               "DomainFQDNName": "contoso.local",
                               "sqlAlwaysOnEndpointName": "ao-ag-listener",

@@ -304,31 +304,32 @@
                               ]
                             }
                           ],
-                          "imageReference": {
-                            "publisher": "MicrosoftWindowsServer",
-                            "offer": "WindowsServer",
-                            "sku": "2012-R2-Datacenter",
-                            "version": "latest"
-                          },
                           "extensions": [
-                              {
-                                "name": "join-ad-domain",
-                                "publisher": "Microsoft.Compute",
-                                "type": "JsonADDomainExtension",
-                                "typeHandlerVersion": "1.3",
-                                "autoUpgradeMinorVersion": true,
-                                "settings": {
-                                  "Name": "fabrikam.com",
-                                  "OUPath": "",
-                                  "User": "fabrikam.com\\onpremuser",
-                                  "Restart": true,
-                                  "Options": 3
-                                },
-                                "protectedSettings": {
-                                  "Password": "AweS0me@PW"
+                            {
+                              "name": "join-domain",
+                              "publisher": "Microsoft.Powershell",
+                              "type": "DSC",
+                              "typeHandlerVersion": "2.7",
+                              "autoUpgradeMinorVersion": true,
+                              "settings": {
+                                "configuration": {
+                                  "url": "https://github.com/woodp/reference-architectures/raw/woodp/sharepointrem/sharepoint/sharepoint-2016-v2/adds.zip",
+                                  "script": "join-domain.ps1",
+                                  "function": "JoinDomain"
+                                }
+                              },
+                              "protectedSettings": {
+                                "configurationArguments": {
+                                  "DomainName": "fabrikam.com",
+                                  "PrimaryDcIpAddress": "192.168.0.4",
+                                  "AdminCreds": {
+                                    "UserName": "onpremuser",
+                                    "Password": "AweS0me@PW"
+                                  }
                                 }
                               }
-                          ]
+                            }
+                        ]
                       }
                   ]
               },
@@ -391,12 +392,6 @@
                                 "enableIPForwarding": false
                               }
                             ],
-                            "imageReference": {
-                              "publisher": "MicrosoftWindowsServer",
-                              "offer": "WindowsServer",
-                              "sku": "2012-R2-Datacenter",
-                              "version": "latest"
-                            },
                             "dataDisks": {
                               "count": 1
                             }                            
@@ -643,26 +638,7 @@
                                     "nicIndex": 0
                                   }
                                 ]                                
-                            },
-                            "extensions": [
-                              {
-                                "name": "join-ad-domain",
-                                "publisher": "Microsoft.Compute",
-                                "type": "JsonADDomainExtension",
-                                "typeHandlerVersion": "1.3",
-                                "autoUpgradeMinorVersion": true,
-                                "settings": {
-                                  "Name": "contoso.local",
-                                  "OUPath": "",
-                                  "User": "contoso.local\\testuser",
-                                  "Restart": true,
-                                  "Options": 3
-                                },
-                                "protectedSettings": {
-                                  "Password": "AweS0me@PW"
-                                }
-                              }
-                            ]                            
+                            }                         
                         }
                     ]
                 },
@@ -700,23 +676,6 @@
                               "count": 1
                             },
                             "extensions": [
-                              {
-                                "name": "join-ad-domain",
-                                "publisher": "Microsoft.Compute",
-                                "type": "JsonADDomainExtension",
-                                "typeHandlerVersion": "1.3",
-                                "autoUpgradeMinorVersion": true,
-                                "settings": {
-                                  "Name": "contoso.local",
-                                  "OUPath": "",
-                                  "User": "contoso.local\\testuser",
-                                  "Restart": true,
-                                  "Options": 3
-                                },
-                                "protectedSettings": {
-                                  "Password": "AweS0me@PW"
-                                }
-                              },
                               {
                                 "name": "CreateFileShareWitness",
                                 "publisher": "Microsoft.Powershell",
