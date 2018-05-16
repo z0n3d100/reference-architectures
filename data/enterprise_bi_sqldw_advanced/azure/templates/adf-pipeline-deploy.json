@@ -45,8 +45,8 @@
             "identity": {
                 "type": "SystemAssigned"
             },
-        
-            "resources": 
+
+            "resources":
             [
                 {
                     "name": "[concat(parameters('factoryName'), '/ETLCutoff')]",
@@ -151,7 +151,7 @@
                                 "type": "SqlServerStoredProcedure",
                                 "dependsOn": [
                                     {
-                                        
+
                                         "activity": "GetLastETLCutoff-Sales",
                                         "dependencyConditions": [
                                             "Succeeded"
@@ -1581,12 +1581,30 @@
                                 "name": "SalesPipeline",
                                 "type": "ExecutePipeline",
                                 "dependsOn": [
-                                    {
-                                        "activity": "GetCutOff",
-                                        "dependencyConditions": [
-                                            "Succeeded"
-                                        ]
-                                    }
+                                  {
+                                      "activity": "CityPipeline",
+                                      "dependencyConditions": [
+                                          "Succeeded"
+                                      ]
+                                  },
+                                  {
+                                      "activity": "CustomerPipeline",
+                                      "dependencyConditions": [
+                                          "Succeeded"
+                                      ]
+                                  },
+                                  {
+                                      "activity": "EmployeePipeline",
+                                      "dependencyConditions": [
+                                          "Succeeded"
+                                      ]
+                                  },
+                                  {
+                                      "activity": "StockItemsPipeline",
+                                      "dependencyConditions": [
+                                          "Succeeded"
+                                      ]
+                                  }
                                 ],
                                 "typeProperties": {
                                     "pipeline": {
@@ -2876,4 +2894,3 @@
         }
     ]
 }
-            
