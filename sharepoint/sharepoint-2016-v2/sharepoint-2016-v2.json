@@ -223,7 +223,9 @@
                               "SiteName": "Azure-Vnet-Site",
                               "OnpremSiteName": "Default-First-Site-Name",
                               "Cidr": "10.0.0.0/16",
-                              "ReplicationFrequency": 10,                                
+                              "ReplicationFrequency": 10,
+                              "TargetDomainName": "contoso.local",
+                              "ForwardIpAddress": "10.0.4.4,10.0.4.5",
                               "AdminCreds": {
                                   "UserName": "onpremuser",
                                   "Password": "AweS0me@PW"
@@ -462,6 +464,8 @@
                               "configurationArguments": {
                                 "DomainName": "contoso.local",
                                 "DomainNetbiosName": "contoso",
+                                "TargetDomainName": "fabrikam.com",
+                                "ForwardIpAddress": "192.168.0.4,192.168.0.5",
                                 "AdminCreds": {
                                   "UserName": "testuser",
                                   "Password": "AweS0me@PW"

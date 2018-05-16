@@ -1,8 +1,12 @@
-# $DomainName         -  FQDN for the Active Directory Domain to create
 # $AdminCreds         -  a PSCredentials object that contains username and password 
 #                        that will be assigned to the Domain Administrator account
 # $SafeModeAdminCreds -  a PSCredentials object that contains the password that will
 #                        be assigned to the Safe Mode Administrator account
+# $DomainName         -  FQDN for the Active Directory Domain to create
+# $DomainNetbiosName     -  Netbios name for the Active Directory Domain to create
+# $TargetDomainName      -  Domain Name to establish the Trust
+# $ForwardIpAddress      -  IP Addresses used for set the conditional forward zone
+#                           for the trust relationship
 # $RetryCount         -  defines how many retries should be performed while waiting
 #                        for the domain to be provisioned
 # $RetryIntervalSec   -  defines the seconds between each retry to check if the 
@@ -22,6 +26,12 @@ Configuration CreateForest {
         [Parameter(Mandatory)]
         [string]$DomainNetbiosName,
 
+        [Parameter(Mandatory)]
+        [string]$TargetDomainName,
+        
+        [Parameter(Mandatory)]
+        [string]$ForwardIpAddress,
+        
         [Int]$RetryCount=20,
         [Int]$RetryIntervalSec=30
     )
@@ -140,6 +150,45 @@ Configuration CreateForest {
                 Add-DnsServerResourceRecordA -Name "OneDrive" -ZoneName "contoso.local" -AllowUpdateAny -IPv4Address "10.0.1.100" -TimeToLive 01:00:00 -ComputerName "AD1.contoso.local"
             }
             DependsOn = "[xPendingReboot]Reboot1"
+        }
+
+        Script SetConditionalForwardedZone {
+            GetScript = {return @{}}
+
+            TestScript = {
+                $zone = Get-DnsServerZone -Name $using:TargetDomainName -ErrorAction SilentlyContinue
+                if($zone -ne $null -and $zone.ZoneType -eq 'Forwarder'){
+                    return $true
+                }
+
+                return $false
+            }
+
+            SetScript = {
+                $ForwardDomainName = $using:TargetDomainName
+                $ForwardAddress = $using:ForwardIpAddress
+                $IpAddresses = @()
+                foreach($address in $ForwardAddress.Split(',')){
+                    $IpAddresses += [IPAddress]$address.Trim()
+                }
+                Add-DnsServerConditionalForwarderZone -Name "$ForwardDomainName" -ReplicationScope "Domain" -MasterServers $IpAddresses
+            }
+        }
+
+        xADDomainTrust SetOutboundDomainTrust {
+            Ensure = 'Present'
+            SourceDomainName = $DomainName
+            TargetDomainName = $TargetDomainName
+            TargetDomainAdministratorCredential = $AdminCreds
+            TrustType = 'External'
+            TrustDirection = 'Outbound'
+            PsDscRunAsCredential = $AdminCreds
+            DependsOn = "[xADDomainController]PrimaryDC"
+        }
+
+        xPendingReboot Reboot2
+        { 
+            Name = "RebootServer"
         }
    }
 }
