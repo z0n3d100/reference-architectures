@@ -2,9 +2,11 @@
 #                        that will be assigned to the Domain Administrator account
 # $SafeModeAdminCreds -  a PSCredentials object that contains the password that will
 #                        be assigned to the Safe Mode Administrator account
+# $TargetAdminCreds   -  a PSCredentials object that contains username and password 
+#                        of the Administrator of the target Domain (trust)
 # $DomainName         -  FQDN for the Active Directory Domain to create
 # $DomainNetbiosName     -  Netbios name for the Active Directory Domain to create
-# $TargetDomainName      -  Domain Name to establish the Trust
+# $TargetDomainName      -  Domain Name to establish the trust
 # $ForwardIpAddress      -  IP Addresses used for set the conditional forward zone
 #                           for the trust relationship
 # $RetryCount         -  defines how many retries should be performed while waiting
@@ -19,6 +21,9 @@ Configuration CreateForest {
 
         [Parameter(Mandatory)]
         [System.Management.Automation.PSCredential]$SafeModeAdminCreds,
+
+        [Parameter(Mandatory)]
+        [System.Management.Automation.PSCredential]$TargetAdminCreds,
 
         [Parameter(Mandatory)]
         [string]$DomainName,
@@ -179,7 +184,7 @@ Configuration CreateForest {
             Ensure = 'Present'
             SourceDomainName = $DomainName
             TargetDomainName = $TargetDomainName
-            TargetDomainAdministratorCredential = $AdminCreds
+            TargetDomainAdministratorCredential = $TargetAdminCreds
             TrustType = 'External'
             TrustDirection = 'Outbound'
             PsDscRunAsCredential = $AdminCreds

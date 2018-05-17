@@ -211,7 +211,7 @@
                           "autoUpgradeMinorVersion": true,
                           "settings": {
                             "configuration": {
-                              "url": "https://github.com/mspnp/reference-architectures/raw/master/sharepoint/sharepoint-2016-v2/adds.zip",
+                              "url": "https://github.com/woodp/reference-architectures/raw/woodp/sharepointrem/sharepoint/sharepoint-2016-v2/adds.zip",
                               "script":"adds-forest-site.ps1",
                               "function": "CreateForest"
                             }
@@ -455,7 +455,7 @@
                             "autoUpgradeMinorVersion": true,
                             "settings": {
                               "configuration": {
-                                "url": "https://github.com/mspnp/reference-architectures/raw/master/sharepoint/sharepoint-2016-v2/adds.zip",
+                                "url": "https://github.com/woodp/reference-architectures/raw/woodp/sharepointrem/sharepoint/sharepoint-2016-v2/adds.zip",
                                 "script":"adds-forest.ps1",
                                 "function": "CreateForest"
                               }
@@ -470,6 +470,10 @@
                                   "UserName": "testuser",
                                   "Password": "AweS0me@PW"
                                 },
+                                "TargetAdminCreds": {
+                                  "UserName": "onpremuser",
+                                  "Password": "AweS0me@PW"
+                                },                                
                                 "SafeModeAdminCreds": {
                                   "UserName": "testsafeuser",
                                   "Password": "Saf3M0de@PW"
