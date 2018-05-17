@@ -243,6 +243,15 @@ configuration CreateFailoverCluster
             DependsOn        = "[xFOCluster]FailoverCluster"
         }
         
+        xClusterQuorum ClusterConfigureQuorum
+        {
+            IsSingleInstance = 'Yes'
+            Type = 'NodeAndFileShareMajority'
+            Resource = $SharePath
+            PsDscRunAsCredential = $Admincreds
+            DependsOn = "[xWaitForCluster]WaitForCluster"
+        }
+
         xSQLServerAlwaysOnService ConfigureSqlServerWithAlwaysOn
         {
             Ensure               = 'Present'
