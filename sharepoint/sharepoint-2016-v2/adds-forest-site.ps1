@@ -1,12 +1,20 @@
-# $DomainName         -  FQDN for the Active Directory Domain to create
-# $AdminCreds         -  a PSCredentials object that contains username and password 
-#                        that will be assigned to the Domain Administrator account
-# $SafeModeAdminCreds -  a PSCredentials object that contains the password that will
-#                        be assigned to the Safe Mode Administrator account
-# $RetryCount         -  defines how many retries should be performed while waiting
-#                        for the domain to be provisioned
-# $RetryIntervalSec   -  defines the seconds between each retry to check if the 
-#                        domain has been provisioned 
+# $AdminCreds            -  a PSCredentials object that contains username and password 
+#                           that will be assigned to the Domain Administrator account
+# $SafeModeAdminCreds    -  a PSCredentials object that contains the password that will
+#                           be assigned to the Safe Mode Administrator account
+# $DomainName            -  FQDN for the Active Directory Domain to create
+# $DomainNetbiosName     -  Netbios name for the Active Directory Domain to create
+# $SiteName              -  Name of the Active Directory replicationm site
+# $OnpremSiteName        -  Name of the Active Directory replication site to link to
+# $Cidr                  -  Subnet for the Active Directory replication
+# $ReplicationFrequency  -  Frequency of the replication
+# $TargetDomainName      -  Domain Name to establish the Trust
+# $ForwardIpAddress      -  IP Addresses used for set the conditional forward zone
+#                           for the trust relationship
+# $RetryCount            -  defines how many retries should be performed while waiting
+#                           for the domain to be provisioned
+# $RetryIntervalSec      -  defines the seconds between each retry to check if the 
+#                           domain has been provisioned 
 Configuration CreateForest {
     param
     (
@@ -34,6 +42,12 @@ Configuration CreateForest {
         [Parameter(Mandatory=$True)]
         [int]$ReplicationFrequency,        
         
+        [Parameter(Mandatory)]
+        [string]$TargetDomainName,
+        
+        [Parameter(Mandatory)]
+        [string]$ForwardIpAddress,
+
         [Int]$RetryCount=20,
         [Int]$RetryIntervalSec=30
     )
@@ -171,6 +185,29 @@ Configuration CreateForest {
             DependsOn = "[xWaitForADDomain]DomainWait"
         }
 
+        Script SetConditionalForwardedZone {
+            GetScript = {return @{}}
+
+            TestScript = {
+                $zone = Get-DnsServerZone -Name $using:TargetDomainName -ErrorAction SilentlyContinue
+                if($zone -ne $null -and $zone.ZoneType -eq 'Forwarder'){
+                    return $true
+                }
+
+                return $false
+            }
+
+            SetScript = {
+                $ForwardDomainName = $using:TargetDomainName
+                $ForwardAddress = $using:ForwardIpAddress
+                $IpAddresses = @()
+                foreach($address in $ForwardAddress.Split(',')){
+                    $IpAddresses += [IPAddress]$address.Trim()
+                }
+                Add-DnsServerConditionalForwarderZone -Name "$ForwardDomainName" -ReplicationScope "Domain" -MasterServers $IpAddresses
+            }
+        }
+        
         xPendingReboot Reboot1
         { 
             Name = "RebootServer"

@@ -15,20 +15,25 @@
                               "name": "configuringAlwaysOn",
                               "publisher": "Microsoft.Powershell",
                               "type": "DSC",
-                              "typeHandlerVersion": "2.75",
-                              "autoUpgradeMinorVersion": false,
+                              "typeHandlerVersion": "2.7",
+                              "autoUpgradeMinorVersion": true,
                               "settings": {
-                                "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/CreateFailoverCluster.zip",
-                                "ConfigurationFunction": "CreateFailoverCluster.ps1\\CreateFailoverCluster",
-                                "properties": {
+                                "configuration": {
+                                  "url": "https://github.com/mspnp/reference-architectures/raw/master/sharepoint/sharepoint-2016-v2/CreateFailoverCluster.zip",
+                                  "script": "CreateFailoverCluster.ps1",
+                                  "function": "CreateFailoverCluster"
+                                }
+                              },
+                              "protectedSettings": {
+                                "configurationArguments": {
                                   "DomainName": "contoso.local",
                                   "Admincreds": {
                                     "userName": "testuser",
-                                    "password": "privateSettingsRef:adminPassword"
+                                    "password": "AweS0me@PW"
                                   },
                                   "SQLServiceCreds": {
                                     "userName": "sqlservicetestuser",
-                                    "password": "privateSettingsRef:sqlServerServiceAccountPassword"
+                                    "password": "AweS0me@SQLServicePW"
                                   },                                  
                                   "ClusterName": "ra-ntier-sql-fc",
                                   "SharePath": "\\\\fsw1\\sql-fs",
@@ -42,13 +47,6 @@
                                   "AOEndpointName": "ra-sp-sql-hadr",
                                   "DNSServerName": "ad1",
                                   "DatabaseNames": "AutoHa-sample"
-                                }
-                              },
-                              "protectedSettings": {
-                                "items": {
-                                  "adminPassword": "AweS0me@PW",
-                                  "sqlServerServiceAccountPassword": "AweS0me@SQLServicePW",
-                                  "sqlAuthPassword": "AweS0me@SQLPW"
                                 }
                               }
                             }

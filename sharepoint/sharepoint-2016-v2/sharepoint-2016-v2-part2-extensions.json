@@ -15,12 +15,17 @@
                                 "name": "createSPfarm",
                                 "publisher": "Microsoft.Powershell",
                                 "type": "DSC",
-                                "typeHandlerVersion": "2.75",
-                                "autoUpgradeMinorVersion": false,
+                                "typeHandlerVersion": "2.7",
+                                "autoUpgradeMinorVersion": true,
                                 "settings": {
-                                  "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/Create-Join-Farm.zip",
-                                  "ConfigurationFunction": "create-join-farm.ps1\\CreateJoinFarm",
-                                  "properties": {
+                                  "configuration": {
+                                    "url": "https://github.com/mspnp/reference-architectures/raw/master/sharepoint/sharepoint-2016-v2/Create-Join-Farm.zip",
+                                    "script": "create-join-farm.ps1",
+                                    "function": "CreateJoinFarm"
+                                  }
+                                },
+                                "protectedSettings": {
+                                  "configurationArguments": {
                                     "domainName": "contoso",
                                     "DomainFQDNName": "contoso.local",
                                     "sqlAlwaysOnEndpointName": "ao-ag-listener",
@@ -29,33 +34,24 @@
                                     "CentralAdmin": "False",
                                     "Passphrase": {
                                       "userName": "testuser",
-                                      "password": "privateSettingsRef:PassPhrasePassword"
+                                      "password": "AweS0me@PW"
                                     },
                                     "FarmAccount": {
                                       "userName": "sp_farm",
-                                      "password": "privateSettingsRef:FarmPassword"
+                                      "password": "AweS0me@PW"
                                     },
                                     "SPSetupAccount": {
                                       "userName": "testuser",
-                                      "password": "privateSettingsRef:SPSetupAccountPassword"
+                                      "password": "AweS0me@PW"
                                     },
                                     "ServicePoolManagedAccount": {
                                       "userName": "sp_svcpool",
-                                      "password": "privateSettingsRef:ServicePoolManagedAccount"
+                                      "password": "AweS0me@PW"
                                     },
                                     "WebPoolManagedAccount": {
                                       "userName": "sp_webpool",
-                                      "password": "privateSettingsRef:WebPoolManagedAccount"
+                                      "password": "AweS0me@PW"
                                     }
-                                  }
-                                },
-                                "protectedSettings": {
-                                  "items": {
-                                    "PassPhrasePassword": "AweS0me@PW",
-                                    "FarmPassword": "AweS0me@PW",
-                                    "SPSetupAccountPassword": "AweS0me@PW",
-                                    "ServicePoolManagedAccount": "AweS0me@PW",
-                                    "WebPoolManagedAccount": "AweS0me@PW"
                                   }
                                 }
                               }
@@ -74,12 +70,17 @@
                                 "name": "configSPservers2",
                                 "publisher": "Microsoft.Powershell",
                                 "type": "DSC",
-                                "typeHandlerVersion": "2.75",
-                                "autoUpgradeMinorVersion": false,
+                                "typeHandlerVersion": "2.7",
+                                "autoUpgradeMinorVersion": true,
                                 "settings": {
-                                  "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/Create-Join-Farm.zip",
-                                  "ConfigurationFunction": "create-join-farm.ps1\\CreateJoinFarm",
-                                  "properties": {
+                                  "configuration":{
+                                    "url": "https://github.com/mspnp/reference-architectures/raw/master/sharepoint/sharepoint-2016-v2/Create-Join-Farm.zip",
+                                    "script": "create-join-farm.ps1",
+                                    "function": "CreateJoinFarm"
+                                  }
+                                },
+                                "protectedSettings": {
+                                  "configurationArguments": {
                                     "domainName": "contoso",
                                     "DomainFQDNName": "contoso.local",
                                     "sqlAlwaysOnEndpointName": "ao-ag-listener",
@@ -88,33 +89,24 @@
                                     "CentralAdmin": "False",
                                     "Passphrase": {
                                       "userName": "testuser",
-                                      "password": "privateSettingsRef:PassPhrasePassword"
+                                      "password": "AweS0me@PW"
                                     },
                                     "FarmAccount": {
                                       "userName": "sp_farm",
-                                      "password": "privateSettingsRef:FarmPassword"
+                                      "password": "AweS0me@PW"
                                     },
                                     "SPSetupAccount": {
                                       "userName": "testuser",
-                                      "password": "privateSettingsRef:SPSetupAccountPassword"
+                                      "password": "AweS0me@PW"
                                     },
                                     "ServicePoolManagedAccount": {
                                       "userName": "sp_svcpool",
-                                      "password": "privateSettingsRef:ServicePoolManagedAccount"
+                                      "password": "AweS0me@PW"
                                     },
                                     "WebPoolManagedAccount": {
                                       "userName": "sp_webpool",
-                                      "password": "privateSettingsRef:WebPoolManagedAccount"
+                                      "password": "AweS0me@PW"
                                     }
-                                  }
-                                },
-                                "protectedSettings": {
-                                  "items": {
-                                    "PassPhrasePassword": "AweS0me@PW",
-                                    "FarmPassword": "AweS0me@PW",
-                                    "SPSetupAccountPassword": "AweS0me@PW",
-                                    "ServicePoolManagedAccount": "AweS0me@PW",
-                                    "WebPoolManagedAccount": "AweS0me@PW"
                                   }
                                 }
                   
@@ -128,12 +120,17 @@
                                 "name": "configSPservers3",
                                 "publisher": "Microsoft.Powershell",
                                 "type": "DSC",
-                                "typeHandlerVersion": "2.75",
-                                "autoUpgradeMinorVersion": false,
+                                "typeHandlerVersion": "2.7",
+                                "autoUpgradeMinorVersion": true,
                                 "settings": {
-                                  "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/Create-Join-Farm.zip",
-                                  "ConfigurationFunction": "create-join-farm.ps1\\CreateJoinFarm",
-                                  "properties": {
+                                  "configuration": {
+                                    "url": "https://github.com/mspnp/reference-architectures/raw/master/sharepoint/sharepoint-2016-v2/Create-Join-Farm.zip",
+                                    "script": "create-join-farm.ps1",
+                                    "function": "CreateJoinFarm"
+                                  }
+                                },
+                                "protectedSettings": {
+                                  "configurationArguments": {
                                     "domainName": "contoso",
                                     "DomainFQDNName": "contoso.local",
                                     "sqlAlwaysOnEndpointName": "ao-ag-listener",
@@ -142,33 +139,24 @@
                                     "CentralAdmin": "False",
                                     "Passphrase": {
                                       "userName": "testuser",
-                                      "password": "privateSettingsRef:PassPhrasePassword"
+                                      "password": "AweS0me@PW"
                                     },
                                     "FarmAccount": {
                                       "userName": "sp_farm",
-                                      "password": "privateSettingsRef:FarmPassword"
+                                      "password": "AweS0me@PW"
                                     },
                                     "SPSetupAccount": {
                                       "userName": "testuser",
-                                      "password": "privateSettingsRef:SPSetupAccountPassword"
+                                      "password": "AweS0me@PW"
                                     },
                                     "ServicePoolManagedAccount": {
                                       "userName": "sp_svcpool",
-                                      "password": "privateSettingsRef:ServicePoolManagedAccount"
+                                      "password": "AweS0me@PW"
                                     },
                                     "WebPoolManagedAccount": {
                                       "userName": "sp_webpool",
-                                      "password": "privateSettingsRef:WebPoolManagedAccount"
+                                      "password": "AweS0me@PW"
                                     }
-                                  }
-                                },
-                                "protectedSettings": {
-                                  "items": {
-                                    "PassPhrasePassword": "AweS0me@PW",
-                                    "FarmPassword": "AweS0me@PW",
-                                    "SPSetupAccountPassword": "AweS0me@PW",
-                                    "ServicePoolManagedAccount": "AweS0me@PW",
-                                    "WebPoolManagedAccount": "AweS0me@PW"
                                   }
                                 }
                   
@@ -188,12 +176,17 @@
                           "name": "configSPservers4",
                           "publisher": "Microsoft.Powershell",
                           "type": "DSC",
-                          "typeHandlerVersion": "2.75",
-                          "autoUpgradeMinorVersion": false,
+                          "typeHandlerVersion": "2.7",
+                          "autoUpgradeMinorVersion": true,
                           "settings": {
-                            "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/Create-Join-Farm.zip",
-                            "ConfigurationFunction": "create-join-farm.ps1\\CreateJoinFarm",
-                            "properties": {
+                            "configuration": {
+                              "url": "https://github.com/mspnp/reference-architectures/raw/master/sharepoint/sharepoint-2016-v2/Create-Join-Farm.zip",
+                              "script": "create-join-farm.ps1",
+                              "function": "CreateJoinFarm"
+                            }
+                          },
+                          "protectedSettings": {
+                            "configurationArguments": {
                               "domainName": "contoso",
                               "DomainFQDNName": "contoso.local",
                               "sqlAlwaysOnEndpointName": "ao-ag-listener",
@@ -202,33 +195,24 @@
                               "CentralAdmin": "False",
                               "Passphrase": {
                                 "userName": "testuser",
-                                "password": "privateSettingsRef:PassPhrasePassword"
+                                "password": "AweS0me@PW"
                               },
                               "FarmAccount": {
                                 "userName": "sp_farm",
-                                "password": "privateSettingsRef:FarmPassword"
+                                "password": "AweS0me@PW"
                               },
                               "SPSetupAccount": {
                                 "userName": "testuser",
-                                "password": "privateSettingsRef:SPSetupAccountPassword"
+                                "password": "AweS0me@PW"
                               },
                               "ServicePoolManagedAccount": {
                                 "userName": "sp_svcpool",
-                                "password": "privateSettingsRef:ServicePoolManagedAccount"
+                                "password": "AweS0me@PW"
                               },
                               "WebPoolManagedAccount": {
                                 "userName": "sp_webpool",
-                                "password": "privateSettingsRef:WebPoolManagedAccount"
+                                "password": "AweS0me@PW"
                               }
-                            }
-                          },
-                          "protectedSettings": {
-                            "items": {
-                              "PassPhrasePassword": "AweS0me@PW",
-                              "FarmPassword": "AweS0me@PW",
-                              "SPSetupAccountPassword": "AweS0me@PW",
-                              "ServicePoolManagedAccount": "AweS0me@PW",
-                              "WebPoolManagedAccount": "AweS0me@PW"
                             }
                           }
             
@@ -242,12 +226,17 @@
                           "name": "configSPservers5",
                           "publisher": "Microsoft.Powershell",
                           "type": "DSC",
-                          "typeHandlerVersion": "2.75",
-                          "autoUpgradeMinorVersion": false,
+                          "typeHandlerVersion": "2.7",
+                          "autoUpgradeMinorVersion": true,
                           "settings": {
-                            "ModulesUrl": "https://github.com/woodp/reference-architectures/raw/woodp/sharepoint/sharepoint/sharepoint-2016-v2/join-farm-search.zip",
-                            "ConfigurationFunction": "join-farm-search.ps1\\CreateJoinFarm",
-                            "properties": {
+                            "configuration": {
+                              "url": "https://github.com/mspnp/reference-architectures/raw/master/sharepoint/sharepoint-2016-v2/join-farm-search.zip",
+                              "script": "join-farm-search.ps1",
+                              "function": "CreateJoinFarm"
+                            }
+                          },
+                          "protectedSettings": {
+                            "configurationArguments": {
                               "domainName": "contoso",
                               "DomainFQDNName": "contoso.local",
                               "sqlAlwaysOnEndpointName": "ao-ag-listener",
@@ -256,33 +245,24 @@
                               "CentralAdmin": "False",
                               "Passphrase": {
                                 "userName": "testuser",
-                                "password": "privateSettingsRef:PassPhrasePassword"
+                                "password": "AweS0me@PW"
                               },
                               "FarmAccount": {
                                 "userName": "sp_farm",
-                                "password": "privateSettingsRef:FarmPassword"
+                                "password": "AweS0me@PW"
                               },
                               "SPSetupAccount": {
                                 "userName": "testuser",
-                                "password": "privateSettingsRef:SPSetupAccountPassword"
+                                "password": "AweS0me@PW"
                               },
                               "ServicePoolManagedAccount": {
                                 "userName": "sp_svcpool",
-                                "password": "privateSettingsRef:ServicePoolManagedAccount"
+                                "password": "AweS0me@PW"
                               },
                               "WebPoolManagedAccount": {
                                 "userName": "sp_webpool",
-                                "password": "privateSettingsRef:WebPoolManagedAccount"
+                                "password": "AweS0me@PW"
                               }
-                            }
-                          },
-                          "protectedSettings": {
-                            "items": {
-                              "PassPhrasePassword": "AweS0me@PW",
-                              "FarmPassword": "AweS0me@PW",
-                              "SPSetupAccountPassword": "AweS0me@PW",
-                              "ServicePoolManagedAccount": "AweS0me@PW",
-                              "WebPoolManagedAccount": "AweS0me@PW"
                             }
                           }            
                         }
