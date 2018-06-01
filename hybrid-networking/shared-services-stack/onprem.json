@@ -99,7 +99,7 @@
                                     "autoUpgradeMinorVersion": true,
                                     "settings": {
                                         "configuration": {
-                                            "url": "https://github.com/woodp/reference-architectures/raw/woodp/shared-services/hybrid-networking/shared-services-stack/shared-services-stack.zip",
+                                            "url": "https://github.com/mspnp/reference-architectures/raw/master/hybrid-networking/shared-services-stack/shared-services-stack.zip",
                                             "script": "create-forest.ps1",
                                             "function": "CreateForest"
                                         }
@@ -140,7 +140,7 @@
                                     "autoUpgradeMinorVersion": true,
                                     "settings": {
                                       "configuration": {
-                                          "url": "https://github.com/woodp/reference-architectures/raw/woodp/shared-services/hybrid-networking/shared-services-stack/shared-services-stack.zip",
+                                          "url": "https://github.com/mspnp/reference-architectures/raw/master/hybrid-networking/shared-services-stack/shared-services-stack.zip",
                                           "script":"add-controller.ps1",
                                           "function": "CreateDomainController"
                                       }

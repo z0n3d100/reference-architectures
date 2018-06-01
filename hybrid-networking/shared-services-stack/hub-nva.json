@@ -36,7 +36,7 @@
                                 "autoUpgradeMinorVersion": true,
                                 "settings": {
                                     "fileUris": [
-                                        "https://raw.githubusercontent.com/woodp/reference-architectures/woodp/shared-services/hybrid-networking/shared-services-stack/enable-ip-forwarding.sh"
+                                        "https://raw.githubusercontent.com/mspnp/reference-architectures/master/hybrid-networking/shared-services-stack/enable-ip-forwarding.sh"
                                     ],
                                     "commandToExecute": "bash enable-ip-forwarding.sh 10.0.0.36"
                                 },
