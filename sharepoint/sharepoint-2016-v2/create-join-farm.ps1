@@ -62,7 +62,7 @@ configuration CreateJoinFarm
     )
 
     Import-DscResource -ModuleName SharePointDsc
-    Import-DscResource -ModuleName PSDesiredStateConfiguration, xStorage, xComputerManagement, xActiveDirectory
+    Import-DscResource -ModuleName PSDesiredStateConfiguration, xStorage, xComputerManagement, xActiveDirectory, xWebAdministration
     Import-DscResource -ModuleName xCredSSP
 
     node localhost
@@ -132,6 +132,19 @@ configuration CreateJoinFarm
             DependsOn = '[xDisk]ADDataDisk2'
         }
 
+        xWebAppPool RemoveDotNet2Pool         { Name = ".NET v2.0";            Ensure = "Absent"; }
+        xWebAppPool RemoveDotNet2ClassicPool  { Name = ".NET v2.0 Classic";    Ensure = "Absent"; }
+        xWebAppPool RemoveDotNet45Pool        { Name = ".NET v4.5";            Ensure = "Absent"; }
+        xWebAppPool RemoveDotNet45ClassicPool { Name = ".NET v4.5 Classic";    Ensure = "Absent"; }
+        xWebAppPool RemoveClassicDotNetPool   { Name = "Classic .NET AppPool"; Ensure = "Absent"; }
+        xWebAppPool RemoveDefaultAppPool      { Name = "DefaultAppPool";       Ensure = "Absent"; }
+        xWebSite    RemoveDefaultWebSite      
+        { 
+            Name = "Default Web Site";     
+            Ensure = "Absent"; 
+            PhysicalPath = "C:\inetpub\wwwroot"; 
+        }
+
         #**********************************************************
         # Basic farm configuration
         #
@@ -139,13 +152,49 @@ configuration CreateJoinFarm
         # provisions generic services and components used by the
         # whole farm
         #**********************************************************
+        xADUser CreateFarmAccount
+        {
+            DomainName = $domainName
+            UserName = $FarmAccount.UserName
+            DisplayName = "SharePoint Farm Account"
+            PasswordNeverExpires = $true            
+            Ensure = 'Present'
+            Password = $FarmAccountCreds
+            DomainAdministratorCredential = $SPSetupAccountCreds
+            DependsOn = "[xComputer]DomainJoin"
+        }
+
+        xADUser ServicePoolManagedAccount
+        {
+            DomainName = $domainName
+            UserName = $ServicePoolManagedAccount.UserName
+            DisplayName = "Service Pool Account"
+            PasswordNeverExpires = $true            
+            Ensure = "Present"
+            Password = $ServicePoolManagedAccountCreds
+            DomainAdministratorCredential = $SPSetupAccountCreds
+            DependsOn = "[xComputer]DomainJoin"
+        }		
+
+        xADUser WebPoolManagedAccount
+        {
+            DomainName = $domainName
+            UserName = $WebPoolManagedAccount.UserName
+            DisplayName = "Web App Pool Account"
+            PasswordNeverExpires = $true            
+            Ensure = "Present"
+            Password = $WebPoolManagedAccountCreds
+            DomainAdministratorCredential = $SPSetupAccountCreds
+            DependsOn = "[xADUser]ServicePoolManagedAccount"
+        }
+        
         SPFarm CreateSPFarm
         {
             Ensure                   = "Present"
             DatabaseServer           = $SqlAlwaysOnEndpointName
             FarmConfigDatabaseName   = "SP_Config_2016"
             Passphrase               = $Passphrase
-            FarmAccount              = $FarmAccountCreds
+            FarmAccount              = $FarmAccount
             PsDscRunAsCredential     = $SPSetupAccount
             AdminContentDatabaseName = "SP_AdminContent"
             CentralAdministrationPort = "2016"

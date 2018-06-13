@@ -19,7 +19,7 @@
                             "autoUpgradeMinorVersion": true,
                             "settings": {
                               "configuration": {
-                                "url": "https://github.com/mspnp/reference-architectures/raw/master/sharepoint/sharepoint-2016-v2/Create-Join-Farm.zip",
+                                "url": "https://github.com/woodp/reference-architectures/raw/woodp/sharepointrem/sharepoint/sharepoint-2016-v2/Create-Join-Farm.zip",
                                 "script": "create-join-farm.ps1",
                                 "function": "CreateJoinFarm"
                               }
