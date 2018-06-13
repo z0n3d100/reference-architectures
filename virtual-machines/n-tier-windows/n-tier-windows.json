@@ -421,7 +421,7 @@
                                     "typeHandlerVersion": "2.7",
                                     "autoUpgradeMinorVersion": true,
                                     "settings": {
-                                        "modulesURL": "https://github.com/luisgmsft/reference-architectures/blob/ee2dfb3f9525d6e2d99f8b71fd29f2a9bf742bb3/scripts/windows/dsc/PrepareSQLServer.ps1.zip",
+                                        "modulesURL": "https://github.com/luisgmsft/reference-architectures/master/scripts/windows/dsc/PrepareSQLServer.ps1.zip",
                                         "configurationFunction": "PrepareSqlServer.ps1\\SqlServerPrepareDsc",
                                         "properties": {
                                             "domainName": "contoso.com",
@@ -461,7 +461,7 @@
                                     "typeHandlerVersion": "2.7",
                                     "autoUpgradeMinorVersion": true,
                                     "settings": {
-                                        "modulesURL": "https://github.com/luisgmsft/reference-architectures/blob/ee2dfb3f9525d6e2d99f8b71fd29f2a9bf742bb3/scripts/windows/dsc/PrepareSQLServer.ps1.zip",
+                                        "modulesURL": "https://github.com/luisgmsft/reference-architectures/master/scripts/windows/dsc/PrepareSQLServer.ps1.zip",
                                         "configurationFunction": "PrepareSqlServer-AGDB.ps1\\SQLServerDBDsc",
                                         "properties": {
                                             "domainName": "contoso.com",
