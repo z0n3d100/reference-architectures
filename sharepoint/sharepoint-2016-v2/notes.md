@@ -10,19 +10,23 @@
 
 ## Deployment order:
 
-1. sharepoint-2016-v2.json  (setup onprem and part of sharepoint infraestructure, prepare cluster)
+1. onprem.json (simulated onprem)
 
-2. sharepoint-2016-v2-create-cluster-ext.json  (create cluster and always on group and listener)
+2. connections.json (azure vnet gateway and connection with onprem)
 
-3. sharepoint-2016-v2-part2.json (create the rest of the infraestructure)
+3. azure1.json (main azure infrastructure)
 
-At this point you should check TCP connectivity between 'ra-sp-app-vm1' and 'ra-sp-sql-lb' on port 1433
-Otherwise reboot 'ra-sp-sql2-vm2'.
+4. azure2-cluster.json  (create cluster and always on group and listener)
 
-4. sharepoint-2016-v2-create-farm-ext.json (create sharepoint farm primary node)
+5. azure3.json (create the rest of the infraestructure)
 
-This extension sometimes fail but DSC keeps retrying and succeeds at installing the sharepoing farm.
+    At this point you should check TCP connectivity between 'ra-sp-app-vm1' and 'ra-sp-sql-lb' on port 1433
+    Otherwise reboot 'ra-sp-sql2-vm2'.
 
-5. sharepoint-2016-v2-part2-extensions.json (create sharepoint cache, search and web)
+6. azure4-sharepoint-server.json (create sharepoint farm primary node)
 
-6. sharepoint-2016-v2-security.json (create network security groups)
+    This extension sometimes fail but DSC keeps retrying and succeeds at installing the sharepoing farm.
+
+7. azure5-sharepoint-farm.json (create sharepoint cache, search and web)
+
+8. azure6-security.json (create network security groups)

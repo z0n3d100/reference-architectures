@@ -194,7 +194,7 @@ configuration CreateJoinFarm
             DatabaseServer           = $SqlAlwaysOnEndpointName
             FarmConfigDatabaseName   = "SP_Config_2016"
             Passphrase               = $Passphrase
-            FarmAccount              = $FarmAccount
+            FarmAccount              = $FarmAccountCreds
             PsDscRunAsCredential     = $SPSetupAccount
             AdminContentDatabaseName = "SP_AdminContent"
             CentralAdministrationPort = "2016"

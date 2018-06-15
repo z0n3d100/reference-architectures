@@ -67,7 +67,7 @@ configuration CreateJoinFarm
     [System.Management.Automation.PSCredential]$WebPoolManagedAccountCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($WebPoolManagedAccount.UserName)", $WebPoolManagedAccount.Password) 
 
     Import-DscResource -ModuleName xCredSSP
-    Import-DscResource -ModuleName PSDesiredStateConfiguration, xStorage, xComputerManagement, xActiveDirectory, SharePointDsc
+    Import-DscResource -ModuleName PSDesiredStateConfiguration, xStorage, xComputerManagement, xActiveDirectory, SharePointDsc, xWebAdministration
 
     $RebootVirtualMachine = $false
     $PSDscAllowDomainUser = $true
@@ -127,6 +127,19 @@ configuration CreateJoinFarm
             Ensure = "Present"
             Name = "RSAT-DNS-Server"
             DependsOn = '[xDisk]ADDataDisk2'
+        }
+
+        xWebAppPool RemoveDotNet2Pool         { Name = ".NET v2.0";            Ensure = "Absent"; }
+        xWebAppPool RemoveDotNet2ClassicPool  { Name = ".NET v2.0 Classic";    Ensure = "Absent"; }
+        xWebAppPool RemoveDotNet45Pool        { Name = ".NET v4.5";            Ensure = "Absent"; }
+        xWebAppPool RemoveDotNet45ClassicPool { Name = ".NET v4.5 Classic";    Ensure = "Absent"; }
+        xWebAppPool RemoveClassicDotNetPool   { Name = "Classic .NET AppPool"; Ensure = "Absent"; }
+        xWebAppPool RemoveDefaultAppPool      { Name = "DefaultAppPool";       Ensure = "Absent"; }
+        xWebSite    RemoveDefaultWebSite      
+        { 
+            Name = "Default Web Site";     
+            Ensure = "Absent"; 
+            PhysicalPath = "C:\inetpub\wwwroot"; 
         }
 
         xADUser CreateFarmAccount
