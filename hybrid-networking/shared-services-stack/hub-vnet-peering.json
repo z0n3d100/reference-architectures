@@ -6,6 +6,7 @@
             "value": [
                 {
                     "type": "VirtualNetwork",
+                    "resourceGroupName": "hub-vnet-rg",
                     "settings": [
                         {
                             "name": "hub-vnet",
@@ -64,6 +65,7 @@
                 },
                 {
                     "type": "NetworkSecurityGroup",
+                    "resourceGroupName": "hub-vnet-rg",
                     "settings":[
                         {
                             "name": "hub-mgmt-nsg",
@@ -88,6 +90,7 @@
                 },
                 {
                     "type": "NetworkSecurityGroup",
+                    "resourceGroupName": "hub-vnet-rg",
                     "settings":[
                         {
                             "name": "hub-shared-services-nsg",

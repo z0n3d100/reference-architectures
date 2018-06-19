@@ -6,6 +6,7 @@
             "value": [
                 {
                     "type": "VirtualNetwork",
+                    "resourceGroupName": "hub-vnet-rg",
                     "settings": [
                         {
                             "name": "hub-vnet",
@@ -42,14 +43,14 @@
                 },
                 {
                     "type": "VirtualMachine",
+                    "resourceGroupName": "hub-vnet-rg",
                     "settings": {
-                        "resourceGroupName": "hub-jb-rg",
                         "vmCount": 1,
                         "namePrefix": "hubjb",
                         "computerNamePrefix": "hubjb",
                         "adminUsername": "",
                         "adminPassword": "",
-                        "osType": "",
+                        "osType": "windows",
                         "virtualNetwork": {
                             "name": "hub-vnet"
                         },
@@ -63,6 +64,7 @@
                 },  
                 {
                     "type": "VirtualNetworkGateway",
+                    "resourceGroupName": "hub-vnet-rg",
                     "settings": {
                         "name": "hub-vpn-gateway1",
                         "gatewayType": "Vpn",
@@ -76,6 +78,7 @@
                 },
                 {
                     "type": "Connection",
+                    "resourceGroupName": "onprem-vnet-rg",
                     "settings": [
                         {
                             "connectionType": "Vnet2Vnet",
@@ -89,6 +92,26 @@
                             "virtualNetworkGateway2": {
                                 "resourceGroupName": "hub-vnet-rg",
                                 "name": "hub-vpn-gateway1"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "Connection",
+                    "resourceGroupName": "hub-vnet-rg",
+                    "settings": [
+                        {
+                            "connectionType": "Vnet2Vnet",
+                            "name": "hub-conn",
+                            "sharedKey": "",
+                            "routingWeight": 1,
+                            "virtualNetworkGateway1": {
+                                "resourceGroupName": "hub-vnet-rg",
+                                "name": "hub-vpn-gateway1"
+                            },                            
+                            "virtualNetworkGateway2": {
+                                "resourceGroupName": "onprem-vnet-rg",
+                                "name": "onprem-vpn-gateway1"
                             }
                         }
                     ]
