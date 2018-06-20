@@ -252,20 +252,25 @@
                     "settings": {
                         "vmCount": 2,
                         "namePrefix": "sql",
-                        "size": "Standard_DS3_v2",
+                        "size": "Standard_DS12_v2",
                         "computerNamePrefix": "sql",
                         "adminUsername": "adminUser",
                         "adminPassword": "testPassw0rd!23",
                         "osType": "windows",
                         "imageReference": {
-                            "offer": "SQL2016-WS2012R2",
+                            "offer": "SQL2017-WS2016",
                             "publisher": "MicrosoftSQLServer",
                             "sku": "Enterprise",
                             "version": "latest"
                         },
                         "dataDisks": {
                             "count": 2,
-                            "diskSizeGB": 1000
+                            "diskSizeGB": 1023,
+                            "caching": "ReadOnly",
+                            "createOption": "empty",
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS"
+                            }
                         },
                         "virtualNetwork": {
                             "name": "ra-ntier-vnet"
@@ -346,82 +351,6 @@
                     }
                 },
                 {
-                    "type": "VirtualMachine",
-                    "settings": {
-                        "vmCount": 1,
-                        "namePrefix": "fsw",
-                        "size": "Standard_DS1_v2",
-                        "computerNamePrefix": "fsw",
-                        "adminUsername": "adminUser",
-                        "adminPassword": "testPassw0rd!23",
-                        "osType": "windows",
-                        "dataDisks": {
-                          "count": 1,
-                          "diskSizeGB": 128,
-                          "caching": "None",
-                          "createOption": "empty"  
-                        },
-                        "virtualNetwork": {
-                            "name": "ra-ntier-vnet"
-                        },
-                        "nics": [
-                            {
-                                "isPublic": false,
-                                "isPrimary": true,
-                                "subnetName": "sql",
-                                "privateIPAllocationMethod": "Dynamic",
-                                "dnsServers": [
-                                    "10.0.4.4",
-                                    "10.0.4.5"
-                                ]
-                            }
-                        ],
-                        "extensions": [
-                            {
-                                "name": "join-ad-domain",
-                                "publisher": "Microsoft.Compute",
-                                "type": "JsonADDomainExtension",
-                                "typeHandlerVersion": "1.3",
-                                "autoUpgradeMinorVersion": true,
-                                "settings": {
-                                    "Name": "contoso.com",
-                                    "OUPath": "",
-                                    "User": "contoso.com\\adminUser",
-                                    "Restart": true,
-                                    "Options": 3
-                                },
-                                "protectedSettings": {
-                                    "Password": "testPassw0rd!23"
-                                }
-                            },
-                            {
-                                "name": "createFileShareWitness",
-                                "publisher": "Microsoft.Powershell",
-                                "type": "DSC",
-                                "typeHandlerVersion": "2.16",
-                                "autoUpgradeMinorVersion": false,
-                                "settings": {
-                                    "modulesURL": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/windows/dsc/CreateFileShareWitness.ps1.zip",
-                                    "configurationFunction": "CreateFileShareWitness.ps1\\CreateFileShareWitness",
-                                    "properties": {
-                                        "domainName": "contoso.com",
-                                        "SharePath": "sql-fs",
-                                        "adminCreds": {
-                                            "userName": "adminUser",
-                                            "password": "privateSettingsRef:adminPassword"
-                                        }
-                                    }
-                                },
-                                "protectedSettings": {
-                                    "items": {
-                                        "adminPassword": "testPassw0rd!23"
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                },
-                {
                     "type": "VirtualMachineExtension",
                     "settings": [
                         {
@@ -438,7 +367,7 @@
                                     "autoUpgradeMinorVersion": true,
                                     "settings": {
                                         "AutoTelemetrySettings": {
-                                            "Region": "West US 2"
+                                            "Region": "Central US"
                                         },
                                         "AutoPatchingSettings": {
                                             "PatchCategory": "WindowsMandatoryUpdates",
@@ -451,6 +380,28 @@
                                             "Enable": false,
                                             "RetentionPeriod": "30",
                                             "EnableEncryption": false
+                                        },
+                                        "KeyVaultCredentialSettings": {
+                                            "Enable": false,
+                                            "CredentialName": ""
+                                        },
+                                        "ServerConfigurationsManagementSettings": {
+                                            "SQLConnectivityUpdateSettings": {
+                                                "ConnectivityType": "Private",
+                                                "Port": "1433"
+                                            },
+                                            "SQLWorkloadTypeUpdateSettings": {
+                                                "SQLWorkloadType": "GENERAL"
+                                            },
+                                            "SQLStorageUpdateSettings": {
+                                                "DiskCount": "2",
+                                                "NumberOfColumns": "2",
+                                                "StartingDeviceID": "2",
+                                                "DiskConfigurationType": "NEW"
+                                            },
+                                            "AdditionalFeaturesServerConfigurations": {
+                                                "IsRServicesEnabled": "false"
+                                            }
                                         }
                                     },
                                     "protectedSettings": {}
@@ -459,22 +410,22 @@
                         },
                         {
                             "vms": [
-                                "sql-vm1"
+                                "sql-vm1",
+                                "sql-vm2"
                             ],
                             "extensions": [
                                 {
-                                    "name": "sqlAOPrepare",
+                                    "name": "AOSetup",
                                     "publisher": "Microsoft.Powershell",
                                     "type": "DSC",
-                                    "typeHandlerVersion": "2.19",
-                                    "autoUpgradeMinorVersion": false,
+                                    "typeHandlerVersion": "2.7",
+                                    "autoUpgradeMinorVersion": true,
                                     "settings": {
-                                        "modulesURL": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/windows/dsc/PrepareAlwaysOnSqlServer.ps1.zip",
-                                        "configurationFunction": "PrepareAlwaysOnSqlServer.ps1\\PrepareAlwaysOnSqlServer",
+                                        "modulesURL": "https://github.com/mspnp/reference-architectures/master/scripts/windows/dsc/PrepareSQLServer.ps1.zip",
+                                        "configurationFunction": "PrepareSqlServer.ps1\\SqlServerPrepareDsc",
                                         "properties": {
                                             "domainName": "contoso.com",
-                                            "sqlAlwaysOnEndpointName": "ra-ntier-sql-hadr",
-                                            "adminCreds": {
+                                            "Admincreds": {
                                                 "userName": "adminUser",
                                                 "password": "privateSettingsRef:adminPassword"
                                             },
@@ -482,8 +433,11 @@
                                                 "userName": "sqlservicetestuser",
                                                 "password": "privateSettingsRef:sqlServerServiceAccountPassword"
                                             },
-                                            "NumberOfDisks": "2",
-                                            "WorkloadType": "GENERAL"
+                                            "ClusterName": "AOCluster",
+                                            "ClusterOwnerNode": "sql1",
+                                            "ClusterIP": "10.0.3.30",
+                                            "witnessStorageBlobEndPoint": "https://[replace-with-storageaccountname].blob.core.windows.net",
+                                            "witnessStorageAccountKey": "[replace-with-storagekey]"
                                         }
                                     },
                                     "protectedSettings": {
@@ -497,37 +451,21 @@
                         },
                         {
                             "vms": [
-                                "sql-vm2"
+                                "sql-vm1"
                             ],
                             "extensions": [
                                 {
-                                    "name": "configuringAlwaysOn",
+                                    "name": "AOSetup",
                                     "publisher": "Microsoft.Powershell",
                                     "type": "DSC",
-                                    "typeHandlerVersion": "2.19",
-                                    "autoUpgradeMinorVersion": false,
+                                    "typeHandlerVersion": "2.7",
+                                    "autoUpgradeMinorVersion": true,
                                     "settings": {
-                                        "modulesURL": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/windows/dsc/CreateFailoverCluster.ps1.zip",
-                                        "configurationFunction": "CreateFailoverCluster.ps1\\CreateFailoverCluster",
+                                        "modulesURL": "https://github.com/mspnp/reference-architectures/master/scripts/windows/dsc/PrepareSQLServer.ps1.zip",
+                                        "configurationFunction": "PrepareSqlServer-AGDB.ps1\\SQLServerDBDsc",
                                         "properties": {
                                             "domainName": "contoso.com",
-                                            "clusterName": "ra-ntier-sql-fc",
-                                            "sharePath": "\\\\fsw1\\sql-fs",
-                                            "nodes": [
-                                                "sql1",
-                                                "sql2"
-                                            ],
-                                            "sqlAlwaysOnEndpointName": "ra-ntier-sql-hadr",
-                                            "sqlAlwaysOnAvailabilityGroupName": "alwayson-ag",
-                                            "sqlAlwaysOnAvailabilityGroupListenerName": "alwayson-ag-listener",
-                                            "SqlAlwaysOnAvailabilityGroupListenerPort": "1433",
-                                            "databaseNames": "AutoHa-sample",
-                                            "lbName": "ra-ntier-sql-lb",
-                                            "lbAddress": "10.0.3.100",
-                                            "primaryReplica": "sql2",
-                                            "secondaryReplica": "sql1",
-                                            "dnsServerName": "ad1",
-                                            "adminCreds": {
+                                            "Admincreds": {
                                                 "userName": "adminUser",
                                                 "password": "privateSettingsRef:adminPassword"
                                             },
@@ -535,19 +473,17 @@
                                                 "userName": "sqlservicetestuser",
                                                 "password": "privateSettingsRef:sqlServerServiceAccountPassword"
                                             },
-                                            "SQLAuthCreds": {
-                                                "userName": "sqlsa",
-                                                "password": "privateSettingsRef:sqlAuthPassword"
-                                            },
-                                            "NumberOfDisks": "2",
-                                            "WorkloadType": "GENERAL"
+                                            "ClusterName": "AOCluster",
+                                            "ClusterOwnerNode": "sql1",
+                                            "ClusterIP": "10.0.3.30",
+                                            "witnessStorageBlobEndPoint": "https://[replace-with-storageaccountname].blob.core.windows.net",
+                                            "witnessStorageAccountKey": "[replace-with-storagekey]"
                                         }
                                     },
                                     "protectedSettings": {
                                         "items": {
                                             "adminPassword": "testPassw0rd!23",
-                                            "sqlServerServiceAccountPassword": "AweS0me@SQLServicePW",
-                                            "sqlAuthPassword": "AweS0me@SQLPW"
+                                            "sqlServerServiceAccountPassword": "AweS0me@SQLServicePW"
                                         }
                                     }
                                 }
