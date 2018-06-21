@@ -125,7 +125,10 @@
                             "subnetName": "web",
                             "privateIPAllocationMethod": "Dynamic",
                             "isPrimary": true,
-                            "enableIPForwarding": false
+                            "enableIPForwarding": false,
+                            "backendPoolNames": [
+                              "bep1"
+                            ]
                           }
                         ],
                         "imageReference": {
@@ -222,7 +225,10 @@
                             "subnetName": "data",
                             "privateIPAllocationMethod": "Dynamic",
                             "isPrimary": true,
-                            "enableIPForwarding": false
+                            "enableIPForwarding": false,
+                            "backendPoolNames": [
+                              "bep1"
+                            ]
                           }
                         ],
                         "imageReference": {
@@ -564,7 +570,135 @@
                       ]
                     }            
                   ]
-                }
+                },
+                {
+                  "type": "VirtualMachine",
+                  "resourceGroupName": "ra-private-dmz-rg",
+                  "settings": {
+                      "vmCount": 2,
+                      "namePrefix": "int-dmz",
+                      "computerNamePrefix": "int-dmz",
+                      "size": "Standard_DS2_v2",
+                      "osType": "linux",
+                      "adminUsername": "testuser",
+                      "adminPassword": "AweS0me@PW",
+                      "virtualNetwork": {
+                          "name": "ra-vnet"
+                      },                        
+                      "nics": [
+                        {
+                          "isPublic": false,
+                          "subnetName": "dmz-in",
+                          "privateIPAllocationMethod": "Dynamic",
+                          "isPrimary": true,
+                          "enableIPForwarding": true,
+                          "backendPoolNames": [
+                              "nva-lb-Bep"
+                          ]
+                        },
+                        {
+                          "isPublic": false,
+                          "subnetName": "dmz-out",
+                          "privateIPAllocationMethod": "Dynamic",
+                          "isPrimary": false,
+                          "enableIPForwarding": true
+                        }
+                      ],
+                      "imageReference": {
+                          "publisher": "Canonical",
+                          "offer": "UbuntuServer",
+                          "sku": "14.04.5-LTS",
+                          "version": "latest"
+                      },
+                      "extensions": [
+                          {
+                            "name": "enable-iptables-routes",
+                            "publisher": "Microsoft.Azure.Extensions",
+                            "type": "CustomScript",
+                            "typeHandlerVersion": "2.0",
+                            "autoUpgradeMinorVersion": true,
+                            "settings": {
+                              "fileUris": [
+                                "https://raw.githubusercontent.com/mspnp/template-building-blocks/v1.0.0/templates/resources/Microsoft.Compute/virtualMachines/extensions/linux/enable-iptables-routes/enable-iptables-routes.sh"
+                              ],
+                              "commandToExecute": "bash enable-iptables-routes.sh internal 10.0.1.100"
+                            },
+                            "protectedSettings": { }
+                          }
+                      ],
+                      "loadBalancerSettings": {
+                          "frontendIPConfigurations": [
+                              {
+                                "name": "nva-lb-fe",
+                                "loadBalancerType": "Internal",
+                                "internalLoadBalancerSettings": {
+                                  "privateIPAddress": "10.0.0.20",
+                                  "subnetName": "dmz-in"                                                
+                                }
+                              }
+                            ],
+                            "loadBalancingRules": [
+                              {
+                                "name": "nva-rule0",
+                                "frontendPort": 80,
+                                "backendPort": 80,
+                                "protocol": "Tcp",
+                                "backendPoolName": "nva-lb-Bep",
+                                "frontendIPConfigurationName": "nva-lb-fe",
+                                "enableFloatingIP": false,
+                                "probeName": "hp1",
+                                "idleTimeoutInMinutes": 4
+                              }
+                            ],
+                            "probes": [
+                              {
+                                  "name": "hp1",
+                                  "port": 80,
+                                  "protocol": "Http",
+                                  "requestPath": "/"
+                              }
+                            ],
+                            "backendPools": [
+                              {
+                                "name": "nva-lb-Bep",
+                                "nicIndex": 0
+                              }
+                            ]
+                      }
+                  }
+              },
+              {
+                  "type": "RouteTable",
+                  "resourceGroupName": "ra-private-dmz-rg",
+                  "settings": {
+                      "name": "intranet-dmz-rt1",
+                      "virtualNetworks": [
+                          {
+                              "name": "ra-vnet",
+                              "subnets": [
+                                  "GatewaySubnet"
+                              ]
+                          }
+                      ],
+                      "routes": [
+                          {
+                              "name": "nva-route0",
+                              "addressPrefix": "10.0.1.0/24",
+                              "nextHop": "10.0.0.20"
+                          },
+                          {
+                              "name": "nva-route1",
+                              "addressPrefix": "10.0.2.0/24",
+                              "nextHop": "10.0.0.20"
+                          },
+                          {
+                              "name": "nva-route2",
+                              "addressPrefix": "10.0.3.0/24",
+                              "nextHop": "10.0.0.20"
+                          }
+                      ]
+                  }
+              }
             ]
         }
     }
