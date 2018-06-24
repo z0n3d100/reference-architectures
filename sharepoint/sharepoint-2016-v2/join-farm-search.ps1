@@ -66,7 +66,8 @@ configuration CreateJoinFarm
     [System.Management.Automation.PSCredential]$ServicePoolManagedAccountCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($ServicePoolManagedAccount.UserName)", $ServicePoolManagedAccount.Password) 
     [System.Management.Automation.PSCredential]$WebPoolManagedAccountCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($WebPoolManagedAccount.UserName)", $WebPoolManagedAccount.Password) 
 
-    Import-DscResource -ModuleName PSDesiredStateConfiguration, xStorage, xComputerManagement, xActiveDirectory, xCredSSP, SharePointDsc
+    Import-DscResource -ModuleName xCredSSP
+    Import-DscResource -ModuleName PSDesiredStateConfiguration, xStorage, xComputerManagement, xActiveDirectory, SharePointDsc, xWebAdministration
 
     $RebootVirtualMachine = $false
     $PSDscAllowDomainUser = $true
@@ -126,6 +127,19 @@ configuration CreateJoinFarm
             Ensure = "Present"
             Name = "RSAT-DNS-Server"
             DependsOn = '[xDisk]ADDataDisk2'
+        }
+
+        xWebAppPool RemoveDotNet2Pool         { Name = ".NET v2.0";            Ensure = "Absent"; }
+        xWebAppPool RemoveDotNet2ClassicPool  { Name = ".NET v2.0 Classic";    Ensure = "Absent"; }
+        xWebAppPool RemoveDotNet45Pool        { Name = ".NET v4.5";            Ensure = "Absent"; }
+        xWebAppPool RemoveDotNet45ClassicPool { Name = ".NET v4.5 Classic";    Ensure = "Absent"; }
+        xWebAppPool RemoveClassicDotNetPool   { Name = "Classic .NET AppPool"; Ensure = "Absent"; }
+        xWebAppPool RemoveDefaultAppPool      { Name = "DefaultAppPool";       Ensure = "Absent"; }
+        xWebSite    RemoveDefaultWebSite      
+        { 
+            Name = "Default Web Site";     
+            Ensure = "Absent"; 
+            PhysicalPath = "C:\inetpub\wwwroot"; 
         }
 
         xADUser CreateFarmAccount
@@ -269,6 +283,14 @@ configuration CreateJoinFarm
             DependsOn = @("[SPFarm]CreateSPFarm", "[SPManagedAccount]WebPoolManagedAccount")
         }
 
+        SPServiceInstance SearchServiceInstance
+        {
+            Name                 = "SharePoint Server Search"
+            Ensure               = "Present"
+            PsDscRunAsCredential = $SPSetupAccount
+            DependsOn            = "[SPFarm]CreateSPFarm"
+        }
+        
         SPStateServiceApp StateServiceApp
         {
             Name = "State Service Application"
@@ -313,7 +335,7 @@ configuration CreateJoinFarm
                 ApplicationPool = $webAppPoolName
                 ApplicationPoolAccount = $WebPoolManagedAccountCreds.UserName
                 AllowAnonymous = $false
-                AuthenticationMethod = "NTLM"
+                # AuthenticationMethod = "NTLM"
                 DatabaseName = "SP2016_Sites_Content"
                 Url = "http://Portal.$DomainFQDNName"
                 Port = 80
@@ -327,7 +349,7 @@ configuration CreateJoinFarm
                 ApplicationPool = $webAppPoolName
                 ApplicationPoolAccount = $WebPoolManagedAccountCreds.UserName
                 AllowAnonymous = $false
-                AuthenticationMethod = "NTLM"
+                # AuthenticationMethod = "NTLM"
                 DatabaseName = "SP2016_Sites_OneDrive"
                 HostHeader = "OneDrive.$DomainFQDNName"
                 Url = "http://OneDrive.$DomainFQDNName"
@@ -470,7 +492,7 @@ configuration CreateJoinFarm
                     SyncDBName = "SP2016_Sync"
                     SyncDBServer = $SqlAlwaysOnEndpointName
                     MySiteHostLocation = "http://OneDrive.$DomainFQDNName"
-                    FarmAccount = $FarmAccountCreds
+                    # FarmAccount = $FarmAccountCreds
                     ApplicationPool = $serviceAppPoolName
                     PsDscRunAsCredential = $SPSetupAccount
                     DependsOn = '[SPServiceAppPool]MainServiceAppPool'
