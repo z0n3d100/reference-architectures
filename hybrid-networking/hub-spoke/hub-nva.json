@@ -6,6 +6,7 @@
             "value": [
                 {
                     "type": "VirtualMachine",
+                    "resourceGroupName": "hub-nva-rg",
                     "settings": {
                         "vmCount": 1,
                         "namePrefix": "nva",
@@ -46,7 +47,8 @@
                 },
                 {
                     "type": "RouteTable",
-                    "settings": [
+                    "resourceGroupName": "hub-nva-rg",
+                    "settings":[
                         {
                             "name": "hub-gateway-rt",
                             "routes": [
@@ -56,8 +58,13 @@
                                     "nextHop": "VnetLocal"
                                 },
                                 {
-                                    "name": "toSpokes",
-                                    "addressPrefix": "0.0.0.0/0",
+                                    "name": "toSpoke1",
+                                    "addressPrefix": "10.1.0.0/16",
+                                    "nextHop": "10.0.0.36"
+                                },
+                                {
+                                    "name": "toSpoke2",
+                                    "addressPrefix": "10.2.0.0/16",
                                     "nextHop": "10.0.0.36"
                                 }
                             ],
@@ -75,7 +82,8 @@
                 },
                 {
                     "type": "RouteTable",
-                    "settings": [
+                    "resourceGroupName": "hub-nva-rg",
+                    "settings":[
                         {
                             "name": "spoke1-rt",
                             "routes": [
@@ -105,7 +113,8 @@
                 },
                 {
                     "type": "RouteTable",
-                    "settings": [
+                    "resourceGroupName": "hub-nva-rg",
+                    "settings":[
                         {
                             "name": "spoke2-rt",
                             "routes": [
