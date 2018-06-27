@@ -309,6 +309,27 @@ configuration CreateFailoverCluster
             PsDscRunAsCredential = $Admincreds
         }
 
+        xSQLServerLogin AddDomainUser
+        {
+            Ensure               = 'Present'
+            Name                 = $DomainCreds.UserName
+            LoginType            = 'WindowsUser'
+            SQLServer            = $env:ComputerName
+            SQLInstanceName      = 'MSSQLSERVER'
+            PsDscRunAsCredential = $Admincreds
+        }
+
+        xSQLServerPermission AddDomainUserPermissions
+        {
+            DependsOn            = '[xSQLServerLogin]AddDomainUser'
+            Ensure               = 'Present'
+            NodeName             = $env:ComputerName
+            InstanceName         = 'MSSQLSERVER'
+            Principal            = $DomainCreds
+            Permission           = 'AlterAnyAvailabilityGroup', 'ViewServerState'
+            PsDscRunAsCredential = $Admincreds
+        }
+
         xSQLServerAlwaysOnAvailabilityGroup SqlAG
         {
             Ensure               = 'Present'

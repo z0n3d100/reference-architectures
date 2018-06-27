@@ -4,9 +4,6 @@
 
 - I had to shorten the names on several of the VMs, so they no longer match the ones in the doc.
 
-- On the 'Validate access to the SharePoint site from the on-premises network' section 
-    https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/sharepoint/#validate-access-to-the-sharepoint-site-from-the-on-premises-network
-    Point 4 and 5 were not needed, access to http://portal.contoso.local required no credentials.
 
 ## Deployment order:
 

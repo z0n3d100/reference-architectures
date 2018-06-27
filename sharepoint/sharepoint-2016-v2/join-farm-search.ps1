@@ -282,14 +282,6 @@ configuration CreateJoinFarm
             PsDscRunAsCredential = $SPSetupAccount
             DependsOn = @("[SPFarm]CreateSPFarm", "[SPManagedAccount]WebPoolManagedAccount")
         }
-
-        SPServiceInstance SearchServiceInstance
-        {
-            Name                 = "SharePoint Server Search"
-            Ensure               = "Present"
-            PsDscRunAsCredential = $SPSetupAccount
-            DependsOn            = "[SPFarm]CreateSPFarm"
-        }
         
         SPStateServiceApp StateServiceApp
         {
