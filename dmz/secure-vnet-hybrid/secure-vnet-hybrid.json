@@ -6,7 +6,6 @@
             "value": [
                 {
                     "type": "VirtualNetwork",
-                    "resourceGroupName": "ra-private-dmz-rg",
                     "settings": [
                         {
                             "name": "ra-vnet",
@@ -100,8 +99,7 @@
                           }
                         ],
                         "virtualNetwork": {
-                            "name": "ra-vnet",
-                            "resourceGroupName": "ra-private-dmz-rg"
+                            "name": "ra-vnet"
                         }
                     }
                 },
@@ -116,8 +114,7 @@
                         "adminUsername": "testuser",
                         "adminPassword": "AweS0me@PW",
                         "virtualNetwork": {
-                            "name": "ra-vnet",
-                            "resourceGroupName": "ra-private-dmz-rg"
+                            "name": "ra-vnet"
                         },
                         "nics": [
                           {
@@ -216,8 +213,7 @@
                         "adminUsername": "testuser",
                         "adminPassword": "AweS0me@PW",
                         "virtualNetwork": {
-                            "name": "ra-vnet",
-                            "resourceGroupName": "ra-private-dmz-rg"                            
+                            "name": "ra-vnet"
                         },
                         "nics": [
                           {
@@ -309,7 +305,6 @@
                 },
                 {
                   "type": "VirtualNetworkGateway",
-                  "resourceGroupName": "ra-private-dmz-rg",
                   "settings":[
                     {
                       "isPublic": true,
@@ -318,8 +313,7 @@
                       "vpnType": "RouteBased",
                       "sku": "Basic",
                       "virtualNetwork": {
-                        "name": "ra-vnet",
-                        "resourceGroupName": "ra-private-dmz-rg"
+                        "name": "ra-vnet"
                       }
                     }
                   ]
@@ -332,8 +326,7 @@
                       "connectionType": "IPsec",
                       "sharedKey": "123secret",
                       "virtualNetworkGateway": {
-                        "name": "ra-vpn-vgw",
-                        "resourceGroupName": "ra-private-dmz-rg"
+                        "name": "ra-vpn-vgw"
                       },
                       "localNetworkGateway": {
                         "name": "ra-vpn-lgw",
@@ -573,7 +566,6 @@
                 },
                 {
                   "type": "VirtualMachine",
-                  "resourceGroupName": "ra-private-dmz-rg",
                   "settings": {
                       "vmCount": 2,
                       "namePrefix": "int-dmz",
@@ -669,7 +661,6 @@
               },
               {
                   "type": "RouteTable",
-                  "resourceGroupName": "ra-private-dmz-rg",
                   "settings": {
                       "name": "intranet-dmz-rt1",
                       "virtualNetworks": [
