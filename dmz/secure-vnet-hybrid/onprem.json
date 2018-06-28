@@ -21,9 +21,6 @@
                                     "name": "GatewaySubnet",
                                     "addressPrefix": "192.168.255.224/27"
                                 }
-                            ],
-                            "dnsServers": [
-                                "168.63.129.16"
                             ]
                         }
                     ]
