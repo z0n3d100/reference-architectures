@@ -312,101 +312,6 @@
                     }
                 },
                 {
-                  "type": "VirtualMachine",
-                  "settings":{
-                    "count": 2,
-                    "namePrefix": "pub-dmz",
-                    "computerNamePrefix": "pub-dmz",
-                    "size": "Standard_DS2_v2",
-                    "osType": "linux",
-                    "adminUsername": "testuser",
-                    "adminPassword": "AweS0me@PW",
-                    "virtualNetwork": {
-                      "name": "ra-vnet"
-                    },
-                    "nics": [
-                    {
-                      "isPublic": false,
-                      "subnetName": "public-dmz-in",
-                      "privateIPAllocationMethod": "Dynamic",
-                      "isPrimary": true,
-                      "enableIPForwarding": true,
-                      "backendPoolNames": [
-                          "pub-nva-lb-Bep"
-                      ]
-                    },
-                    {
-                      "isPublic": false,
-                      "subnetName": "pub-dmz-out",
-                      "privateIPAllocationMethod": "Dynamic",
-                      "isPrimary": false,
-                      "enableIPForwarding": true
-                    }
-                  ],
-                    "imageReference": {
-                      "publisher": "Canonical",
-                      "offer": "UbuntuServer",
-                      "sku": "14.04.5-LTS",
-                      "version": "latest"
-                    },
-                    "dataDisks": {
-                      "count": 1
-                    },
-                    "extensions": [
-                      {
-                        "name": "enable-iptables-routes",
-                        "publisher": "Microsoft.Azure.Extensions",
-                        "type": "CustomScript",
-                        "typeHandlerVersion": "2.0",
-                        "autoUpgradeMinorVersion": true,
-                        "settings": {
-                          "fileUris": [
-                            "https://raw.githubusercontent.com/mspnp/template-building-blocks/v1.0.0/templates/resources/Microsoft.Compute/virtualMachines/extensions/linux/enable-iptables-routes/enable-iptables-routes.sh"
-                          ]
-                        },
-                        "protectedSettings": {
-                          "commandToExecute": "bash enable-iptables-routes.sh internal 10.0.1.100"
-                        }
-                      }
-                    ],
-                    "loadBalancerSettings": {
-                        "frontendIPConfigurations": [
-                            {
-                              "name": "pub-nva-lb-fe",
-                              "loadBalancerType": "Public"
-                            }
-                          ],
-                          "loadBalancingRules": [
-                            {
-                              "name": "pub-nva-rule0",
-                              "frontendPort": 80,
-                              "backendPort": 80,
-                              "protocol": "Tcp",
-                              "backendPoolName": "pub-nva-lb-Bep",
-                              "frontendIPConfigurationName": "pub-nva-lb-fe",
-                              "enableFloatingIP": false,
-                              "probeName": "pubhp1",
-                              "idleTimeoutInMinutes": 4
-                            }
-                          ],
-                          "probes": [
-                            {
-                                "name": "pubhp1",
-                                "port": 80,
-                                "protocol": "Http",
-                                "requestPath": "/"
-                            }
-                          ],
-                          "backendPools": [
-                            {
-                              "name": "pub-nva-lb-Bep",
-                              "nicIndex": 0
-                            }
-                          ]
-                    }
-                  }
-                },
-                {
                   "type": "VirtualNetworkGateway",
                   "settings":[
                     {
@@ -761,8 +666,8 @@
                             ]
                       }
                   }
-              },
-              {
+                },
+                {
                   "type": "RouteTable",
                   "settings": {
                       "name": "intranet-dmz-rt1",
@@ -792,6 +697,97 @@
                           }
                       ]
                   }
+              },
+              {
+                "type": "VirtualMachine",
+                "settings": {
+                    "vmCount": 2,
+                    "namePrefix": "pub-dmz",
+                    "computerNamePrefix": "pub-dmz",
+                    "size": "Standard_DS2_v2",
+                    "osType": "linux",
+                    "adminUsername": "testuser",
+                    "adminPassword": "AweS0me@PW",
+                    "virtualNetwork": {
+                        "name": "ra-vnet"
+                    },                        
+                    "nics": [
+                      {
+                        "isPublic": false,
+                        "subnetName": "pub-dmz-in",
+                        "privateIPAllocationMethod": "Dynamic",
+                        "isPrimary": true,
+                        "enableIPForwarding": true,
+                        "backendPoolNames": [
+                            "nva-plb-Bep"
+                        ]
+                      },
+                      {
+                        "isPublic": false,
+                        "subnetName": "pub-dmz-out",
+                        "privateIPAllocationMethod": "Dynamic",
+                        "isPrimary": false,
+                        "enableIPForwarding": true
+                      }
+                    ],
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "UbuntuServer",
+                        "sku": "14.04.5-LTS",
+                        "version": "latest"
+                    },
+                    "extensions": [
+                        {
+                          "name": "enable-iptables-routes",
+                          "publisher": "Microsoft.Azure.Extensions",
+                          "type": "CustomScript",
+                          "typeHandlerVersion": "2.0",
+                          "autoUpgradeMinorVersion": true,
+                          "settings": {
+                            "fileUris": [
+                              "https://raw.githubusercontent.com/mspnp/template-building-blocks/v1.0.0/templates/resources/Microsoft.Compute/virtualMachines/extensions/linux/enable-iptables-routes/enable-iptables-routes.sh"
+                            ],
+                            "commandToExecute": "bash enable-iptables-routes.sh internal 10.0.1.100"
+                          },
+                          "protectedSettings": { }
+                        }
+                    ],
+                    "loadBalancerSettings": {
+                        "frontendIPConfigurations": [
+                            {
+                              "name": "nva-plb-fe",
+                              "loadBalancerType": "Public"
+                            }
+                          ],
+                          "loadBalancingRules": [
+                            {
+                              "name": "nva-rule0",
+                              "frontendPort": 80,
+                              "backendPort": 80,
+                              "protocol": "Tcp",
+                              "backendPoolName": "nva-plb-Bep",
+                              "frontendIPConfigurationName": "nva-plb-fe",
+                              "enableFloatingIP": false,
+                              "probeName": "hp1",
+                              "idleTimeoutInMinutes": 4
+                            }
+                          ],
+                          "probes": [
+                            {
+                                "name": "hp1",
+                                "port": 80,
+                                "protocol": "Http",
+                                "requestPath": "/"
+                            }
+                          ],
+                          "backendPools": [
+                            {
+                              "name": "nva-plb-Bep",
+                              "nicIndex": 0
+                            }
+                          ]
+                    }
+                }
               }
             ]
         }
