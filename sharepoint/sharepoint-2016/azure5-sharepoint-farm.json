@@ -384,7 +384,7 @@
                           "autoUpgradeMinorVersion": true,
                           "settings": {
                             "fileUris": [
-                              "https://raw.githubusercontent.com/mspnp/reference-architectures/master/sharepoint/sharepoint-2016/extensions/add-dns.ps1"
+                              "https://raw.githubusercontent.com/mspnp/reference-architectures/master/sharepoint/sharepoint-2016/add-dns.ps1"
                             ]
                           },
                           "protectedSettings": {
