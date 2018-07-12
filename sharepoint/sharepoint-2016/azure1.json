@@ -327,7 +327,7 @@
                                 "autoUpgradeMinorVersion": true,
                                 "settings": {
                                   "configuration": {
-                                    "url": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/sharepoint/sharepoint-2016/extensions/CreateFileShareWitness.ps1.zip",
+                                    "url": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/sharepoint/sharepoint-2016/CreateFileShareWitness.ps1.zip",
                                     "script": "CreateFileShareWitness.ps1",
                                     "function": "CreateFileShareWitness"
                                   }
