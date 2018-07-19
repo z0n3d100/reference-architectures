@@ -185,10 +185,16 @@ The extension building block for a Windows VM is similar tot he Linux one, excep
 						"typeHandlerVersion": "2.7",
 						"autoUpgradeMinorVersion": true,
 						"settings": {
-							"ModulesUrl": "https://raw.githubusercontent.com/mspnp/reference-architectures/mster/scripts/windows/iisaspnet.ps1.zip",
-							"configurationFunction": "iisaspnet.ps1\\iisaspnet"
+							"configuration":
+							{
+								"url": "https://raw.githubusercontent.com/mspnp/reference-architectures/mster/scripts/windows/iisaspnet.ps1.zip",
+								"script": "iisaspnet.ps1",
+								"function": "iisaspnet"
+							}
 						},
-						"protectedSettings": {}
+						"protectedSettings": {
+							"configurationArguments": { }
+						}
 					}                
 				]
 			}
