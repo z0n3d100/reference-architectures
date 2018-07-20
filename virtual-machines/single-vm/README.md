@@ -187,7 +187,7 @@ The extension building block for a Windows VM is similar tot he Linux one, excep
 						"settings": {
 							"configuration":
 							{
-								"url": "https://raw.githubusercontent.com/mspnp/reference-architectures/mster/scripts/windows/iisaspnet.ps1.zip",
+								"url": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/windows/iisaspnet.ps1.zip",
 								"script": "iisaspnet.ps1",
 								"function": "iisaspnet"
 							}
