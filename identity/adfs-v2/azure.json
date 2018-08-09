@@ -316,7 +316,48 @@
                 }                 
             }
           ]
-        }        
+        },
+        {
+          "type": "VirtualMachineExtension",
+          "settings": [
+            {
+              "vms": [
+                "ra-adfs-adfs-vm1",
+                "ra-adfs-adfs-vm2",
+                "ra-adfs-proxy-vm1",
+                "ra-adfs-proxy-vm2"
+              ],
+              "extensions": [
+                {
+                    "name": "addsc",
+                    "publisher": "Microsoft.Powershell",
+                    "type": "DSC",
+                    "typeHandlerVersion": "2.7",
+                    "autoUpgradeMinorVersion": true,
+                    "settings": {
+                        "ModulesUrl": "https://lugizidscstorage.blob.core.windows.net/isos/adfs-v2.zip",
+                        "ConfigurationFunction":"certificatessetup.ps1\\Certificates",
+                        "Properties": {
+                            "DomainName": "contoso.com",
+                            "NetBiosDomainName": "CONTOSO",
+                            "FederationName": "adfs.contoso.com",
+                            "Description": "Contoso Corporation",
+                            "AdminCreds": {
+                              "UserName": "testuser",
+                              "Password": "PrivateSettingsRef:AdminPassword"
+                            }                      
+                        }
+                    },
+                    "protectedSettings": {
+                        "Items": {
+                            "AdminPassword": "AweS0me@PW"
+                        }
+                    }
+                }
+              ]
+            }
+          ]
+        }      
       ]
     }
   }

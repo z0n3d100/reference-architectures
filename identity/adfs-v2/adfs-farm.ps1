@@ -36,12 +36,19 @@ Configuration InstallADFS
             RebootNodeIfNeeded = $true            
         }
 
+        WindowsFeature AddWindowsIdentityFeature
+        {
+            Ensure    = 'Present'
+            Name      = 'Windows-Identity-Foundation'
+        }
+
         xWaitForADDomain DscForestWait 
         { 
             DomainName = $DomainName 
             DomainUserCredential= $DomainCreds
             RetryCount = $RetryCount 
             RetryIntervalSec = $RetryIntervalSec
+            DependsOn = '[WindowsFeature]AddWindowsIdentityFeature'
         }
          
         xComputer JoinDomain

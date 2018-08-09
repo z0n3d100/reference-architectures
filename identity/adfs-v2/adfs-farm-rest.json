@@ -16,15 +16,15 @@
                       "name": "addsc",
                       "publisher": "Microsoft.Powershell",
                       "type": "DSC",
-                      "typeHandlerVersion": "2.75",
+                      "typeHandlerVersion": "2.7",
                       "autoUpgradeMinorVersion": true,
                       "settings": {
-                        "ModulesUrl": "https://github.com/woodp/reference-architectures/blob/adfs/identity/adfs-v2/adfs-v2.zip?raw=true",
+                        "ModulesUrl": "https://lugizidscstorage.blob.core.windows.net/isos/adfs-v2.zip",
                         "ConfigurationFunction":"adfs-nodes.ps1\\AddADFSNode",
                         "Properties": {
                             "DomainName": "contoso.com",
                             "MachineName": "localhost",
-                            "PrimaryAdfsServer": "adfs-vm1",
+                            "PrimaryAdfsServer": "adfs1",
                             "NetBiosDomainName": "CONTOSO",
                             "FederationName": "adfs.contoso.com",
                             "AdminCreds": {
