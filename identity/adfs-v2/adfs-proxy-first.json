@@ -1,0 +1,47 @@
+{
+    "$schema": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/schemas/buildingBlocks.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "buildingBlocks": {
+        "value": [
+          {
+            "type": "VirtualMachineExtension",
+            "settings": [
+              {
+                "vms": [
+                  "ra-adfs-proxy-vm1"
+                ],
+                "extensions": [
+                  {
+                      "name": "adfsproxy",
+                      "publisher": "Microsoft.Powershell",
+                      "type": "DSC",
+                      "typeHandlerVersion": "2.75",
+                      "autoUpgradeMinorVersion": true,
+                      "settings": {
+                          "ModulesUrl": "https://github.com/woodp/reference-architectures/blob/adfs/identity/adfs-v2/adfs-v2.zip?raw=true",
+                          "ConfigurationFunction":"adfs-webproxy.ps1\\InstallWebProxyApp",
+                          "Properties": {
+                              "DomainName": "contoso.com",
+                              "FederationName": "adfs.contoso.com",
+                              "WebApplicationProxyName": "Contoso App",
+                              "AdminCreds": {
+                                "UserName": "testuser",
+                                "Password": "PrivateSettingsRef:AdminPassword"
+                              }                      
+                          }
+                      },
+                      "protectedSettings": {
+                          "Items": {
+                              "AdminPassword": "AweS0me@PW"
+                          }
+                      }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
