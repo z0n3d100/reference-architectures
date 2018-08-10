@@ -2,10 +2,7 @@ Configuration Certificates
 {
     Param(
         [Parameter(Mandatory)]
-        [System.Management.Automation.PSCredential]$AdminCreds,
-
-        [Parameter(Mandatory)]
-        [string]$DomainName
+        [System.Management.Automation.PSCredential]$AdminCreds
     )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration, xStorage, xNetworking, xComputerManagement
