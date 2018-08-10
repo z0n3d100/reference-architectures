@@ -335,23 +335,19 @@
                     "typeHandlerVersion": "2.7",
                     "autoUpgradeMinorVersion": true,
                     "settings": {
-                        "ModulesUrl": "https://lugizidscstorage.blob.core.windows.net/isos/adfs-v2.zip",
-                        "ConfigurationFunction":"certificatessetup.ps1\\Certificates",
-                        "Properties": {
-                            "DomainName": "contoso.com",
-                            "NetBiosDomainName": "CONTOSO",
-                            "FederationName": "adfs.contoso.com",
-                            "Description": "Contoso Corporation",
-                            "AdminCreds": {
-                              "UserName": "testuser",
-                              "Password": "PrivateSettingsRef:AdminPassword"
-                            }                      
-                        }
+                      "configuration": {
+                        "url": "https://lugizidscstorage.blob.core.windows.net/isos/adfs-v2.zip",
+                        "script": "certificatessetup.ps1",
+                        "function": "Certificates"
+                      }
                     },
                     "protectedSettings": {
-                        "Items": {
-                            "AdminPassword": "AweS0me@PW"
+                      "configurationArguments": {
+                        "AdminCreds": {
+                          "UserName": "testuser",
+                          "Password": "AweS0me@PW"
                         }
+                      }
                     }
                 }
               ]
