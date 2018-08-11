@@ -39,19 +39,12 @@ Configuration AddADFSNode
             RebootNodeIfNeeded = $true            
         }
 
-        WindowsFeature AddWindowsIdentityFeature
-        {
-            Ensure    = 'Present'
-            Name      = 'Windows-Identity-Foundation'
-        }
-
         xWaitForADDomain DscForestWait 
         { 
             DomainName = $DomainName 
             DomainUserCredential= $DomainCreds
             RetryCount = $RetryCount 
             RetryIntervalSec = $RetryIntervalSec
-            DependsOn = '[WindowsFeature]AddWindowsIdentityFeature'
         }
          
         xComputer JoinDomain
@@ -62,9 +55,16 @@ Configuration AddADFSNode
             DependsOn = "[xWaitForADDomain]DscForestWait"
         }
 
-        xPendingReboot Reboot1
-        { 
-            Name = "RebootServer"
+        Script AfterDomainJoinReboot
+        {
+            TestScript = {
+                return (Test-Path HKLM:\SOFTWARE\MyMainKey\RebootKey)
+            }
+            SetScript = {
+                New-Item -Path HKLM:\SOFTWARE\MyMainKey\RebootKey -Force
+                 $global:DSCMachineStatus = 1
+            }
+            GetScript = { return @{result = 'result'}}
             DependsOn = "[xComputer]JoinDomain"
         }
 
@@ -73,7 +73,20 @@ Configuration AddADFSNode
             Ensure = "Present"
             Name   = "ADFS-Federation"
             IncludeAllSubFeature = $true
-            DependsOn = "[xPendingReboot]Reboot1"
+            DependsOn = "[Script]AfterDomainJoinReboot"
+        }
+
+        Script AfterADFSReboot
+        {
+            TestScript = {
+                return (Test-Path HKLM:\SOFTWARE\MyMainKey\RebootKey)
+            }
+            SetScript = {
+                New-Item -Path HKLM:\SOFTWARE\MyMainKey\RebootKey -Force
+                 $global:DSCMachineStatus = 1
+            }
+            GetScript = { return @{result = 'result'}}
+            DependsOn = "[WindowsFeature]InstallADFS"
         }
 
         cADFSNode AddADFSNode
@@ -82,7 +95,7 @@ Configuration AddADFSNode
             PrimaryADFSServer = $PrimaryAdfsServer
             CertificateThumbprint = $Thumbprint
             ServiceCredential = $DomainCreds
-            DependsOn = "[WindowsFeature]InstallADFS"
+            DependsOn = "[Script]AfterADFSReboot"
         }
 
         $ServiceAccountName = "${NetBiosDomainName}\$($Admincreds.UserName)";
