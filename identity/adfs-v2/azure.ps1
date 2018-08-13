@@ -137,9 +137,16 @@ Configuration CreateDomainController {
             DependsOn = "[xADDomainController]SecondaryDC"
         }
 
-        xPendingReboot Reboot1
-        { 
-            Name = "RebootServer"
+        Script DNSReboot
+        {
+            TestScript = {
+                return (Test-Path HKLM:\SOFTWARE\MyMainKey\RebootKey)
+            }
+            SetScript = {
+                New-Item -Path HKLM:\SOFTWARE\MyMainKey\RebootKey -Force
+                 $global:DSCMachineStatus = 1
+            }
+            GetScript = { return @{result = 'result'}}
             DependsOn = "[xDnsServerAddress]DnsServerAddress"
         }
 
@@ -159,7 +166,7 @@ Configuration CreateDomainController {
                 Add-DnsServerResourceRecordCName -Name "enterpriseregistration" -HostNameAlias $using:FederationName -ZoneName $using:DomainName -AllowUpdateAny
             }
             
-            DependsOn = "[xPendingReboot]Reboot1"
+            DependsOn = "[Script]DNSReboot"
         }        
 
    }
