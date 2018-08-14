@@ -53,7 +53,7 @@
                         "namePrefix": "jb",
                         "size": "Standard_DS1_v2",
                         "adminUsername": "testadminuser",
-                        "adminPassword": "test$!Passw0rd111",
+                        "adminPassword": "[replace-with-password]",
                         "virtualNetwork": {
                             "name": "ra-ntier-vnet"
                         },
@@ -100,7 +100,7 @@
                         "osType": "windows",
                         "namePrefix": "ad",
                         "adminUserName": "adminUser",
-                        "adminPassword": "testPassw0rd!23",
+                        "adminPassword": "[replace-with-password]",
                         "nics": [
                             {
                                 "subnetName": "ad",
@@ -155,7 +155,7 @@
                                         ]
                                     },
                                     "protectedSettings": {
-                                        "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File adds-replication-site.ps1 -DomainName contoso.com -AdminUser adminUser -AdminPassword testPassw0rd!23 -SiteName Azbb-Tutorial-Site -OnPremsiteName Default-First-Site-Name -Cidr 10.0.0.0/16 -ReplicationFrequency 10"
+                                        "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File adds-replication-site.ps1 -DomainName contoso.com -AdminUser adminUser -AdminPassword [replace-with-password] -SiteName Azbb-Tutorial-Site -OnPremsiteName Default-First-Site-Name -Cidr 10.0.0.0/16 -ReplicationFrequency 10"
                                     }
                                 }
                             ]
@@ -225,7 +225,7 @@
                                         "Options": 3
                                     },
                                     "protectedSettings": {
-                                        "Password": "testPassw0rd!23"
+                                        "Password": "[replace-with-password]"
                                     }
                                 },
                                 {
@@ -240,7 +240,7 @@
                                         ]
                                     },
                                     "protectedSettings": {
-                                        "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File adds.ps1 -AdminUser adminUser -AdminPassword testPassw0rd!23 -SafeModePassword Saf3M0de@PW -DomainName contoso.com -SiteName Default-First-Site-Name"
+                                        "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File adds.ps1 -AdminUser adminUser -AdminPassword [replace-with-password] -SafeModePassword Saf3M0de@PW -DomainName contoso.com -SiteName Default-First-Site-Name"
                                     }
                                 }
                             ]
@@ -255,7 +255,7 @@
                         "size": "Standard_DS12_v2",
                         "computerNamePrefix": "sql",
                         "adminUsername": "adminUser",
-                        "adminPassword": "testPassw0rd!23",
+                        "adminPassword": "[replace-with-password]",
                         "osType": "windows",
                         "imageReference": {
                             "offer": "SQL2017-WS2016",
@@ -344,7 +344,7 @@
                                     "Options": 3
                                 },
                                 "protectedSettings": {
-                                    "Password": "testPassw0rd!23"
+                                    "Password": "[replace-with-password]"
                                 }
                             }
                         ]
@@ -353,102 +353,6 @@
                 {
                     "type": "VirtualMachineExtension",
                     "settings": [
-                        {
-                            "vms": [
-                                "sql-vm1",
-                                "sql-vm2"
-                            ],
-                            "extensions": [
-                                {
-                                    "name": "SqlVmIaasExtension",
-                                    "type": "SqlIaaSAgent",
-                                    "publisher": "Microsoft.SqlServer.Management",
-                                    "typeHandlerVersion": "1.2",
-                                    "autoUpgradeMinorVersion": true,
-                                    "settings": {
-                                        "AutoTelemetrySettings": {
-                                            "Region": "Central US"
-                                        },
-                                        "AutoPatchingSettings": {
-                                            "PatchCategory": "WindowsMandatoryUpdates",
-                                            "Enable": true,
-                                            "DayOfWeek": "Sunday",
-                                            "MaintenanceWindowStartingHour": "12",
-                                            "MaintenanceWindowDuration": "60"
-                                        },
-                                        "AutoBackupSettings": {
-                                            "Enable": false,
-                                            "RetentionPeriod": "30",
-                                            "EnableEncryption": false
-                                        },
-                                        "KeyVaultCredentialSettings": {
-                                            "Enable": false,
-                                            "CredentialName": ""
-                                        },
-                                        "ServerConfigurationsManagementSettings": {
-                                            "SQLConnectivityUpdateSettings": {
-                                                "ConnectivityType": "Private",
-                                                "Port": "1433"
-                                            },
-                                            "SQLWorkloadTypeUpdateSettings": {
-                                                "SQLWorkloadType": "GENERAL"
-                                            },
-                                            "SQLStorageUpdateSettings": {
-                                                "DiskCount": "2",
-                                                "NumberOfColumns": "2",
-                                                "StartingDeviceID": "2",
-                                                "DiskConfigurationType": "NEW"
-                                            },
-                                            "AdditionalFeaturesServerConfigurations": {
-                                                "IsRServicesEnabled": "false"
-                                            }
-                                        }
-                                    },
-                                    "protectedSettings": {}
-                                }
-                            ]
-                        },
-                        {
-                            "vms": [
-                                "sql-vm1",
-                                "sql-vm2"
-                            ],
-                            "extensions": [
-                                {
-                                    "name": "AOSetup",
-                                    "publisher": "Microsoft.Powershell",
-                                    "type": "DSC",
-                                    "typeHandlerVersion": "2.7",
-                                    "autoUpgradeMinorVersion": true,
-                                    "settings": {
-                                        "modulesURL": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/windows/dsc/PrepareSQLServer.ps1.zip",
-                                        "configurationFunction": "PrepareSqlServer.ps1\\SqlServerPrepareDsc",
-                                        "properties": {
-                                            "domainName": "contoso.com",
-                                            "Admincreds": {
-                                                "userName": "adminUser",
-                                                "password": "privateSettingsRef:adminPassword"
-                                            },
-                                            "sqlServiceCreds": {
-                                                "userName": "sqlservicetestuser",
-                                                "password": "privateSettingsRef:sqlServerServiceAccountPassword"
-                                            },
-                                            "ClusterName": "AOCluster",
-                                            "ClusterOwnerNode": "sql1",
-                                            "ClusterIP": "10.0.3.30",
-                                            "witnessStorageBlobEndPoint": "https://[replace-with-storageaccountname].blob.core.windows.net",
-                                            "witnessStorageAccountKey": "[replace-with-storagekey]"
-                                        }
-                                    },
-                                    "protectedSettings": {
-                                        "items": {
-                                            "adminPassword": "testPassw0rd!23",
-                                            "sqlServerServiceAccountPassword": "AweS0me@SQLServicePW"
-                                        }
-                                    }
-                                }
-                            ]
-                        },
                         {
                             "vms": [
                                 "sql-vm1"
@@ -461,17 +365,22 @@
                                     "typeHandlerVersion": "2.7",
                                     "autoUpgradeMinorVersion": true,
                                     "settings": {
-                                        "modulesURL": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/windows/dsc/PrepareSQLServer.ps1.zip",
-                                        "configurationFunction": "PrepareSqlServer-AGDB.ps1\\SQLServerDBDsc",
-                                        "properties": {
+                                        "configuration": {
+                                            "url": "https://github.com/mspnp/reference-architectures/raw/master/virtual-machines/n-tier-windows/PrepareSQLServer.ps1.zip",
+                                            "script": "PrepareSqlServer.ps1",
+                                            "function": "SqlServerPrepareDsc"
+                                        }
+                                    },
+                                    "protectedSettings": {
+                                        "configurationArguments": {
                                             "domainName": "contoso.com",
                                             "Admincreds": {
                                                 "userName": "adminUser",
-                                                "password": "privateSettingsRef:adminPassword"
+                                                "password": "[replace-with-password]"
                                             },
                                             "sqlServiceCreds": {
                                                 "userName": "sqlservicetestuser",
-                                                "password": "privateSettingsRef:sqlServerServiceAccountPassword"
+                                                "password": "[replace-with-sql-password]"
                                             },
                                             "ClusterName": "AOCluster",
                                             "ClusterOwnerNode": "sql1",
@@ -479,14 +388,96 @@
                                             "witnessStorageBlobEndPoint": "https://[replace-with-storageaccountname].blob.core.windows.net",
                                             "witnessStorageAccountKey": "[replace-with-storagekey]"
                                         }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "VirtualMachineExtension",
+                    "settings": [
+                        {
+                            "vms": [
+                                "sql-vm2"
+                            ],
+                            "extensions": [
+                                {
+                                    "name": "AOSetup2",
+                                    "publisher": "Microsoft.Powershell",
+                                    "type": "DSC",
+                                    "typeHandlerVersion": "2.7",
+                                    "autoUpgradeMinorVersion": true,
+                                    "settings": {
+                                        "configuration": {
+                                            "url": "https://github.com/mspnp/reference-architectures/raw/master/virtual-machines/n-tier-windows/PrepareSQLServer.ps1.zip",
+                                            "script": "PrepareSqlServer.ps1",
+                                            "function": "SqlServerPrepareDsc"
+                                        }
                                     },
                                     "protectedSettings": {
-                                        "items": {
-                                            "adminPassword": "testPassw0rd!23",
-                                            "sqlServerServiceAccountPassword": "AweS0me@SQLServicePW"
+                                        "configurationArguments": {
+                                            "domainName": "contoso.com",
+                                            "Admincreds": {
+                                                "userName": "adminUser",
+                                                "password": "[replace-with-password]"
+                                            },
+                                            "sqlServiceCreds": {
+                                                "userName": "sqlservicetestuser",
+                                                "password": "[replace-with-sql-password]"
+                                            },
+                                            "ClusterName": "AOCluster",
+                                            "ClusterOwnerNode": "sql1",
+                                            "ClusterIP": "10.0.3.30",
+                                            "witnessStorageBlobEndPoint": "https://[replace-with-storageaccountname].blob.core.windows.net",
+                                            "witnessStorageAccountKey": "[replace-with-storagekey]"
                                         }
                                     }
                                 }
+                            ]
+                        }
+                    ]
+                },                
+                {
+                    "type": "VirtualMachineExtension",
+                    "settings": [
+                        {
+                            "vms": [
+                                "sql-vm1"
+                            ],
+                            "extensions": [
+                                {
+                                    "name": "AOSetup",
+                                    "publisher": "Microsoft.Powershell",
+                                    "type": "DSC",
+                                    "typeHandlerVersion": "2.7",
+                                    "autoUpgradeMinorVersion": true,
+                                    "settings": {
+                                        "configuration": {
+                                            "url": "https://github.com/mspnp/reference-architectures/raw/master/virtual-machines/n-tier-windows/PrepareSQLServer.ps1.zip",
+                                            "script": "PrepareSqlServer-AGDB.ps1",
+                                            "function": "SQLServerDBDsc"
+                                        }
+                                    },
+                                    "protectedSettings": {
+                                        "configurationArguments": {
+                                            "domainName": "contoso.com",
+                                            "Admincreds": {
+                                                "userName": "adminUser",
+                                                "password": "[replace-with-password]"
+                                            },
+                                            "sqlServiceCreds": {
+                                                "userName": "sqlservicetestuser",
+                                                "password": "[replace-with-sql-password]"
+                                            },
+                                            "ClusterName": "AOCluster",
+                                            "ClusterOwnerNode": "sql1",
+                                            "ClusterIP": "10.0.3.30",
+                                            "witnessStorageBlobEndPoint": "https://[replace-with-storageaccountname].blob.core.windows.net",
+                                            "witnessStorageAccountKey": "[replace-with-storagekey]"
+                                        }
+                                    }
+                                }                            
                             ]
                         }
                     ]
@@ -499,7 +490,7 @@
                         "size": "Standard_DS1_v2",
                         "computerNamePrefix": "web",
                         "adminUsername": "adminUser",
-                        "adminPassword": "testPassw0rd!23",
+                        "adminPassword": "[replace-with-password]",
                         "virtualNetwork": {
                             "name": "ra-ntier-vnet"
                         },
@@ -529,20 +520,25 @@
                                     "Options": 3
                                 },
                                 "protectedSettings": {
-                                    "Password": "testPassw0rd!23"
+                                    "Password": "[replace-with-password]"
                                 }
                             },
                             {
                                 "name": "iis-config-ext",
                                 "publisher": "Microsoft.Powershell",
                                 "type": "DSC",
-                                "typeHandlerVersion": "2.1",
+                                "typeHandlerVersion": "2.7",
                                 "autoUpgradeMinorVersion": true,
                                 "settings": {
-                                    "ModulesUrl": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/windows/dsc/iisaspnet.ps1.zip",
-                                    "configurationFunction": "iisaspnet.ps1\\iisaspnet"
+                                    "configuration": {
+                                        "url": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/windows/dsc/iisaspnet.ps1.zip",
+                                        "script": "iisaspnet.ps1",
+                                        "function": "iisaspnet"
+                                    }
                                 },
-                                "protectedSettings": {}
+                                "protectedSettings": {
+                                    "configurationArguments": {}
+                                }
                             }
                         ],
                         "applicationGatewaySettings": {
@@ -622,7 +618,7 @@
                         "size": "Standard_DS1_v2",
                         "computerNamePrefix": "biz",
                         "adminUsername": "adminUser",
-                        "adminPassword": "testPassw0rd!23",
+                        "adminPassword": "[replace-with-password]",
                         "virtualNetwork": {
                             "name": "ra-ntier-vnet"
                         },
@@ -654,20 +650,25 @@
                                     "Options": 3
                                 },
                                 "protectedSettings": {
-                                    "Password": "testPassw0rd!23"
+                                    "Password": "[replace-with-password]"
                                 }
                             },
                             {
                                 "name": "iis-config-ext",
                                 "publisher": "Microsoft.Powershell",
                                 "type": "DSC",
-                                "typeHandlerVersion": "2.1",
+                                "typeHandlerVersion": "2.7",
                                 "autoUpgradeMinorVersion": true,
                                 "settings": {
-                                    "ModulesUrl": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/windows/dsc/iisaspnet.ps1.zip",
-                                    "configurationFunction": "iisaspnet.ps1\\iisaspnet"
+                                    "configuration": {
+                                        "url": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/windows/dsc/iisaspnet.ps1.zip",
+                                        "script": "iisaspnet.ps1",
+                                        "function": "iisaspnet"
+                                    }
                                 },
-                                "protectedSettings": {}
+                                "protectedSettings": {
+                                    "configurationArguments": {}
+                                }
                             }
                         ],
                         "loadBalancerSettings": {
