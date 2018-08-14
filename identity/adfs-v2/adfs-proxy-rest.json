@@ -13,7 +13,7 @@
                 ],
                 "extensions": [
                   {
-                      "name": "adfsproxy",
+                      "name": "adfs",
                       "publisher": "Microsoft.Powershell",
                       "type": "DSC",
                       "typeHandlerVersion": "2.7",

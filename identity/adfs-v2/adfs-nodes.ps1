@@ -76,6 +76,14 @@ Configuration AddADFSNode
             DependsOn = "[Script]AfterDomainJoinReboot"
         }
 
+        WindowsFeature InstallWIF
+        {
+            Ensure = "Present"
+            Name   = "Windows-Identity-Foundation"
+            IncludeAllSubFeature = $true
+            DependsOn = "[WindowsFeature]InstallADFS"
+        }
+
         Script AfterADFSReboot
         {
             TestScript = {
@@ -86,7 +94,7 @@ Configuration AddADFSNode
                  $global:DSCMachineStatus = 1
             }
             GetScript = { return @{result = 'result'}}
-            DependsOn = "[WindowsFeature]InstallADFS"
+            DependsOn = "[WindowsFeature]InstallWIF"
         }
 
         cADFSNode AddADFSNode
