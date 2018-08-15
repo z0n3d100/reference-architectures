@@ -118,7 +118,8 @@ Configuration AddADFSNode
             ServiceAccountName = $ServiceAccountName
             RegistrationQuota = 10
             MaximumRegistrationInactivityPeriod = 90
-            DependsOn = "[cADFSNode]AddADFSNode"         
+            DependsOn = "[cADFSNode]AddADFSNode"
+            PsDscRunAsCredential = $Admincreds
         }
     }
 }

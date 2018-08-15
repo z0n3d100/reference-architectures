@@ -118,6 +118,7 @@ Configuration InstallADFS
             RegistrationQuota = 10
             MaximumRegistrationInactivityPeriod = 90
             DependsOn = "[cADFSFarm]AddADFSFarm"
+            PsDscRunAsCredential = $Admincreds
         }
     }
 }
