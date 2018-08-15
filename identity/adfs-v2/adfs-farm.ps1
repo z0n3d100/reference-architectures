@@ -103,7 +103,7 @@ Configuration InstallADFS
             ServiceCredential = $DomainCreds
             InstallCredential = $DomainCreds
             DependsOn = "[Script]AfterADFSReboot"
-            PsDscRunAsCredential = $Admincreds
+            PsDscRunAsCredential = $Admincreds
         }
 
         $ServiceAccountName = $DomainCreds.UserName;

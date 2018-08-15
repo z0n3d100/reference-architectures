@@ -104,7 +104,7 @@ Configuration AddADFSNode
             CertificateThumbprint = $Thumbprint
             ServiceCredential = $DomainCreds
             DependsOn = "[Script]AfterADFSReboot"
-            PsDscRunAsCredential = $Admincreds
+            PsDscRunAsCredential = $Admincreds
         }
 
         $ServiceAccountName = "${NetBiosDomainName}\$($Admincreds.UserName)";
