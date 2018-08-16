@@ -107,12 +107,12 @@ Configuration AddADFSNode
             PsDscRunAsCredential = $Admincreds
         }
 
-        $ServiceAccountName = "${NetBiosDomainName}\$($Admincreds.UserName)";
+        $ServiceAccountName = $DomainCreds.UserName;
 
         cADFSDeviceRegistration cADFSDeviceRegistration
         {
             Ensure = "Present"
-            DomainName = "contoso.com"
+            DomainName = $DomainName
             ServiceCredential = $DomainCreds
             InstallCredential = $DomainCreds
             ServiceAccountName = $ServiceAccountName
