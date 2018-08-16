@@ -107,16 +107,11 @@ Configuration AddADFSNode
             PsDscRunAsCredential = $Admincreds
         }
 
-        Script AfterAddNodeReboot
+        Service AdfsService
         {
-            TestScript = {
-                return (Test-Path HKLM:\SOFTWARE\MyMainKey\RebootKey)
-            }
-            SetScript = {
-                New-Item -Path HKLM:\SOFTWARE\MyMainKey\RebootKey -Force
-                 $global:DSCMachineStatus = 1
-            }
-            GetScript = { return @{result = 'result'}}
+            Name = "adfssrv"
+            Ensure = "Present"
+            State = "Running"
             DependsOn = "[cADFSNode]AddADFSNode"
         }
 
@@ -131,7 +126,7 @@ Configuration AddADFSNode
             ServiceAccountName = $ServiceAccountName
             RegistrationQuota = 10
             MaximumRegistrationInactivityPeriod = 90
-            DependsOn = "[Script]AfterAddNodeReboot"
+            DependsOn = "[Service]AdfsService"
             PsDscRunAsCredential = $Admincreds
         }
     }
