@@ -76,14 +76,67 @@ Configuration AddADFSNode
             DependsOn = "[Script]AfterDomainJoinReboot"
         }
 
+        WindowsFeature InstallWIF
+        {
+            Ensure = "Present"
+            Name   = "Windows-Identity-Foundation"
+            IncludeAllSubFeature = $true
+            DependsOn = "[WindowsFeature]InstallADFS"
+        }
+
+        Script AfterADFSReboot
+        {
+            TestScript = {
+                return (Test-Path HKLM:\SOFTWARE\MyMainKey\RebootKey)
+            }
+            SetScript = {
+                New-Item -Path HKLM:\SOFTWARE\MyMainKey\RebootKey -Force
+                 $global:DSCMachineStatus = 1
+            }
+            GetScript = { return @{result = 'result'}}
+            DependsOn = "[WindowsFeature]InstallWIF"
+        }
+
         cADFSNode AddADFSNode
         {   
             Ensure = "Present"
             PrimaryADFSServer = $PrimaryAdfsServer
             CertificateThumbprint = $Thumbprint
             ServiceCredential = $DomainCreds
-            DependsOn = "[WindowsFeature]InstallADFS"
+            DependsOn = "[Script]AfterADFSReboot"
             PsDscRunAsCredential = $Admincreds
+        }
+
+        Service AdfsService
+        {
+            Name = "adfssrv"
+            Ensure = "Present"
+            State = "Running"
+            DependsOn = "[cADFSNode]AddADFSNode"
+        }
+
+        Service DrsService
+        {
+            Name = "drs"
+            Ensure = "Present"
+            State = "Running"
+            StartupType = "Automatic"
+            DependsOn = "[cADFSNode]AddADFSNode"
+        }
+
+        $ServiceAccountName = $DomainCreds.UserName;
+        
+        cADFSDeviceRegistration cADFSDeviceRegistration
+        {
+            Ensure = "Present"
+            DomainName = $DomainName
+            ServiceCredential = $DomainCreds
+            InstallCredential = $DomainCreds
+            ServiceAccountName = $ServiceAccountName
+            RegistrationQuota = 10
+            MaximumRegistrationInactivityPeriod = 90
+            DependsOn = "[Service]AdfsService","[Service]DrsService"
+            PsDscRunAsCredential = $DomainCreds
         }
     }
 }
