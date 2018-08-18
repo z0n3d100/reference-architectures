@@ -46,6 +46,7 @@ Configuration InstallWebProxyApp
             ServiceCredential = $DomainCreds
             ExternalPreAuthentication = "PassThrough";
             DependsOn = "[WindowsFeature]WebApplicationProxy"
+            PsDscRunAsCredential = $DomainCreds
         }
 
         xPendingReboot Reboot1
