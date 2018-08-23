@@ -46,7 +46,6 @@ Configuration InstallWebProxy
                 Install-WebApplicationProxy -FederationServiceTrustCredential $using:DomainCreds -CertificateThumbprint $using:Thumbprint -FederationServiceName $using:FederationName 
             }
             DependsOn = "[WindowsFeature]WebApplicationProxy"
-            PsDscRunAsCredential = $DomainCreds
         }
 
         xPendingReboot Reboot1
