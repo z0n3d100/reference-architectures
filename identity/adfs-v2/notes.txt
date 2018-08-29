@@ -2,16 +2,47 @@
 
 - run azbb onprem.json
 - run azbb azure.json
-- if not done via azbb: 
-    - install cert in ra-adfs-adfs-vm1 and ra-adfs-adfs-vm2
-    - install cert and if it is a self signed cert also add the root cert in ra-adfs-proxy-vm1 and ra-adfs-proxy-vm2
 - run adfs-farm-first.json
-    - check that ADFS farm was set up, although azbb returns an error, DSC keeps retrying and sometimes succeeds other times you need to run the DSC config manually on the VM
 - run adfs-farm-rest.json
-    - check that ADFS farm was set up, although azbb returns an error, DSC keeps retrying and sometimes succeeds other times you need to run the DSC config manually on the VM
-- run adfs-proxy-first.json
-    - check that the WebApplicationProxy app was installed, azbb returns an error sometimes but DSC succeeds
-- run adfs-proxy-rest.json
-    - check that WebApplicationProxy was installed, azbb returns an error sometimes but DSC succeeds
+- run manually into ra-adfs-proxy-vm1
+
+```
+. .\adfs-webproxy.ps1
+
+ $cd = @{
+    AllNodes = @(
+        @{
+            NodeName = 'localhost'
+            PSDscAllowPlainTextPassword = $true
+            PSDscAllowDomainUser = $true
+        }
+    )
+}
+
+$c1 = Get-Credential -UserName testuser -Message "AweS0me@PW"
+InstallWebProxyApp -DomainName contoso.com -FederationName adfs.contoso.com -WebApplicationProxyName "Contoso App" -AdminCreds $c1 -ConfigurationData $cd
+Start-DscConfiguration .InstallWebProxyApp
+Get-DscConfigurationStatus
+```
+
+- run manually into ra-adfs-proxy-vm2
+```
+. .\adfs-webproxy-rest.ps1
+
+ $cd = @{
+    AllNodes = @(
+        @{
+            NodeName = 'localhost'
+            PSDscAllowPlainTextPassword = $true
+            PSDscAllowDomainUser = $true
+        }
+    )
+}
+
+$c1 = Get-Credential -UserName testuser -Message "AweS0me@PW"
+InstallWebProxy -DomainName contoso.com -FederationName adfs.contoso.com -AdminCreds $c1 -ConfigurationData $cd
+Start-DscConfiguration .InstallWebProxy
+Get-DscConfigurationStatus
+```
 
 Note that cADFS is not the version on the PsGallery but a custom one with added resources: https://github.com/woodp/cADFS
