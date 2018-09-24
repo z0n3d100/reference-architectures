@@ -49,7 +49,7 @@
                   "typeHandlerVersion": "2.7",
                   "autoUpgradeMinorVersion": true,
                   "settings": {
-                       "ModulesUrl": "https://lugizidscstorage.blob.core.windows.net/isos/adfs-v2.zip",
+                       "ModulesUrl": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/identity/adfs-v2/adfs-v2.zip",
                        "ConfigurationFunction":"azure.ps1\\CreateDomainController",
                        "Properties": {
                             "DomainName": "contoso.com",
@@ -336,7 +336,7 @@
                     "autoUpgradeMinorVersion": true,
                     "settings": {
                       "configuration": {
-                        "url": "https://lugizidscstorage.blob.core.windows.net/isos/adfs-v2.zip",
+                        "url": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/identity/adfs-v2/adfs-v2.zip",
                         "script": "certificatessetup.ps1",
                         "function": "Certificates"
                       }
