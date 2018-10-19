@@ -9,11 +9,14 @@ Configuration InstallWebProxy
         [System.Management.Automation.PSCredential]$Admincreds,
         
         [Parameter(Mandatory)]
-        [string]$FederationName
+        [string]$FederationName,
+
+        [Parameter(Mandatory)]
+        [string]$WebApplicationProxyName
     )
 
     #Import the required DSC Resources
-    Import-DscResource -Module xPendingReboot
+    Import-DscResource -Module xPendingReboot, cADFS
     
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
     $Thumbprint =(Get-ChildItem -DnsName $FederationName -Path cert:\LocalMachine\My).Thumbprint
@@ -34,24 +37,21 @@ Configuration InstallWebProxy
             IncludeAllSubFeature = $true
         }
 
-        Script InstallWebProxy
+        cADFSWebApplicationProxy WebApplicationProxy
         {
-            GetScript = {return @{}}
-            
-            TestScript = { return $false; } # Is always run
-
-            SetScript = 
-            {
-                Write-Verbose -Message 'Installing Web Application Proxy.';
-                Install-WebApplicationProxy -FederationServiceTrustCredential $using:DomainCreds -CertificateThumbprint $using:Thumbprint -FederationServiceName $using:FederationName 
-            }
+            Ensure = "Present"
+            Name = $WebApplicationProxyName
+            FederationName = $FederationName
+            CertificateThumbprint = $Thumbprint
+            ServiceCredential = $DomainCreds
+            ExternalPreAuthentication = "PassThrough";
             DependsOn = "[WindowsFeature]WebApplicationProxy"
         }
 
         xPendingReboot Reboot1
         { 
             Name = "RebootServer"
-            DependsOn = @("[Script]InstallWebProxy")
+            DependsOn = "[cADFSWebApplicationProxy]WebApplicationProxy"
         }
     }
 }
