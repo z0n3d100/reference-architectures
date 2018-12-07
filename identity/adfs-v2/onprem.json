@@ -16,6 +16,10 @@
                     {
                       "name": "adds",
                       "addressPrefix": "192.168.0.0/24"
+                    },
+                    {
+                        "name": "GatewaySubnet",
+                        "addressPrefix": "192.168.255.224/27"
                     }
                   ],
                   "dnsServers": [
@@ -25,7 +29,20 @@
                 ]
               }
             ]
-          },        
+          },
+          {
+              "type": "VirtualNetworkGateway",
+              "settings": {
+                  "name": "ra-adfs-onprem-vpn-gateway1",
+                  "gatewayType": "Vpn",
+                  "vpnType": "RouteBased",
+                  "sku": "VpnGw1",
+                  "isPublic": true,
+                  "virtualNetwork": {
+                      "name": "ra-adfs-onpremise-vnet"
+                  }
+              }
+          },
           {
             "type": "VirtualNetwork",
             "settings": [
@@ -88,16 +105,6 @@
                     "192.168.0.4",
                     "192.168.0.5",
                     "168.63.129.16"
-                ],
-                "virtualNetworkPeerings": [
-                  {
-                      "remoteVirtualNetwork": {
-                          "name": "ra-adfs-onpremise-vnet"
-                      },
-                      "allowForwardedTraffic": true,
-                      "allowGatewayTransit": true,
-                      "useRemoteGateways": false
-                  }
                 ]
               }
             ]
@@ -125,7 +132,7 @@
               },
               "nics": [
                 {
-                  "isPublic": true,
+                  "isPublic": false,
                   "isPrimary": true,
                   "privateIPAllocationMethod": "Static",
                   "subnetName": "adds",
@@ -136,7 +143,7 @@
               "imageReference": {
                 "publisher": "MicrosoftWindowsServer",
                 "offer": "WindowsServer",
-                "sku": "2012-R2-Datacenter",
+                "sku": "2016-Datacenter",
                 "version": "latest"
               },
               "dataDisks": {
@@ -243,24 +250,65 @@
                   {
                     "name": "adds",
                     "addressPrefix": "192.168.0.0/24"
+                  },
+                  {
+                      "name": "GatewaySubnet",
+                      "addressPrefix": "192.168.255.224/27"
                   }
                 ],
                 "dnsServers": [
                   "192.168.0.4",
                   "192.168.0.5"
-                ],
-                "virtualNetworkPeerings": [
-                  {
-                      "remoteVirtualNetwork": {
-                          "name": "ra-adfs-vnet"
-                      },
-                      "allowForwardedTraffic": true,
-                      "allowGatewayTransit": true,
-                      "useRemoteGateways": false
-                  }
                 ]
               }
             ]
+          },
+          {
+            "type": "VirtualNetworkGateway",
+            "settings": {
+                "name": "ra-adfs-cloud-vpn-gateway1",
+                "gatewayType": "Vpn",
+                "vpnType": "RouteBased",
+                "sku": "VpnGw1",
+                "isPublic": true,
+                "virtualNetwork": {
+                    "name": "ra-adfs-vnet"
+                }
+            }
+          },
+          {
+            "type": "Connection",
+            "settings": [
+                {
+                    "connectionType": "Vnet2Vnet",
+                    "name": "cloud-onprem-conn",
+                    "sharedKey": "AweS0me@PW",
+                    "routingWeight": 1,
+                    "virtualNetworkGateway1": {
+                        "name": "ra-adfs-onprem-vpn-gateway1"
+                    },
+                    "virtualNetworkGateway2": {
+                        "name": "ra-adfs-cloud-vpn-gateway1"
+                    }
+                  }
+              ]
+          },
+          {
+              "type": "Connection",
+              "settings": [
+                  {
+                      "connectionType": "Vnet2Vnet",
+                      "name": "onprem-cloud-conn",
+                      "sharedKey": "AweS0me@PW",
+                      "routingWeight": 1,
+                      "virtualNetworkGateway1": {
+                          "name": "ra-adfs-cloud-vpn-gateway1"
+                      },
+                      "virtualNetworkGateway2": {
+                          "name": "ra-adfs-onprem-vpn-gateway1"
+                      }
+                  }
+              ]
           }
         ]
       }

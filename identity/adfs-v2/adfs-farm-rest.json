@@ -19,7 +19,7 @@
                       "typeHandlerVersion": "2.7",
                       "autoUpgradeMinorVersion": true,
                       "settings": {
-                        "ModulesUrl": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/identity/adfs-v2/adfs-v2.zip",
+                        "ModulesUrl": "https://lugizidscstorage.blob.core.windows.net/isos/adfs-v2.zip",
                         "ConfigurationFunction":"adfs-nodes.ps1\\AddADFSNode",
                         "Properties": {
                             "DomainName": "contoso.com",
