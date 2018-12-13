@@ -115,15 +115,6 @@ Configuration AddADFSNode
             DependsOn = "[cADFSNode]AddADFSNode"
         }
 
-        # Service DrsService
-        # {
-        #     Name = "drs"
-        #     Ensure = "Present"
-        #     State = "Running"
-        #     StartupType = "Automatic"
-        #     DependsOn = "[cADFSNode]AddADFSNode"
-        # }
-
         $ServiceAccountName = $DomainCreds.UserName;
         
         cADFSDeviceRegistration cADFSDeviceRegistration
@@ -135,7 +126,7 @@ Configuration AddADFSNode
             ServiceAccountName = $ServiceAccountName
             RegistrationQuota = 10
             MaximumRegistrationInactivityPeriod = 90
-            DependsOn = "[Service]AdfsService"#,"[Service]DrsService"
+            DependsOn = "[Service]AdfsService"
             PsDscRunAsCredential = $DomainCreds
         }
     }
