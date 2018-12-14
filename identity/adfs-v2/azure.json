@@ -20,12 +20,12 @@
             "imageReference": {
               "publisher": "MicrosoftWindowsServer",
               "offer": "WindowsServer",
-              "sku": "2012-R2-Datacenter",
+              "sku": "2016-Datacenter",
               "version": "latest"
             },
             "nics": [
               {
-                "isPublic": true,
+                "isPublic": false,
                 "subnetName": "adds",
                 "privateIPAllocationMethod": "Static",
                 "startingIPAddress": "10.0.4.4",
@@ -141,19 +141,28 @@
                   "10.0.4.5",
                   "192.168.0.4",
                   "192.168.0.5"
-              ],
-              "virtualNetworkPeerings": [
-                {
-                    "remoteVirtualNetwork": {
-                        "name": "ra-adfs-onpremise-vnet"
-                    },
-                    "allowForwardedTraffic": true,
-                    "allowGatewayTransit": true,
-                    "useRemoteGateways": false
-                }
               ]
             }
           ]
+        },
+        { 
+          "type": "VirtualMachine", 
+          "settings": { 
+            "vmCount": 1,
+            "namePrefix": "ra-adfs-jb", 
+            "size": "Standard_DS1_v2", 
+            "adminUsername": "testuser", 
+            "adminPassword": "AweS0me@PW", 
+            "osType": "windows", 
+            "virtualNetwork": { 
+              "name": "ra-adfs-vnet" 
+            }, 
+            "nics": [ 
+              { 
+                "subnetName": "mgmt" 
+              } 
+            ] 
+          } 
         },
         {
           "type": "VirtualMachine",
@@ -171,7 +180,7 @@
               },            
               "nics": [
                 {
-                  "isPublic": true,
+                  "isPublic": false,
                   "subnetName": "adfs",
                   "privateIPAllocationMethod": "Static",
                   "startingIPAddress": "10.0.5.4",
@@ -185,7 +194,7 @@
               "imageReference": {
                 "publisher": "MicrosoftWindowsServer",
                 "offer": "WindowsServer",
-                "sku": "2012-R2-Datacenter",
+                "sku": "2016-Datacenter",
                 "version": "latest"
               },
               "dataDisks": {
@@ -252,7 +261,7 @@
                 },
                 "nics": [
                     {
-                        "isPublic": true,
+                        "isPublic": false,
                         "subnetName": "proxy",
                         "privateIPAllocationMethod": "Static",
                         "startingIPAddress": "10.0.6.4",
@@ -266,7 +275,7 @@
                 "imageReference": {
                     "publisher": "MicrosoftWindowsServer",
                     "offer": "WindowsServer",
-                    "sku": "2012-R2-Datacenter",
+                    "sku": "2016-Datacenter",
                     "version": "latest"
                 },
                 "dataDisks": {
