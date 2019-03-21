@@ -129,35 +129,37 @@
                             ],
                             "extensions": [
                                 {
-                                    "name": "install-adds-forest",
-                                    "publisher": "Microsoft.Compute",
-                                    "type": "CustomScriptExtension",
-                                    "typeHandlerVersion": "1.8",
+                                    "name": "addsc",
+                                    "publisher": "Microsoft.Powershell",
+                                    "type": "DSC",
+                                    "typeHandlerVersion": "2.7",
                                     "autoUpgradeMinorVersion": true,
                                     "settings": {
-                                        "fileUris": [
-                                            "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/windows/ad/adds-forest.ps1"
-                                        ]
+                                        "configuration": {
+                                          "url": "https://github.com/mspnp/reference-architectures/raw/master/virtual-machines/n-tier-windows/adds.zip",
+                                          "script":"primary.ps1",
+                                          "function": "CreateForest"
+                                      }
                                     },
                                     "protectedSettings": {
-                                        "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File adds-forest.ps1 -DomainName contoso.com -DomainNetbiosName contoso -SafeModePassword Saf3M0de@PW"
+                                      "configurationArguments": {
+                                        "DomainName": "contoso.com",
+                                        "DomainNetbiosName": "CONTOSO",
+                                        "SiteName": "Azbb-Tutorial-Site",
+                                        "OnpremSiteName": "Default-First-Site-Name",
+                                        "Cidr": "10.0.0.0/16",
+                                        "ReplicationFrequency": 10,
+                                        "AdminCreds": {
+                                          "UserName": "adminUser",
+                                          "Password": "[replace-with-password]"
+                                        },
+                                        "SafeModeAdminCreds": {
+                                          "UserName": "testsafeadminuser",
+                                          "Password": "[replace-with-safe-password]"
+                                        }
+                                      }
                                     }
-                                },
-                                {
-                                    "name": "install-adds-forest",
-                                    "publisher": "Microsoft.Compute",
-                                    "type": "CustomScriptExtension",
-                                    "typeHandlerVersion": "1.8",
-                                    "autoUpgradeMinorVersion": true,
-                                    "settings": {
-                                        "fileUris": [
-                                            "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/windows/ad/adds-replication-site.ps1"
-                                        ]
-                                    },
-                                    "protectedSettings": {
-                                        "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File adds-replication-site.ps1 -DomainName contoso.com -AdminUser adminUser -AdminPassword [replace-with-password] -SiteName Azbb-Tutorial-Site -OnPremsiteName Default-First-Site-Name -Cidr 10.0.0.0/16 -ReplicationFrequency 10"
-                                    }
-                                }
+                                  }                  
                             ]
                         }
                     ]
@@ -240,7 +242,7 @@
                                         ]
                                     },
                                     "protectedSettings": {
-                                        "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File adds.ps1 -AdminUser adminUser -AdminPassword [replace-with-password] -SafeModePassword Saf3M0de@PW -DomainName contoso.com -SiteName Default-First-Site-Name"
+                                        "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File adds.ps1 -AdminUser adminUser -AdminPassword [replace-with-password] -SafeModePassword [replace-with-safe-password] -DomainName contoso.com -SiteName Default-First-Site-Name"
                                     }
                                 }
                             ]
