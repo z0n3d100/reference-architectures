@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-
+az group create --name "${RGNAME}" --location "${RGLOCATION}"
 
 openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048  -keyout gatewaycertkey.key -out gatewaycertrequest.csr -subj "/C=US/ST=WA/L=Redmond/O=Microsoft/OU=Gateway/CN=${DNSNAME}.${RGLOCATION}.cloudapp.azure.com/emailAddress=email@email.com"
 
@@ -9,13 +9,13 @@ openssl pkcs12 -export -out gatewaycertificate.pfx -inkey gatewaycertkey.key -in
 
 certdata=`base64 gatewaycertificate.pfx --wrap=0`
 
-az group create --name "${RGNAME}" --location "${RGLOCATION}"
+
 
 az storage account create -n ${STORAGEACCNAME} -g ${RGNAME} -l ${RGLOCATION} --sku standard_LRS
 
 az storage container create -n rsrcontainer  --account-name ${STORAGEACCNAME} --public-access blob
 
-wget https://raw.githubusercontent.com/mspnp/reference-architectures/carlos/webappra/web-app-ri/deployment/Microsoft_Azure_logo_small.png
+wget ${DEPLOYMENT}Microsoft_Azure_logo_small.png
 
 az storage blob upload -c rsrcontainer -f Microsoft_Azure_logo_small.png -n Microsoft_Azure_logo_small.png --account-name ${STORAGEACCNAME}
 

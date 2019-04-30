@@ -2,11 +2,16 @@
 Open an azure cloud shell from the portal.
 
 
-#### Step 1 Create  the environment variables to run the deployment script.
+#### Step 1 Create directory and  the environment variables to run the deployment script.
 
 Open an azure cloud shell and run below commands.
 
 **Note: ** RGLOCATION should be in the right format. Some examples of valid locations are **westus, eastus, northeurope, westeurope, eastasia, southeastasia, northcentralus, southcentralus, centralus, eastus2, westus2, japaneast, japanwest, brazilsouth**. The DNSNAME and STORAGEACCNAME should be **unique and valid**. You will test uniqueness and validity of them after this step.
+
+```
+mkdir deployweb
+cd deployweb
+```
 ```
 export DEPLOYMENT=https://raw.githubusercontent.com/mspnp/reference-architectures/carlos/webappra/web-app/deployment/
 export RGNAME=resourceGroupName
@@ -53,12 +58,11 @@ read -s CERTPASS
 read -s SQLADMINPASSWORD
 ```
 
-#### Step 5 From the azure cloud shell create a directory for deployment download the deployment script and run it
+#### Step 5 From the azure cloud shell download the deployment script, assign execute permissions and run it
 
 ```
-mkdir deployweb
-cd deploywb
 wget ${DEPLOYMENT}rundeployment.sh
+chmod +x rundeployment.sh
 ```
 ```
 .\rundeployment.sh
