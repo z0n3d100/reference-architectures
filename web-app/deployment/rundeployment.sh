@@ -2,7 +2,7 @@
 
 
 
-openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048  -keyout gatewaycertkey.key -out gatewaycertrequest.csr -subj "/C=US/ST=WA/L=Redmond/O=Microsoft/OU=Gateway/CN=${FQN}.${RGLOCATION}.cloudapp.azure.com/emailAddress=email@email.com"
+openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048  -keyout gatewaycertkey.key -out gatewaycertrequest.csr -subj "/C=US/ST=WA/L=Redmond/O=Microsoft/OU=Gateway/CN=${DNSNAME}.${RGLOCATION}.cloudapp.azure.com/emailAddress=email@email.com"
 
 openssl pkcs12 -export -out gatewaycertificate.pfx -inkey gatewaycertkey.key -in gatewaycertrequest.csr -passout pass:${CERTPASS}
 
@@ -15,14 +15,10 @@ az storage account create -n ${STORAGEACCNAME} -g ${RGNAME} -l ${RGLOCATION} --s
 
 az storage container create -n rsrcontainer  --account-name ${STORAGEACCNAME} --public-access blob
 
-wget https://ceapex.visualstudio.com/0ed5b4a0-21d8-4dc2-8b95-5fdb8449e2bd/_apis/git/repositories/24f3f15d-2961-4ebf-a35d-2146574b7976/Microsoft_Azure_logo_small.png
+wget https://raw.githubusercontent.com/mspnp/reference-architectures/carlos/webappra/web-app-ri/deployment/Microsoft_Azure_logo_small.png
 
-az storage blob upload -c rsrcontainer -f Microsoft_Azure_logo_small.png -n blobName --account-name ${STORAGEACCNAME}
+az storage blob upload -c rsrcontainer -f Microsoft_Azure_logo_small.png -n Microsoft_Azure_logo_small.png --account-name ${STORAGEACCNAME}
 
-
-
-
-read -s SQLADMINPASSWORD
 
 az sql server create -l "${RGLOCATION}"  -g $RGNAME -n $SQLSERVERNAME  -u $SQLADMINUSER -p $SQLADMINPASSWORD
 

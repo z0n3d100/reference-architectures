@@ -4,9 +4,8 @@ Open an azure cloud shell from the portal.
 
 #### Step 1 Create  the environment variables to run the deployment script
 The RGLOCATION should be in the right format. Some examples of valid locations are **westus, eastus, northeurope, westeurope, eastasia, southeastasia, northcentralus, southcentralus, centralus, eastus2, westus2, japaneast, japanwest, brazilsouth**. The DNSNAME and STORAGEACCNAME should be **unique**. You will test them after this step.
-
-
 ```
+export RGNAME=resourceGroupName
 export RGLOCATION=yourLocation
 export SQLSERVERNAME=yourSqlServerName
 export SQLSERVERDB=yousqlSqlServerDb
