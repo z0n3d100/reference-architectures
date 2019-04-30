@@ -1,0 +1,993 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "VotingApi_name": {
+      "defaultValue": "[concat( 'votingapi-',uniqueString(resourceGroup().id) ) ]",
+      "type": "string"
+    },
+    "VotingWeb_name": {
+      "defaultValue": "[concat( 'votingweb-',uniqueString(resourceGroup().id) ) ]",
+      "type": "string"
+    },
+    "Votingsql_name": {
+      "defaultValue": "[concat( 'votingsql-',uniqueString(resourceGroup().id) ) ]",
+      "type": "string"
+    },
+    "Votingrediscache_name": {
+      "defaultValue": "[concat( 'votingcache-',uniqueString(resourceGroup().id) ) ]",
+      "type": "string"
+    },
+    "VotingApiPlan_name": {
+      "defaultValue": "[concat('votingapiplan-', uniqueString(resourceGroup().id))]",
+      "type": "string"
+    },
+    "VotingWebPlan_name": {
+      "defaultValue": "[concat('votingwebplan-', uniqueString(resourceGroup().id)) ]",
+      "type": "string"
+    },
+    "FunctionVoteCounter_name": {
+      "defaultValue": "[concat('functionvotecounter-', uniqueString(resourceGroup().id))]",
+      "type": "string"
+    },
+    "servicebusvotingns_name": {
+      "defaultValue": "[concat( 'votingsb-',uniqueString(resourceGroup().id) ) ]",
+      "type": "string"
+    },
+    "virtualNetworks_VotingVnet_name": {
+      "defaultValue": "VotingVnet",
+      "type": "string"
+    },
+    "FunctionVoteCounterPlan_name": {
+      "defaultValue": "[concat( 'functionvotercounterplan-',uniqueString(resourceGroup().id) ) ]",
+      "type": "string"
+    },
+    "databaseAccounts_votingcosmos_name": {
+      "defaultValue": "[concat( 'votingcosmos-',uniqueString(resourceGroup().id) ) ]",
+      "type": "string"
+    },
+    "applicationGateways_VotingGateway_name": {
+      "defaultValue": "[concat( 'votingGateway-',uniqueString(resourceGroup().id) ) ]",
+      "type": "string"
+    },
+    "publicIp_name": {
+      "defaultValue": "VotingGateway-ip",
+      "type": "string"
+    },
+
+    "votingIp_Path": {
+      "defaultValue": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/Microsoft.Network/publicIPAddresses/',parameters('publicIp_name'))]",
+      "type": "string"
+    },
+    "subnet_path": {
+      "defaultValue": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/Microsoft.Network/virtualNetworks/VotingVnet','/subnets/votingSubnet')]",
+      "type": "string"
+    },
+
+    "alertrules_VotingApi_name": {
+      "defaultValue": "[concat( 'failureanomalieswebapi-',uniqueString(resourceGroup().id) ) ]",
+      "type": "string"
+    },
+    "alertrules_VotingWeb_name": {
+      "defaultValue": "[concat( 'failureanomaliesweb-',uniqueString(resourceGroup().id) ) ]",
+      "type": "string"
+    },
+    "alertrules_FunctionVoteCounter_name": {
+      "defaultValue": "[concat( 'failureanomaliesfunction-',uniqueString(resourceGroup().id) ) ]",
+      "type": "string"
+    },
+    "FunctionstorageAccount": {
+      "defaultValue": "[toLower(concat('function', uniqueString(resourceGroup().id) )) ]",
+      "type": "string"
+    },
+    "ResourcestorageAccount": {
+      "defaultValue": "[toLower(concat('rsr', uniqueString(resourceGroup().id) )) ]",
+      "type": "string"
+    },
+
+
+    "SqlConnectionString": {
+      "defaultValue": "SQL_CONNECTION_STRING",
+      "type": "securestring"
+    },
+    "certData": {
+      "defaultValue": "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",
+      "type": "securestring",
+      "metadata": {
+        "description": "Base-64 encoded form of the .pfx file"
+      }
+    },
+    "certPassword": {
+      "defaultValue": "Pag$1Lab",
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for .pfx certificate"
+      }
+    },
+    "pubcertData": {
+      "defaultValue": "MIIEHTCCAwWgAwIBAgIJAMhkGHGZCMvwMA0GCSqGSIb3DQEBCwUAMIGkMQswCQYDVQQGEwJVUzELMAkGA1UECAwCV0ExEDAOBgNVBAcMB1JlZG1vbmQxEjAQBgNVBAoMCU1pY3Jvc29mdDEMMAoGA1UECwwDUCZQMTQwMgYDVQQDDCt2b3Rpbmd3ZWIuc291dGhjZW50cmFsdXMuY2xvdWRhcHAuYXp1cmUuY29tMR4wHAYJKoZIhvcNAQkBFg9lbWFpbEBlbWFpbC5jb20wHhcNMTkwNDAyMTkyOTE5WhcNMjAwNDAxMTkyOTE5WjCBpDELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAldBMRAwDgYDVQQHDAdSZWRtb25kMRIwEAYDVQQKDAlNaWNyb3NvZnQxDDAKBgNVBAsMA1AmUDE0MDIGA1UEAwwrdm90aW5nd2ViLnNvdXRoY2VudHJhbHVzLmNsb3VkYXBwLmF6dXJlLmNvbTEeMBwGCSqGSIb3DQEJARYPZW1haWxAZW1haWwuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApLSOOt/Tb4xJbVsX5S8covnMAqQSWdRQqwB/tZHvpCZ0d+cnsarTnxZLEl4pbcFbyQjRGQEdCZFMSvt6trfrpZiPdS/lXHhFszc/o2W90WYQ02cipbdBSSSNmBZbO9xmdsN5R6eKG146DipbJglcp3Hj1/27eNTAtELMssxUaPzV/x5KR7QS7FADPdg9l4YXLa2efKuHjX974oFQDtdgHWr66qVE8esrJHfRwKtjDr5ViNLNeiegb5AvLY6mZqFX2zsbA4KIygnZ7Y4ZBHMd8mRlbBmoD0IsIJ5P5xEp6oIoFB3v7nASWzsHxpvcLlSzOoZVJWCeaWHcSxwaY/YTBQIDAQABo1AwTjAdBgNVHQ4EFgQUExqXc0uNpwtYu8H348Z1KoBc87MwHwYDVR0jBBgwFoAUExqXc0uNpwtYu8H348Z1KoBc87MwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAKItiXP3sX/Lc1SfYnZWqSGTXAQamQzJ80sGnnUERrQzgFbBInS7zBUN0eNZS6tHJlh4PGKtO3sB/p2P05TcGZ6awrkJ+J/HbkBLPNasE211srop+rjCWYo3aiC4lpJJrPzDM+qX2hC22lCgVPhdpK2gvJTdDWSwLBEOfYXsJ/Vm2Csa7g9SwdX89qoOBjd50z265Pz+DFmHpKR/teWXi91sArK2Np7bGovLwxn73t8bH5rEfcm0e5ujKAYmI+D4UsJaaNwtgrSA9THdw8LXtonS0EFFZZywSCF8vdih6ADBIKYbDNE4D3vb34obXMpMZEgE2o9n9ShEKRY06YuWw",
+      "type": "securestring",
+      "metadata": {
+        "description": "Base-64 for public key of pfx"
+      }
+    }
+
+  },
+
+  "variables": {
+    "location": "[resourceGroup().location]",
+    "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_VotingVnet_name'), 'votingSubnet')]",
+    "publicIPRef": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('publicIp_name'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Cache/Redis",
+      "apiVersion": "2017-10-01",
+      "name": "[parameters('Votingrediscache_name')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "sku": {
+          "name": "Basic",
+          "family": "C",
+          "capacity": 0
+        },
+        "enableNonSslPort": false,
+        "redisConfiguration": {
+          "maxclients": "256"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DocumentDB/databaseAccounts",
+      "apiVersion": "2015-04-08",
+      "name": "[parameters('databaseAccounts_votingcosmos_name')]",
+      "location": "[variables('location')]",
+      "tags": {
+        "defaultExperience": "Core (SQL)"
+      },
+      "kind": "GlobalDocumentDB",
+      "properties": {
+        "ipRangeFilter": "",
+        "enableAutomaticFailover": false,
+        "enableMultipleWriteLocations": true,
+        "isVirtualNetworkFilterEnabled": false,
+        "virtualNetworkRules": [],
+        "databaseAccountOfferType": "Standard",
+        "consistencyPolicy": {
+          "defaultConsistencyLevel": "Session",
+          "maxIntervalInSeconds": 5,
+          "maxStalenessPrefix": 100
+        },
+        "locations": [
+          {
+            "locationName": "[variables('location')]",
+            "failoverPriority": 0
+          }
+        ],
+        "capabilities": []
+      }
+    },
+    {
+      "type": "microsoft.insights/components",
+      "apiVersion": "2015-05-01",
+      "name": "[parameters('FunctionVoteCounter_name')]",
+      "location": "[variables('location')]",
+      "tags": {
+        "applicationType": "web",
+        "[concat('hidden-link:/subscriptions/',subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/Microsoft.Web/sites/',parameters('FunctionVoteCounter_name'))]": "Resource"
+      },
+      "kind": "web",
+      "properties": {
+        "Application_Type": "web",
+        "Flow_Type": "Redfield",
+        "Request_Source": "AppServiceEnablementCreate"
+      }
+    },
+    {
+      "type": "microsoft.insights/components",
+      "apiVersion": "2015-05-01",
+      "name": "[parameters('VotingApi_name')]",
+      "location": "[variables('location')]",
+      "kind": "web",
+      "properties": {
+        "Application_Type": "web",
+        "Flow_Type": "Redfield",
+        "HockeyAppId": ""
+      }
+    },
+    {
+      "type": "microsoft.insights/components",
+      "apiVersion": "2015-05-01",
+      "name": "[parameters('VotingWeb_name')]",
+      "location": "[variables('location')]",
+      "kind": "web",
+      "properties": {
+        "Application_Type": "web",
+        "Flow_Type": "Redfield",
+        "HockeyAppId": ""
+      }
+    },
+
+    {
+      "type": "Microsoft.ServiceBus/namespaces",
+      "apiVersion": "2017-04-01",
+      "name": "[parameters('servicebusvotingns_name')]",
+      "location": "[variables('location')]",
+      "sku": {
+        "name": "Premium",
+        "tier": "Premium",
+        "capacity": 1
+      },
+      "properties": {
+        "metricId": "[concat(subscription().tenantId,':', parameters('servicebusvotingns_name'))]",
+        "serviceBusEndpoint": "[concat('https://', parameters('servicebusvotingns_name'), '.servicebus.windows.net:443/')]",
+        "status": "Active"
+      }
+    },
+
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2018-07-01",
+      "name": "[parameters('ResourcestorageAccount')]",
+      "location": "[variables('location')]",
+      "sku": {
+        "name": "Standard_LRS",
+        "tier": "Standard"
+      },
+      "kind": "Storage",
+      "properties": {
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "virtualNetworkRules": [],
+          "ipRules": [],
+          "defaultAction": "Allow"
+        },
+        "supportsHttpsTrafficOnly": false,
+        "encryption": {
+          "services": {
+            "file": {
+              "enabled": true
+            },
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        }
+      }
+    },
+
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2018-07-01",
+      "name": "[parameters('FunctionstorageAccount')]",
+      "location": "[variables('location')]",
+      "sku": {
+        "name": "Standard_LRS",
+        "tier": "Standard"
+      },
+      "kind": "Storage",
+      "properties": {
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "virtualNetworkRules": [],
+          "ipRules": [],
+          "defaultAction": "Allow"
+        },
+        "supportsHttpsTrafficOnly": false,
+        "encryption": {
+          "services": {
+            "file": {
+              "enabled": true
+            },
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2016-09-01",
+      "name": "[parameters('FunctionVoteCounterPlan_name')]",
+      "location": "[variables('location')]",
+      "sku": {
+        "name": "Y1",
+        "tier": "Dynamic",
+        "size": "Y1",
+        "family": "Y",
+        "capacity": 0
+      },
+      "kind": "functionapp",
+      "properties": {
+        "name": "[parameters('FunctionVoteCounterPlan_name')]",
+        "perSiteScaling": false,
+        "reserved": false,
+        "targetWorkerCount": 0,
+        "targetWorkerSizeId": 0
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2016-09-01",
+      "name": "[parameters('VotingApiPlan_name')]",
+      "location": "[variables('location')]",
+      "sku": {
+        "name": "S1",
+        "tier": "Standard",
+        "size": "S1",
+        "family": "S",
+        "capacity": 1
+      },
+      "kind": "app",
+      "properties": {
+        "name": "[parameters('VotingApiPlan_name')]",
+        "perSiteScaling": false,
+        "reserved": false,
+        "targetWorkerCount": 0,
+        "targetWorkerSizeId": 0
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2016-09-01",
+      "name": "[parameters('VotingWebPlan_name')]",
+      "location": "[variables('location')]",
+      "sku": {
+        "name": "S1",
+        "tier": "Standard",
+        "size": "S1",
+        "family": "S",
+        "capacity": 1
+      },
+      "kind": "app",
+      "properties": {
+        "name": "[parameters('VotingWebPlan_name')]",
+        "perSiteScaling": false,
+        "reserved": false,
+        "targetWorkerCount": 0,
+        "targetWorkerSizeId": 0
+      }
+    },
+    {
+      "type": "microsoft.insights/alertrules",
+      "apiVersion": "2014-04-01",
+      "name": "[parameters('alertrules_FunctionVoteCounter_name')]",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "[resourceId('microsoft.insights/components', parameters('FunctionVoteCounter_name'))]"
+      ],
+      "tags": {
+        "[concat('hidden-link:/subscriptions/',subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/microsoft.insights/components/',parameters('FunctionVoteCounter_name'))]": "Resource"
+      },
+      "properties": {
+        "name": "[parameters('alertrules_FunctionVoteCounter_name')]",
+        "description": "",
+        "isEnabled": true,
+        "condition": {
+          "odata.type": "Microsoft.Azure.Management.Insights.Models.ThresholdRuleCondition",
+          "dataSource": {
+            "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
+            "resourceUri": "[resourceId('microsoft.insights/components', parameters('FunctionVoteCounter_name'))]",
+            "metricName": "advanced::A3108E3D-5E26-44CF-B232-783F5E20EF10::ewAiAEgAeQBwAGUAcgBpAG8AbgBBAHAAcABsAGkAYwBhAHQAaQBvAG4AUwBpAGQAIgA6AG4AdQBsAGwALAAiAEgAeQBwAGUAcgBpAG8AbgBTAHUAYgBqAGUAYwB0AFMAaQBkACIAOgBuAHUAbABsACwAIgBIAHkAcABlAHIAaQBvAG4ATwBiAHMAZQByAHYAZQByAFMAaQBkACIAOgBuAHUAbABsACwAIgBDAHUAcwB0AG8AbQBlAHIAQQBjAGMAbwB1AG4AdABJAGQAIgA6ACIAMAAwADAAMAAwADAAMAAwAC0AMAAwADAAMAAtADAAMAAwADAALQAwADAAMAAwAC0AMAAwADAAMAAwADAAMAAwADAAMAAwADAAIgAsACIAQQBwAHAAbABpAGMAYQB0AGkAbwBuAE4AYQBtAGUAIgA6AG4AdQBsAGwALAAiAEEAcABwAGwAaQBjAGEAdABpAG8AbgBJAGQAIgA6AG4AdQBsAGwALAAiAFAAcgBvAGYAaQBsAGUASQBkACIAOgAwACwAIgBXAGkAbgBkAG8AdwBTAGkAegBlAEkAbgBNAGkAbgB1AHQAZQBzACIAOgA2ADAALAAiAE0AZQB0AHIAaQBjAE4AYQBtAGUAIgA6ACIAIgAsACIAVABoAHIAZQBzAGgAbwBsAGQAIgA6ADIALgAwACwAIgBBAGwAZQByAHQAVABlAG0AcABsAGEAdABlAEkAZAAiADoAIgAiACwAIgBSAHUAbABlAEkAZAAiADoAIgAiACwAIgBSAHUAbABlAE4AYQBtAGUAIgA6ACIAIgAsACIAUgB1AGwAZQBEAGUAcwBjAHIAaQBwAHQAaQBvAG4AIgA6ACIAIgAsACIAUgBlAHMAbwB1AHIAYwBlAEkAZAAiADoAbgB1AGwAbAAsACIAUwB1AGIAcwBjAHIAaQBwAHQAaQBvAG4ASQBkACIAOgBuAHUAbABsACwAIgBBAGcAZwByAGUAZwBhAHQAZQBGAHUAbgBjAHQAaQBvAG4AIgA6ACIAIgAsACIAQwBvAG0AcABhAHIAaQBzAG8AbgBPAHAAZQByAGEAdABvAHIAIgA6ACIAewBcACIAQgBhAHMAZQBsAGkAbgBlAFQAaQBtAGUAcwBwAGEAbgBcACIAOgBcACIAMAAwADoANAAwADoAMAAwAFwAIgAsAFwAIgBJAG4AcwBpAGcAaAB0AHMAUwBlAHIAdgBpAGMAZQBMAGEAZwBcACIAOgBcACIAMAAwADoAMAAwADoAMAAwAFwAIgAsAFwAIgBCAHUAZgBmAGUAcgBUAGkAbQBlAFwAIgA6AFwAIgAwADAAOgAwADEAOgAwADAAXAAiACwAXAAiAEIAbABvAGIAUwB0AG8AcgBhAGcAZQBMAG8AZwBnAGkAbgBnAEUAbgBhAGIAbABlAGQAXAAiADoAZgBhAGwAcwBlACwAXAAiAFUAcwBlAHIAUwB1AHAAcAByAGUAcwBzAGkAbwBuAHMAXAAiADoAbgB1AGwAbAAsAFwAIgBQAHIAbwBmAGkAbABlAEkAZABcACIAOgAwACwAXAAiAEUAbQBhAGkAbABUAHkAcABlAFwAIgA6ADAALABcACIAUgBkAGQARgBhAGkAbAB1AHIAZQBzAFMAcABpAGsAZQBUAGgAcgBlAHMAaABvAGwAZABcACIAOgAzAC4AMAAsAFwAIgBSAGEAdwBQAHIAbwBhAGMAdABpAHYAZQBSAHUAbABlAEMAbwBuAGYAaQBnAFwAIgA6AG4AdQBsAGwAfQAiACwAIgBFAG4AYQBiAGwAZQBTAGUAbgBkAEUAbQBhAGkAbABUAG8AQwB1AHMAdABvAG0AIgA6AGYAYQBsAHMAZQAsACIAQwB1AHMAdABvAG0ARQBtAGEAaQBsAHMARQBuAGMAbwBkAGUAZAAiADoAIgAiACwAIgBFAG4AYQBiAGwAZQBTAGUAbgBkAEUAbQBhAGkAbABUAG8ATwB3AG4AZQByAHMAIgA6AGYAYQBsAHMAZQB9AA=="
+          },
+          "operator": "GreaterThan",
+          "threshold": 2,
+          "windowSize": "PT1H"
+        },
+        "action": {
+          "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
+          "sendToServiceOwners": true,
+          "customEmails": []
+        }
+      }
+    },
+    {
+      "type": "microsoft.insights/alertrules",
+      "apiVersion": "2014-04-01",
+      "name": "[parameters('alertrules_VotingApi_name')]",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "[resourceId('microsoft.insights/components', parameters('VotingApi_name'))]"
+      ],
+      "tags": {
+        "[concat('hidden-link:/subscriptions/',subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/microsoft.insights/components/',parameters('VotingApi_name'))]": "Resource"
+      },
+      "properties": {
+        "name": "[parameters('alertrules_VotingApi_name')]",
+        "description": "",
+        "isEnabled": true,
+        "condition": {
+          "odata.type": "Microsoft.Azure.Management.Insights.Models.ThresholdRuleCondition",
+          "dataSource": {
+            "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
+            "resourceUri": "[resourceId('microsoft.insights/components', parameters('VotingApi_name'))]",
+            "metricName": "advanced::A3108E3D-5E26-44CF-B232-783F5E20EF10::ewAiAEgAeQBwAGUAcgBpAG8AbgBBAHAAcABsAGkAYwBhAHQAaQBvAG4AUwBpAGQAIgA6AG4AdQBsAGwALAAiAEgAeQBwAGUAcgBpAG8AbgBTAHUAYgBqAGUAYwB0AFMAaQBkACIAOgBuAHUAbABsACwAIgBIAHkAcABlAHIAaQBvAG4ATwBiAHMAZQByAHYAZQByAFMAaQBkACIAOgBuAHUAbABsACwAIgBDAHUAcwB0AG8AbQBlAHIAQQBjAGMAbwB1AG4AdABJAGQAIgA6ACIAMAAwADAAMAAwADAAMAAwAC0AMAAwADAAMAAtADAAMAAwADAALQAwADAAMAAwAC0AMAAwADAAMAAwADAAMAAwADAAMAAwADAAIgAsACIAQQBwAHAAbABpAGMAYQB0AGkAbwBuAE4AYQBtAGUAIgA6AG4AdQBsAGwALAAiAEEAcABwAGwAaQBjAGEAdABpAG8AbgBJAGQAIgA6AG4AdQBsAGwALAAiAFAAcgBvAGYAaQBsAGUASQBkACIAOgAwACwAIgBXAGkAbgBkAG8AdwBTAGkAegBlAEkAbgBNAGkAbgB1AHQAZQBzACIAOgA2ADAALAAiAE0AZQB0AHIAaQBjAE4AYQBtAGUAIgA6ACIAIgAsACIAVABoAHIAZQBzAGgAbwBsAGQAIgA6ADIALgAwACwAIgBBAGwAZQByAHQAVABlAG0AcABsAGEAdABlAEkAZAAiADoAIgAiACwAIgBSAHUAbABlAEkAZAAiADoAIgAiACwAIgBSAHUAbABlAE4AYQBtAGUAIgA6ACIAIgAsACIAUgB1AGwAZQBEAGUAcwBjAHIAaQBwAHQAaQBvAG4AIgA6ACIAIgAsACIAUgBlAHMAbwB1AHIAYwBlAEkAZAAiADoAbgB1AGwAbAAsACIAUwB1AGIAcwBjAHIAaQBwAHQAaQBvAG4ASQBkACIAOgBuAHUAbABsACwAIgBBAGcAZwByAGUAZwBhAHQAZQBGAHUAbgBjAHQAaQBvAG4AIgA6ACIAIgAsACIAQwBvAG0AcABhAHIAaQBzAG8AbgBPAHAAZQByAGEAdABvAHIAIgA6ACIAewBcACIAQgBhAHMAZQBsAGkAbgBlAFQAaQBtAGUAcwBwAGEAbgBcACIAOgBcACIAMAAwADoANAAwADoAMAAwAFwAIgAsAFwAIgBJAG4AcwBpAGcAaAB0AHMAUwBlAHIAdgBpAGMAZQBMAGEAZwBcACIAOgBcACIAMAAwADoAMAAwADoAMAAwAFwAIgAsAFwAIgBCAHUAZgBmAGUAcgBUAGkAbQBlAFwAIgA6AFwAIgAwADAAOgAwADEAOgAwADAAXAAiACwAXAAiAEIAbABvAGIAUwB0AG8AcgBhAGcAZQBMAG8AZwBnAGkAbgBnAEUAbgBhAGIAbABlAGQAXAAiADoAZgBhAGwAcwBlACwAXAAiAFUAcwBlAHIAUwB1AHAAcAByAGUAcwBzAGkAbwBuAHMAXAAiADoAbgB1AGwAbAAsAFwAIgBQAHIAbwBmAGkAbABlAEkAZABcACIAOgAwACwAXAAiAEUAbQBhAGkAbABUAHkAcABlAFwAIgA6ADAALABcACIAUgBkAGQARgBhAGkAbAB1AHIAZQBzAFMAcABpAGsAZQBUAGgAcgBlAHMAaABvAGwAZABcACIAOgAzAC4AMAAsAFwAIgBSAGEAdwBQAHIAbwBhAGMAdABpAHYAZQBSAHUAbABlAEMAbwBuAGYAaQBnAFwAIgA6AG4AdQBsAGwAfQAiACwAIgBFAG4AYQBiAGwAZQBTAGUAbgBkAEUAbQBhAGkAbABUAG8AQwB1AHMAdABvAG0AIgA6AGYAYQBsAHMAZQAsACIAQwB1AHMAdABvAG0ARQBtAGEAaQBsAHMARQBuAGMAbwBkAGUAZAAiADoAIgAiACwAIgBFAG4AYQBiAGwAZQBTAGUAbgBkAEUAbQBhAGkAbABUAG8ATwB3AG4AZQByAHMAIgA6AGYAYQBsAHMAZQB9AA=="
+          },
+          "operator": "GreaterThan",
+          "threshold": 2,
+          "windowSize": "PT1H"
+        },
+        "action": {
+          "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
+          "sendToServiceOwners": true,
+          "customEmails": []
+        }
+      }
+    },
+    {
+      "type": "microsoft.insights/alertrules",
+      "apiVersion": "2014-04-01",
+      "name": "[parameters('alertrules_VotingWeb_name')]",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "[resourceId('microsoft.insights/components', parameters('VotingWeb_name'))]"
+      ],
+      "tags": {
+        "[concat('hidden-link:/subscriptions/',subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/microsoft.insights/components/',parameters('VotingWeb_name'))]": "Resource"
+      },
+      "properties": {
+        "name": "[parameters('alertrules_VotingWeb_name')]",
+        "description": "",
+        "isEnabled": true,
+        "condition": {
+          "odata.type": "Microsoft.Azure.Management.Insights.Models.ThresholdRuleCondition",
+          "dataSource": {
+            "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
+            "resourceUri": "[resourceId('microsoft.insights/components', parameters('VotingWeb_name'))]",
+            "metricName": "advanced::A3108E3D-5E26-44CF-B232-783F5E20EF10::ewAiAEgAeQBwAGUAcgBpAG8AbgBBAHAAcABsAGkAYwBhAHQAaQBvAG4AUwBpAGQAIgA6AG4AdQBsAGwALAAiAEgAeQBwAGUAcgBpAG8AbgBTAHUAYgBqAGUAYwB0AFMAaQBkACIAOgBuAHUAbABsACwAIgBIAHkAcABlAHIAaQBvAG4ATwBiAHMAZQByAHYAZQByAFMAaQBkACIAOgBuAHUAbABsACwAIgBDAHUAcwB0AG8AbQBlAHIAQQBjAGMAbwB1AG4AdABJAGQAIgA6ACIAMAAwADAAMAAwADAAMAAwAC0AMAAwADAAMAAtADAAMAAwADAALQAwADAAMAAwAC0AMAAwADAAMAAwADAAMAAwADAAMAAwADAAIgAsACIAQQBwAHAAbABpAGMAYQB0AGkAbwBuAE4AYQBtAGUAIgA6AG4AdQBsAGwALAAiAEEAcABwAGwAaQBjAGEAdABpAG8AbgBJAGQAIgA6AG4AdQBsAGwALAAiAFAAcgBvAGYAaQBsAGUASQBkACIAOgAwACwAIgBXAGkAbgBkAG8AdwBTAGkAegBlAEkAbgBNAGkAbgB1AHQAZQBzACIAOgA2ADAALAAiAE0AZQB0AHIAaQBjAE4AYQBtAGUAIgA6ACIAIgAsACIAVABoAHIAZQBzAGgAbwBsAGQAIgA6ADIALgAwACwAIgBBAGwAZQByAHQAVABlAG0AcABsAGEAdABlAEkAZAAiADoAIgAiACwAIgBSAHUAbABlAEkAZAAiADoAIgAiACwAIgBSAHUAbABlAE4AYQBtAGUAIgA6ACIAIgAsACIAUgB1AGwAZQBEAGUAcwBjAHIAaQBwAHQAaQBvAG4AIgA6ACIAIgAsACIAUgBlAHMAbwB1AHIAYwBlAEkAZAAiADoAbgB1AGwAbAAsACIAUwB1AGIAcwBjAHIAaQBwAHQAaQBvAG4ASQBkACIAOgBuAHUAbABsACwAIgBBAGcAZwByAGUAZwBhAHQAZQBGAHUAbgBjAHQAaQBvAG4AIgA6ACIAIgAsACIAQwBvAG0AcABhAHIAaQBzAG8AbgBPAHAAZQByAGEAdABvAHIAIgA6ACIAewBcACIAQgBhAHMAZQBsAGkAbgBlAFQAaQBtAGUAcwBwAGEAbgBcACIAOgBcACIAMAAwADoANAAwADoAMAAwAFwAIgAsAFwAIgBJAG4AcwBpAGcAaAB0AHMAUwBlAHIAdgBpAGMAZQBMAGEAZwBcACIAOgBcACIAMAAwADoAMAAwADoAMAAwAFwAIgAsAFwAIgBCAHUAZgBmAGUAcgBUAGkAbQBlAFwAIgA6AFwAIgAwADAAOgAwADEAOgAwADAAXAAiACwAXAAiAEIAbABvAGIAUwB0AG8AcgBhAGcAZQBMAG8AZwBnAGkAbgBnAEUAbgBhAGIAbABlAGQAXAAiADoAZgBhAGwAcwBlACwAXAAiAFUAcwBlAHIAUwB1AHAAcAByAGUAcwBzAGkAbwBuAHMAXAAiADoAbgB1AGwAbAAsAFwAIgBQAHIAbwBmAGkAbABlAEkAZABcACIAOgAwACwAXAAiAEUAbQBhAGkAbABUAHkAcABlAFwAIgA6ADAALABcACIAUgBkAGQARgBhAGkAbAB1AHIAZQBzAFMAcABpAGsAZQBUAGgAcgBlAHMAaABvAGwAZABcACIAOgAzAC4AMAAsAFwAIgBSAGEAdwBQAHIAbwBhAGMAdABpAHYAZQBSAHUAbABlAEMAbwBuAGYAaQBnAFwAIgA6AG4AdQBsAGwAfQAiACwAIgBFAG4AYQBiAGwAZQBTAGUAbgBkAEUAbQBhAGkAbABUAG8AQwB1AHMAdABvAG0AIgA6AGYAYQBsAHMAZQAsACIAQwB1AHMAdABvAG0ARQBtAGEAaQBsAHMARQBuAGMAbwBkAGUAZAAiADoAIgAiACwAIgBFAG4AYQBiAGwAZQBTAGUAbgBkAEUAbQBhAGkAbABUAG8ATwB3AG4AZQByAHMAIgA6AGYAYQBsAHMAZQB9AA=="
+          },
+          "operator": "GreaterThan",
+          "threshold": 2,
+          "windowSize": "PT1H"
+        },
+        "action": {
+          "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
+          "sendToServiceOwners": true,
+          "customEmails": []
+        }
+      }
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/AuthorizationRules",
+      "apiVersion": "2017-04-01",
+      "name": "[concat(parameters('servicebusvotingns_name'), '/RootManageSharedAccessKey')]",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebusvotingns_name'))]"
+      ],
+      "properties": {
+        "rights": [
+          "Listen",
+          "Manage",
+          "Send"
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/queues",
+      "apiVersion": "2017-04-01",
+      "name": "[concat(parameters('servicebusvotingns_name'), '/queue')]",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebusvotingns_name'))]"
+      ],
+      "properties": {
+        "lockDuration": "PT1M",
+        "maxSizeInMegabytes": 1024,
+        "requiresDuplicateDetection": false,
+        "requiresSession": false,
+        "defaultMessageTimeToLive": "P10675199DT2H48M5.4775807S",
+        "deadLetteringOnMessageExpiration": false,
+        "enableBatchedOperations": true,
+        "duplicateDetectionHistoryTimeWindow": "PT10M",
+        "maxDeliveryCount": 10,
+        "status": "Active",
+        "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
+        "enablePartitioning": false,
+        "enableExpress": false
+      }
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/queues",
+      "apiVersion": "2017-04-01",
+      "name": "[concat(parameters('servicebusvotingns_name'), '/votingqueue')]",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebusvotingns_name'))]"
+      ],
+      "properties": {
+        "lockDuration": "PT1M",
+        "maxSizeInMegabytes": 1024,
+        "requiresDuplicateDetection": false,
+        "requiresSession": false,
+        "defaultMessageTimeToLive": "P10675199DT2H48M5.4775807S",
+        "deadLetteringOnMessageExpiration": false,
+        "enableBatchedOperations": true,
+        "duplicateDetectionHistoryTimeWindow": "PT10M",
+        "maxDeliveryCount": 10,
+        "status": "Active",
+        "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
+        "enablePartitioning": false,
+        "enableExpress": false
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2016-08-01",
+      "name": "[parameters('FunctionVoteCounter_name')]",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('FunctionVoteCounterPlan_name'))]",
+        "[resourceId('microsoft.insights/components', parameters('FunctionVoteCounter_name'))]",
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebusvotingns_name'))]",
+        "[resourceId('Microsoft.Cache/Redis', parameters('Votingrediscache_name'))]"
+      ],
+      "tags": {
+        "[concat('hidden-link:/subscriptions/',subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/Microsoft.Web/serverfarms/',parameters('FunctionVoteCounterPlan_name'))]": "empty"
+      },
+      "kind": "functionapp",
+      "identity": {
+        "principalId": null,
+        "tenantId": null,
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "enabled": true,
+        "hostNameSslStates": [
+          {
+            "name": "[concat(parameters('FunctionVoteCounter_name'),'.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "[concat(parameters('FunctionVoteCounter_name'),'.scm.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Repository"
+          }
+        ],
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('FunctionVoteCounterPlan_name'))]",
+        "reserved": false,
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": false,
+        "clientCertEnabled": false,
+        "hostNamesDisabled": false,
+        "containerSize": 1536,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": true,
+        "siteConfig": {
+          "netFrameworkVersion": "v4.7",
+          "phpVersion": "5.6",
+          "pythonVersion": "",
+          "nodeVersion": "",
+          "linuxFxVersion": "",
+          "requestTracingEnabled": false,
+          "remoteDebuggingEnabled": false,
+          "httpLoggingEnabled": false,
+          "logsDirectorySizeLimit": 35,
+          "detailedErrorLoggingEnabled": false,
+          "publishingUsername": "$VotingWeb",
+          "appSettings": [
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('FunctionVoteCounter_name')), '2014-04-01').InstrumentationKey]"
+            },
+
+            {
+              "name": "SERVICEBUS_CONNECTION_STRING",
+              "value": "[listKeys(resourceId(concat('Microsoft.ServiceBus/namespaces/AuthorizationRules'),parameters('servicebusvotingns_name'),'RootManageSharedAccessKey'),'2015-08-01').primaryConnectionString]"
+            },
+
+            {
+              "name": "sqldb_connection",
+              "value": "[parameters('SqlConnectionString')]"
+            }
+
+          ]
+
+        }
+
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2016-08-01",
+      "name": "[parameters('VotingApi_name')]",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('VotingApiPlan_name'))]",
+        "[resourceId('microsoft.insights/components', parameters('VotingApi_name'))]",
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebusvotingns_name'))]",
+        "[resourceId('Microsoft.Cache/Redis', parameters('Votingrediscache_name'))]"
+      ],
+      "tags": {
+        "[concat('hidden-link:/subscriptions/',subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/Microsoft.Web/serverfarms/',parameters('VotingApiPlan_name'))]": "empty"
+      },
+      "kind": "app",
+      "identity": {
+        "principalId": null,
+        "tenantId": null,
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "enabled": true,
+        "hostNameSslStates": [
+          {
+            "name": "[concat(parameters('VotingApi_name'),'.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "[concat(parameters('VotingApi_name'),'.scm.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Repository"
+          }
+        ],
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('VotingApiPlan_name'))]",
+        "reserved": false,
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": true,
+        "clientCertEnabled": false,
+        "hostNamesDisabled": false,
+        "containerSize": 0,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": true,
+        "siteConfig": {
+          "netFrameworkVersion": "v4.7",
+          "phpVersion": "5.6",
+          "pythonVersion": "",
+          "nodeVersion": "",
+          "linuxFxVersion": "",
+          "requestTracingEnabled": false,
+          "remoteDebuggingEnabled": false,
+          "httpLoggingEnabled": false,
+          "logsDirectorySizeLimit": 35,
+          "detailedErrorLoggingEnabled": false,
+          "publishingUsername": "$VotingWeb",
+          "appSettings": [
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('VotingApi_name')), '2014-04-01').InstrumentationKey]"
+            },
+
+            {
+              "name": "ApplicationInsights:InstrumentationKey",
+              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('VotingApi_name')), '2014-04-01').InstrumentationKey]"
+            },
+
+
+            {
+              "name": "ConnectionStrings:SqlDbConnection",
+              "value": "[parameters('SqlConnectionString')]"
+            }
+          ]
+
+
+
+
+        }
+
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2016-08-01",
+      "name": "[parameters('VotingWeb_name')]",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('VotingWebPlan_name'))]",
+        "[resourceId('microsoft.insights/components', parameters('VotingWeb_name'))]",
+        "[resourceId('Microsoft.Cache/Redis', parameters('Votingrediscache_name'))]",
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebusvotingns_name'))]"
+      ],
+      "tags": {
+        "[concat('hidden-link:/subscriptions/',subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/Microsoft.Web/serverfarms/',parameters('VotingWebPlan_name'))]": "empty"
+      },
+      "kind": "app",
+      "identity": {
+        "principalId": null,
+        "tenantId": null,
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "enabled": true,
+        "hostNameSslStates": [
+          {
+            "name": "[concat(parameters('VotingWeb_name'),'.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "[concat(parameters('VotingWeb_name'),'.scm.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Repository"
+          }
+        ],
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('VotingWebPlan_name'))]",
+        "reserved": false,
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": true,
+        "clientCertEnabled": false,
+        "hostNamesDisabled": false,
+        "containerSize": 0,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": true,
+        "siteConfig": {
+          "netFrameworkVersion": "v4.7",
+          "phpVersion": "5.6",
+          "pythonVersion": "",
+          "nodeVersion": "",
+          "linuxFxVersion": "",
+          "requestTracingEnabled": false,
+          "remoteDebuggingEnabled": false,
+          "httpLoggingEnabled": false,
+          "logsDirectorySizeLimit": 35,
+          "detailedErrorLoggingEnabled": false,
+          "publishingUsername": "$VotingWeb",
+          "appSettings": [
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('VotingWeb_name')), '2014-04-01').InstrumentationKey]"
+            },
+
+            {
+              "name": "ConnectionStrings:sbConnectionString",
+              "value": "[listKeys(resourceId(concat('Microsoft.ServiceBus/namespaces/AuthorizationRules'),parameters('servicebusvotingns_name'),'RootManageSharedAccessKey'),'2015-08-01').primaryConnectionString]"
+            },
+
+            {
+              "name": "ConnectionStrings:VotingDataAPIBaseUri",
+              "value": "[concat(parameters('VotingApi_name'),'.azurewebsites.net')]"
+            },
+
+            {
+              "name": "ApplicationInsights:InstrumentationKey",
+              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('VotingWeb_name')), '2014-04-01').InstrumentationKey]"
+            },
+
+            {
+              "name": "ConnectionStrings:RedisConnectionString",
+              "value": "[concat(parameters('Votingrediscache_name'),'.redis.cache.windows.net,abortConnect:6380=false,ssl=true,password=', listKeys(resourceId('Microsoft.Cache/Redis', parameters('Votingrediscache_name')), '2015-08-01').primaryKey)]"
+            },
+
+            {
+              "name": "ConnectionStrings:queueName",
+              "value": "votingqueue"
+            },
+
+            {
+              "name": "ConnectionStrings:CosmosUri",
+              "value": "[concat('https://',parameters('databaseAccounts_votingcosmos_name'),'documents.azure.com:443/')]"
+            },
+
+            {
+              "name": "ConnectionStrings:CosmosKey",
+              "value": "[listKeys(resourceId(concat('Microsoft.DocumentDB/databaseAccounts'),parameters('databaseAccounts_votingcosmos_name')),'2015-04-08').primaryMasterKey]"
+            }
+
+          ]
+
+
+
+
+        }
+
+      }
+    },
+    {
+      "type": "Microsoft.Network/applicationGateways",
+      "apiVersion": "2017-06-01",
+      "name": "[parameters('applicationGateways_VotingGateway_name')]",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_VotingVnet_name'))]",
+        "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIp_name'))]",
+        "[resourceId('Microsoft.Web/sites', parameters('VotingWeb_name'))]"
+      ],
+      "properties": {
+        "sku": {
+          "name": "Standard_Small",
+          "tier": "Standard",
+          "capacity": 2
+        },
+        "gatewayIPConfigurations": [
+          {
+            "name": "appGatewayIpConfig",
+            "properties": {
+              "subnet": {
+                "id": "[variables('subnetRef')]"
+              }
+            },
+            "type": "Microsoft.Network/applicationGateways/gatewayIPConfigurations"
+          }
+        ],
+        "sslCertificates": [
+          {
+            "name": "votingweb",
+            "properties": {
+              //             "publicCertData": "MIIETAYJKoZIhvcNAQcCoIIEPTCCBDkCAQExADALBgkqhkiG9w0BBwGgggQhMIIEHTCCAwWgAwIBAgIJAMhkGHGZCMvwMA0GCSqGSIb3DQEBCwUAMIGkMQswCQYDVQQGEwJVUzELMAkGA1UECAwCV0ExEDAOBgNVBAcMB1JlZG1vbmQxEjAQBgNVBAoMCU1pY3Jvc29mdDEMMAoGA1UECwwDUCZQMTQwMgYDVQQDDCt2b3Rpbmd3ZWIuc291dGhjZW50cmFsdXMuY2xvdWRhcHAuYXp1cmUuY29tMR4wHAYJKoZIhvcNAQkBFg9lbWFpbEBlbWFpbC5jb20wHhcNMTkwNDAyMTkyOTE5WhcNMjAwNDAxMTkyOTE5WjCBpDELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAldBMRAwDgYDVQQHDAdSZWRtb25kMRIwEAYDVQQKDAlNaWNyb3NvZnQxDDAKBgNVBAsMA1AmUDE0MDIGA1UEAwwrdm90aW5nd2ViLnNvdXRoY2VudHJhbHVzLmNsb3VkYXBwLmF6dXJlLmNvbTEeMBwGCSqGSIb3DQEJARYPZW1haWxAZW1haWwuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApLSOOt/Tb4xJbVsX5S8covnMAqQSWdRQqwB/tZHvpCZ0d+cnsarTnxZLEl4pbcFbyQjRGQEdCZFMSvt6trfrpZiPdS/lXHhFszc/o2W90WYQ02cipbdBSSSNmBZbO9xmdsN5R6eKG146DipbJglcp3Hj1/27eNTAtELMssxUaPzV/x5KR7QS7FADPdg9l4YXLa2efKuHjX974oFQDtdgHWr66qVE8esrJHfRwKtjDr5ViNLNeiegb5AvLY6mZqFX2zsbA4KIygnZ7Y4ZBHMd8mRlbBmoD0IsIJ5P5xEp6oIoFB3v7nASWzsHxpvcLlSzOoZVJWCeaWHcSxwaY/YTBQIDAQABo1AwTjAdBgNVHQ4EFgQUExqXc0uNpwtYu8H348Z1KoBc87MwHwYDVR0jBBgwFoAUExqXc0uNpwtYu8H348Z1KoBc87MwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAKItiXP3sX/Lc1SfYnZWqSGTXAQamQzJ80sGnnUERrQzgFbBInS7zBUN0eNZS6tHJlh4PGKtO3sB/p2P05TcGZ6awrkJ+J/HbkBLPNasE211srop+rjCWYo3aiC4lpJJrPzDM+qX2hC22lCgVPhdpK2gvJTdDWSwLBEOfYXsJ/Vm2Csa7g9SwdX89qoOBjd50z265Pz+DFmHpKR/teWXi91sArK2Np7bGovLwxn73t8bH5rEfcm0e5ujKAYmI+D4UsJaaNwtgrSA9THdw8LXtonS0EFFZZywSCF8vdih6ADBIKYbDNE4D3vb34obXMpMZEgE2o9n9ShEKRY06YuWwSjEA"
+       //       "publicCertData": "[parameters('pubcertData')]",
+              "data": "[parameters('certData')]",
+              "password": "[parameters('certPassword')]"
+            },
+            "type": "Microsoft.Network/applicationGateways/sslCertificates"
+          }
+        ],
+        //"authenticationCertificates": [
+        //  {
+        //    "name": "votingweb",
+        //    "properties": {
+        //      "data": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUVIVENDQXdXZ0F3SUJBZ0lKQU1oa0dIR1pDTXZ3TUEwR0NTcUdTSWIzRFFFQkN3VUFNSUdrTVFzd0NRWUQKVlFRR0V3SlZVekVMTUFrR0ExVUVDQXdDVjBFeEVEQU9CZ05WQkFjTUIxSmxaRzF2Ym1ReEVqQVFCZ05WQkFvTQpDVTFwWTNKdmMyOW1kREVNTUFvR0ExVUVDd3dEVUNaUU1UUXdNZ1lEVlFRRERDdDJiM1JwYm1kM1pXSXVjMjkxCmRHaGpaVzUwY21Gc2RYTXVZMnh2ZFdSaGNIQXVZWHAxY21VdVkyOXRNUjR3SEFZSktvWklodmNOQVFrQkZnOWwKYldGcGJFQmxiV0ZwYkM1amIyMHdIaGNOTVRrd05EQXlNVGt5T1RFNVdoY05NakF3TkRBeE1Ua3lPVEU1V2pDQgpwREVMTUFrR0ExVUVCaE1DVlZNeEN6QUpCZ05WQkFnTUFsZEJNUkF3RGdZRFZRUUhEQWRTWldSdGIyNWtNUkl3CkVBWURWUVFLREFsTmFXTnliM052Wm5ReEREQUtCZ05WQkFzTUExQW1VREUwTURJR0ExVUVBd3dyZG05MGFXNW4KZDJWaUxuTnZkWFJvWTJWdWRISmhiSFZ6TG1Oc2IzVmtZWEJ3TG1GNmRYSmxMbU52YlRFZU1Cd0dDU3FHU0liMwpEUUVKQVJZUFpXMWhhV3hBWlcxaGFXd3VZMjl0TUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCCkNnS0NBUUVBcExTT090L1RiNHhKYlZzWDVTOGNvdm5NQXFRU1dkUlFxd0IvdFpIdnBDWjBkK2Nuc2FyVG54WkwKRWw0cGJjRmJ5UWpSR1FFZENaRk1TdnQ2dHJmcnBaaVBkUy9sWEhoRnN6Yy9vMlc5MFdZUTAyY2lwYmRCU1NTTgptQlpiTzl4bWRzTjVSNmVLRzE0NkRpcGJKZ2xjcDNIajEvMjdlTlRBdEVMTXNzeFVhUHpWL3g1S1I3UVM3RkFEClBkZzlsNFlYTGEyZWZLdUhqWDk3NG9GUUR0ZGdIV3I2NnFWRThlc3JKSGZSd0t0akRyNVZpTkxOZWllZ2I1QXYKTFk2bVpxRlgyenNiQTRLSXlnblo3WTRaQkhNZDhtUmxiQm1vRDBJc0lKNVA1eEVwNm9Jb0ZCM3Y3bkFTV3pzSAp4cHZjTGxTek9vWlZKV0NlYVdIY1N4d2FZL1lUQlFJREFRQUJvMUF3VGpBZEJnTlZIUTRFRmdRVUV4cVhjMHVOCnB3dFl1OEgzNDhaMUtvQmM4N013SHdZRFZSMGpCQmd3Rm9BVUV4cVhjMHVOcHd0WXU4SDM0OFoxS29CYzg3TXcKREFZRFZSMFRCQVV3QXdFQi96QU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFLSXRpWFAzc1gvTGMxU2ZZblpXcQpTR1RYQVFhbVF6Sjgwc0dublVFUnJRemdGYkJJblM3ekJVTjBlTlpTNnRISmxoNFBHS3RPM3NCL3AyUDA1VGNHClo2YXdya0orSi9IYmtCTFBOYXNFMjExc3JvcCtyakNXWW8zYWlDNGxwSkpyUHpETStxWDJoQzIybENnVlBoZHAKSzJndkpUZERXU3dMQkVPZllYc0ovVm0yQ3NhN2c5U3dkWDg5cW9PQmpkNTB6MjY1UHorREZtSHBLUi90ZVdYaQo5MXNBcksyTnA3Ykdvdkx3eG43M3Q4Ykg1ckVmY20wZTV1aktBWW1JK0Q0VXNKYWFOd3RnclNBOVRIZHc4TFh0Cm9uUzBFRkZaWnl3U0NGOHZkaWg2QURCSUtZYkRORTREM3ZiMzRvYlhNcE1aRWdFMm85bjlTaEVLUlkwNll1V3cKU2c9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg=="
+        //    },
+        //    "type": "Microsoft.Network/applicationGateways/authenticationCertificates"
+        //  }
+        //],
+        "frontendIPConfigurations": [
+          {
+            "name": "appGatewayFrontendIP",
+            "type": "Microsoft.Network/applicationGateways/frontendIPConfigurations",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[variables('publicIPRef')]"
+              }
+            }
+          }
+        ],
+        "frontendPorts": [
+          {
+            "name": "appGatewayFrontendPort",
+            "properties": {
+              "port": 443
+            },
+            "type": "Microsoft.Network/applicationGateways/frontendPorts"
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "appGatewayBackendPool",
+            "properties": {
+              "backendAddresses": [
+                {
+                  "fqdn": "votingweb.azurewebsites.net"
+                }
+              ]
+            },
+            "type": "Microsoft.Network/applicationGateways/backendAddressPools"
+          }
+        ],
+        "backendHttpSettingsCollection": [
+          {
+            "name": "appGatewayBackendHttpSettings",
+            "properties": {
+              "port": 443,
+              "protocol": "Https",
+              "cookieBasedAffinity": "Disabled",
+              "pickHostNameFromBackendAddress": true,
+              "requestTimeout": 30,
+              "probe": {
+                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGateways_VotingGateway_name')), '/probes/appGatewayBackendHttpSettings25d2db43-3284-4273-b03b-3e3b726c2009')]"
+              }
+            },
+            "type": "Microsoft.Network/applicationGateways/backendHttpSettingsCollection"
+          }
+        ],
+        "httpListeners": [
+          {
+            "name": "appGatewayHttpListener",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGateways_VotingGateway_name')), '/frontendIPConfigurations/appGatewayFrontendIP')]"
+              },
+              "frontendPort": {
+                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGateways_VotingGateway_name')), '/frontendPorts/appGatewayFrontendPort')]"
+              },
+              "protocol": "Https",
+              "sslCertificate": {
+                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGateways_VotingGateway_name')), '/sslCertificates/votingweb')]"
+              },
+              "requireServerNameIndication": false
+            },
+            "type": "Microsoft.Network/applicationGateways/httpListeners"
+          }
+        ],
+        "urlPathMaps": [],
+        "requestRoutingRules": [
+          {
+            "name": "rule1",
+            "properties": {
+              "ruleType": "Basic",
+              "httpListener": {
+                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGateways_VotingGateway_name')), '/httpListeners/appGatewayHttpListener')]"
+              },
+              "backendAddressPool": {
+                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGateways_VotingGateway_name')), '/backendAddressPools/appGatewayBackendPool')]"
+              },
+              "backendHttpSettings": {
+                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGateways_VotingGateway_name')), '/backendHttpSettingsCollection/appGatewayBackendHttpSettings')]"
+              }
+            },
+            "type": "Microsoft.Network/applicationGateways/requestRoutingRules"
+          }
+        ],
+        "probes": [
+          {
+            "name": "appGatewayBackendHttpSettings25d2db43-3284-4273-b03b-3e3b726c2009",
+            "properties": {
+              "protocol": "Https",
+              "path": "/",
+              "interval": 30,
+              "timeout": 30,
+              "unhealthyThreshold": 3,
+              "pickHostNameFromBackendHttpSettings": true,
+              "minServers": 0,
+              "match": {}
+            },
+            "type": "Microsoft.Network/applicationGateways/probes"
+          }
+        ],
+        "rewriteRuleSets": [],
+        "redirectConfigurations": []
+        //   "enableHttp2": false
+      }
+    },
+
+
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2017-06-01",
+      "name": "[parameters('publicIp_name')]",
+      "location": "[variables('location')]",
+      "sku": {
+        "name": "Basic",
+        "tier": "Regional"
+      },
+      "properties": {
+        "resourceGuid": "[guid(subscription().subscriptionId)]",
+        "publicIPAddressVersion": "IPv4",
+        "publicIPAllocationMethod": "Dynamic",
+        "idleTimeoutInMinutes": 4,
+        "dnsSettings": {
+          "domainNameLabel": "[parameters('VotingWeb_name')]",
+          "fqdn": "[concat(parameters('VotingWeb_name'),replace(variables('location'),' ', ''),'.cloudapp.azure.com')]"
+        },
+        "ipTags": []
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2017-06-01",
+      "name": "[parameters('virtualNetworks_VotingVnet_name')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "resourceGuid": "[guid(subscription().subscriptionId)]",
+        "addressSpace": {
+          "addressPrefixes": [
+            "172.21.0.0/16"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "votingSubnet",
+            "properties": {
+              "addressPrefix": "172.21.0.0/24",
+              "delegations": []
+            }
+          }
+        ],
+        "virtualNetworkPeerings": [],
+        "enableDdosProtection": false,
+        "enableVmProtection": false
+      }
+    }
+
+  ],
+
+  "outputs": {
+
+
+  }
+
+}
