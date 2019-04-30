@@ -20,6 +20,11 @@ wget https://raw.githubusercontent.com/mspnp/reference-architectures/carlos/weba
 az storage blob upload -c rsrcontainer -f Microsoft_Azure_logo_small.png -n Microsoft_Azure_logo_small.png --account-name ${STORAGEACCNAME}
 
 
+resourceurl=`az storage account show -n ${STORAGEACCNAME} | jq -r .primaryEndpoints.blob`rsrcontainer/Microsoft_Azure_logo_small.png
+
+
+
+
 az sql server create -l "${RGLOCATION}"  -g $RGNAME -n $SQLSERVERNAME  -u $SQLADMINUSER -p $SQLADMINPASSWORD
 
 az sql db create -s $SQLSERVERNAME -n $SQLSERVERDB -g $RGNAME
