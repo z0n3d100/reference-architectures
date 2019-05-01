@@ -10,10 +10,6 @@
       "defaultValue": "[concat( 'votingweb-',uniqueString(resourceGroup().id) ) ]",
       "type": "string"
     },
-    "Votingsql_name": {
-      "defaultValue": "[concat( 'votingsql-',uniqueString(resourceGroup().id) ) ]",
-      "type": "string"
-    },
     "Votingrediscache_name": {
       "defaultValue": "[concat( 'votingcache-',uniqueString(resourceGroup().id) ) ]",
       "type": "string"
@@ -813,15 +809,6 @@
             "type": "Microsoft.Network/applicationGateways/sslCertificates"
           }
         ],
-        //"authenticationCertificates": [
-        //  {
-        //    "name": "votingweb",
-        //    "properties": {
-        //      "data": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUVIVENDQXdXZ0F3SUJBZ0lKQU1oa0dIR1pDTXZ3TUEwR0NTcUdTSWIzRFFFQkN3VUFNSUdrTVFzd0NRWUQKVlFRR0V3SlZVekVMTUFrR0ExVUVDQXdDVjBFeEVEQU9CZ05WQkFjTUIxSmxaRzF2Ym1ReEVqQVFCZ05WQkFvTQpDVTFwWTNKdmMyOW1kREVNTUFvR0ExVUVDd3dEVUNaUU1UUXdNZ1lEVlFRRERDdDJiM1JwYm1kM1pXSXVjMjkxCmRHaGpaVzUwY21Gc2RYTXVZMnh2ZFdSaGNIQXVZWHAxY21VdVkyOXRNUjR3SEFZSktvWklodmNOQVFrQkZnOWwKYldGcGJFQmxiV0ZwYkM1amIyMHdIaGNOTVRrd05EQXlNVGt5T1RFNVdoY05NakF3TkRBeE1Ua3lPVEU1V2pDQgpwREVMTUFrR0ExVUVCaE1DVlZNeEN6QUpCZ05WQkFnTUFsZEJNUkF3RGdZRFZRUUhEQWRTWldSdGIyNWtNUkl3CkVBWURWUVFLREFsTmFXTnliM052Wm5ReEREQUtCZ05WQkFzTUExQW1VREUwTURJR0ExVUVBd3dyZG05MGFXNW4KZDJWaUxuTnZkWFJvWTJWdWRISmhiSFZ6TG1Oc2IzVmtZWEJ3TG1GNmRYSmxMbU52YlRFZU1Cd0dDU3FHU0liMwpEUUVKQVJZUFpXMWhhV3hBWlcxaGFXd3VZMjl0TUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCCkNnS0NBUUVBcExTT090L1RiNHhKYlZzWDVTOGNvdm5NQXFRU1dkUlFxd0IvdFpIdnBDWjBkK2Nuc2FyVG54WkwKRWw0cGJjRmJ5UWpSR1FFZENaRk1TdnQ2dHJmcnBaaVBkUy9sWEhoRnN6Yy9vMlc5MFdZUTAyY2lwYmRCU1NTTgptQlpiTzl4bWRzTjVSNmVLRzE0NkRpcGJKZ2xjcDNIajEvMjdlTlRBdEVMTXNzeFVhUHpWL3g1S1I3UVM3RkFEClBkZzlsNFlYTGEyZWZLdUhqWDk3NG9GUUR0ZGdIV3I2NnFWRThlc3JKSGZSd0t0akRyNVZpTkxOZWllZ2I1QXYKTFk2bVpxRlgyenNiQTRLSXlnblo3WTRaQkhNZDhtUmxiQm1vRDBJc0lKNVA1eEVwNm9Jb0ZCM3Y3bkFTV3pzSAp4cHZjTGxTek9vWlZKV0NlYVdIY1N4d2FZL1lUQlFJREFRQUJvMUF3VGpBZEJnTlZIUTRFRmdRVUV4cVhjMHVOCnB3dFl1OEgzNDhaMUtvQmM4N013SHdZRFZSMGpCQmd3Rm9BVUV4cVhjMHVOcHd0WXU4SDM0OFoxS29CYzg3TXcKREFZRFZSMFRCQVV3QXdFQi96QU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFLSXRpWFAzc1gvTGMxU2ZZblpXcQpTR1RYQVFhbVF6Sjgwc0dublVFUnJRemdGYkJJblM3ekJVTjBlTlpTNnRISmxoNFBHS3RPM3NCL3AyUDA1VGNHClo2YXdya0orSi9IYmtCTFBOYXNFMjExc3JvcCtyakNXWW8zYWlDNGxwSkpyUHpETStxWDJoQzIybENnVlBoZHAKSzJndkpUZERXU3dMQkVPZllYc0ovVm0yQ3NhN2c5U3dkWDg5cW9PQmpkNTB6MjY1UHorREZtSHBLUi90ZVdYaQo5MXNBcksyTnA3Ykdvdkx3eG43M3Q4Ykg1ckVmY20wZTV1aktBWW1JK0Q0VXNKYWFOd3RnclNBOVRIZHc4TFh0Cm9uUzBFRkZaWnl3U0NGOHZkaWg2QURCSUtZYkRORTREM3ZiMzRvYlhNcE1aRWdFMm85bjlTaEVLUlkwNll1V3cKU2c9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg=="
-        //    },
-        //    "type": "Microsoft.Network/applicationGateways/authenticationCertificates"
-        //  }
-        //],
         "frontendIPConfigurations": [
           {
             "name": "appGatewayFrontendIP",
@@ -928,7 +915,6 @@
         ],
         "rewriteRuleSets": [],
         "redirectConfigurations": []
-        //   "enableHttp2": false
       }
     },
 
