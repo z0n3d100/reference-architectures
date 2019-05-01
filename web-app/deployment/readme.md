@@ -1,6 +1,4 @@
 # Web application Deployment
-Open an azure cloud shell from the portal.
-
 
 #### Step 1 Create directory and  the environment variables to run the deployment script.
 
