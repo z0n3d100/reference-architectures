@@ -38,4 +38,4 @@ connstring=$(echo $connstring | sed "s/<password>/${SQLADMINPASSWORD}/g")
 
  sqlcmd -S tcp:${SQLSERVERNAME}.database.windows.net,1433 -d votingdb -U $SQLADMINUSER -P $SQLADMINPASSWORD -N -l 30 -Q "CREATE TABLE Counts(ID INT NOT NULL IDENTITY PRIMARY KEY, Candidate VARCHAR(32) NOT NULL, Count INT)"
  
- 
+ az group deployment create --resource-group $RGNAME --template-uri ${DEPLOYMENT}webappdeploy.json --parameters VotingWeb_name=${DNSNAME} SqlConnectionString="${connstring}" certData=${certdata} certPassword=${CERTPASS}
