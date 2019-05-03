@@ -41,6 +41,9 @@ connstring=`az sql db show-connection-string --server $SQLSERVERNAME --name $SQL
 
 connstring=$(echo $connstring | sed "s/<username>/${SQLADMINUSER}/g")
 connstring=$(echo $connstring | sed "s/<password>/${SQLADMINPASSWORD}/g")
+sqlcon="${connstring%\"}"
+sqlcon="${sqlcon#\"}"
+
 
 az sql server firewall-rule create -g $RGNAME -s $SQLSERVERNAME  -n azureservices --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
 
@@ -50,7 +53,7 @@ sqlcmd -S tcp:${SQLSERVERNAME}.database.windows.net,1433 -d votingdb -U $SQLADMI
 
 # it runs the arm template deployment passing the dns name of gateway
 # the certificate and its password 
-az group deployment create --resource-group $RGNAME --template-uri ${DEPLOYMENT}webappdeploy.json --parameters VotingWeb_name=${DNSNAME} SqlConnectionString="$connstring" certData=${certdata} certPassword=${CERTPASS}
+az group deployment create --resource-group $RGNAME --template-uri ${DEPLOYMENT}webappdeploy.json --parameters VotingWeb_name=${DNSNAME} SqlConnectionString="$sqlcon" certData=${certdata} certPassword=${CERTPASS}
 
 cosmosacc=`az cosmosdb list -g ${RGNAME} | jq -r .[0].name`
 

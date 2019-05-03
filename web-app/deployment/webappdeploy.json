@@ -838,7 +838,7 @@
             "properties": {
               "backendAddresses": [
                 {
-                  "fqdn": "votingweb.azurewebsites.net"
+                  "fqdn": "[concat(parameters('VotingWeb_name'),'.azurewebsites.net')]"
                 }
               ]
             },
