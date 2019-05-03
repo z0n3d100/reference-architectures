@@ -11,7 +11,7 @@ mkdir deployweb
 cd deployweb
 ```
 ```
-export DEPLOYMENT=https://raw.githubusercontent.com/mspnp/reference-architectures/carlos/webappra/web-app/deployment/
+export DEPLOYMENT=https://raw.githubusercontent.com/mspnp/reference-architectures/web-app/deployment/
 export RGNAME=resourceGroupName
 export RGLOCATION=yourLocation
 export SQLSERVERNAME=yourSqlServerName
