@@ -129,11 +129,7 @@
         },
         "enableNonSslPort": false,
         "redisConfiguration": {
-          "maxclients": "5000",
-          "maxmemory-reserved": "2",
-          "maxfragmentationmemory-reserved": "12",
-          "maxmemory-delta": "2"
-        }
+          "maxclients": "5000"
       }
     },
     {
