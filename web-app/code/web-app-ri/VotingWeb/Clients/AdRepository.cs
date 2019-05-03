@@ -38,7 +38,8 @@ namespace VotingWeb.Clients
             {
                 Lazy<ConnectionMultiplexer> lazyConnection = GetLazyConnection(cacheConnectionString);
                 cache = lazyConnection.Value.GetDatabase();
-                client = new CosmosClient(cosmosEndpointUri, cosmosKey);
+                client = new CosmosClient(cosmosEndpointUri, cosmosKey);             
+                container = client.Databases[databaseId].Containers[containerId];
             }
             catch(Exception ex) when (ex is RedisConnectionException ||
                                       ex is RedisException)

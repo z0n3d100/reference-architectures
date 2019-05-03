@@ -30,6 +30,7 @@
         {
             try
             {
+                
                 return await _context.Counts.ToListAsync();
             }
             catch (Exception ex) when ( ex is SqlException)

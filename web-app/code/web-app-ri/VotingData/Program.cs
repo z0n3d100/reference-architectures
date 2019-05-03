@@ -22,9 +22,13 @@ namespace VotingData
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
                     var env = hostingContext.HostingEnvironment;
-                    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                          .AddJsonFile($"appsettings.{env.EnvironmentName}.json",
-                              optional: false, reloadOnChange: true);
+                    if (env.IsDevelopment())
+                    {
+                        config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                              .AddJsonFile($"appsettings.{env.EnvironmentName}.json",
+                                            optional: false, reloadOnChange: true);
+                    }
+  
                     config.AddEnvironmentVariables();
                 })
                 .UseApplicationInsights()
