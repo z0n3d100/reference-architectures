@@ -116,6 +116,7 @@
     "publicIPRef": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('publicIp_name'))]"
   },
   "resources": [
+
     {
       "type": "Microsoft.Cache/Redis",
       "apiVersion": "2017-10-01",
@@ -130,8 +131,10 @@
         "enableNonSslPort": false,
         "redisConfiguration": {
           "maxclients": "5000"
+        }
       }
     },
+
     {
       "type": "Microsoft.DocumentDB/databaseAccounts",
       "apiVersion": "2015-04-08",
