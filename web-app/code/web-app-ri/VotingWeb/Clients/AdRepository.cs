@@ -70,6 +70,8 @@ namespace VotingWeb.Clients
             try
             {
                 var response = await cache.StringGetAsync("1").ConfigureAwait(false);
+             
+
                 if (String.IsNullOrEmpty(response))
                 {
                     var sqlQueryText = "SELECT * FROM c WHERE c.MessageType = 'AD'";
@@ -83,7 +85,7 @@ namespace VotingWeb.Clients
                         ads.AddRange(currentResultSet);
                     }
 
-                    cache.StringSet("1", ads.First().ToString(), TimeSpan.FromMinutes(10));
+                     await cache.StringSetAsync("1", JsonConvert.SerializeObject(ads.First()), TimeSpan.FromMinutes(10));
                 }
                 else
                 {

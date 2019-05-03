@@ -38,6 +38,10 @@ namespace FunctionApp1
                     {
                         // Execute the command and log the # rows affected.
                         var rows = await cmd.ExecuteNonQueryAsync();
+                        if (rows == 0)
+                        {
+                            log.Error(String.Format("id entry not found on the database {0}",Id));
+                        }
                     }
                 }
 
