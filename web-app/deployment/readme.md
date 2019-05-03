@@ -4,7 +4,7 @@
 
 Open an azure cloud shell and run below commands.
 
-**Note: ** RGLOCATION should be in the right format. Some examples of valid locations are **westus, eastus, northeurope, westeurope, eastasia, southeastasia, northcentralus, southcentralus, centralus, eastus2, westus2, japaneast, japanwest, brazilsouth**. The DNSNAME and STORAGEACCNAME should be **unique and valid**. You will test uniqueness and validity of them after this step.
+**Note:** RGLOCATION should be in the right format. Some examples of valid locations are **westus, eastus, northeurope, westeurope, eastasia, southeastasia, northcentralus, southcentralus, centralus, eastus2, westus2, japaneast, japanwest, brazilsouth**. The DNSNAME and STORAGEACCNAME should be **unique and valid**. You will test uniqueness and validity of them after this step.
 
 ```
 mkdir deployweb
