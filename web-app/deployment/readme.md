@@ -85,3 +85,9 @@ example correct json
 2. Go to azure portal in the resource group of deployment above and click on **Azure Cosmos Db Account** then select **cacheContainer** then click on **Documents**. Click on **New Document**. Replace the whole json payload with above content and click **Save**
 
 #### Step 7 Publish Asp.net core Web, Api and Function applications.
+
+1. Clone the repo. Open Votin.sln solution right click on VotingData click on **Publish**, select **new profile** then click on **existing**, select the resource group for the deployment select the votingdata api app service deployment.
+
+2. Open visual studio  right click on VotingWeeb click on **Publish**, select **new profile** then click on **existing**, select the resource group for the deployment select the votingweb app service deployment.
+
+3. Open FunctionVoteCounter.sln solution right click on VoteCounter project click on **Publish**, select **new profile** then click on **existing**, select the resource group select the function app service deployment.
