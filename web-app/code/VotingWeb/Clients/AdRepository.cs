@@ -82,7 +82,7 @@ namespace VotingWeb.Clients
                         ads.AddRange(currentResultSet);
                     }
 
-                    cache.StringSet("1", ads.First().ToString());
+                    cache.StringSet("1", ads.First().ToString(), TimeSpan.FromMinutes(10));
                 }
                 else
                 {

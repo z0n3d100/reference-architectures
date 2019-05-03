@@ -125,11 +125,14 @@
         "sku": {
           "name": "Basic",
           "family": "C",
-          "capacity": 0
+          "capacity": 3
         },
         "enableNonSslPort": false,
         "redisConfiguration": {
-          "maxclients": "256"
+          "maxclients": "5000",
+          "maxmemory-reserved": "2",
+          "maxfragmentationmemory-reserved": "12",
+          "maxmemory-delta": "2"
         }
       }
     },
@@ -735,7 +738,7 @@
 
             {
               "name": "ConnectionStrings:VotingDataAPIBaseUri",
-              "value": "[concat(parameters('VotingApi_name'),'.azurewebsites.net')]"
+              "value": "[concat('https://',parameters('VotingApi_name'),'.azurewebsites.net')]"
             },
 
             {
@@ -745,7 +748,7 @@
 
             {
               "name": "ConnectionStrings:RedisConnectionString",
-              "value": "[concat(parameters('Votingrediscache_name'),'.redis.cache.windows.net,abortConnect:6380=false,ssl=true,password=', listKeys(resourceId('Microsoft.Cache/Redis', parameters('Votingrediscache_name')), '2015-08-01').primaryKey)]"
+              "value": "[concat(parameters('Votingrediscache_name'),'.redis.cache.windows.net:6380,abortConnect=false,ssl=true,password=', listKeys(resourceId('Microsoft.Cache/Redis', parameters('Votingrediscache_name')), '2015-08-01').primaryKey)]"
             },
 
             {
@@ -755,7 +758,7 @@
 
             {
               "name": "ConnectionStrings:CosmosUri",
-              "value": "[concat('https://',parameters('databaseAccounts_votingcosmos_name'),'documents.azure.com:443/')]"
+              "value": "[concat('https://',parameters('databaseAccounts_votingcosmos_name'),'.documents.azure.com:443/')]"
             },
 
             {

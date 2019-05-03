@@ -65,3 +65,23 @@ chmod +x rundeployment.sh
 ```
 .\rundeployment.sh
 ```
+
+#### Step 6 Insert Document in Cosmos Db
+1. After deployment ends in the last step, run below commands to get the resourceURl
+
+```
+resourceurl=`az storage account show -n ${STORAGEACCNAME} | jq -r .primaryEndpoints.blob`rsrcontainer/Microsoft_Azure_logo_small.png
+echo $resourceurl
+```
+Copy that value from above command and paste it in  json content below replacing resourceurl
+
+```
+{"id": "1","Message": "Powered by Azure","MessageType": "AD","Url": "resourceurl"}
+```
+example correct json
+```
+{"id": "1","Message": "Powered by Azure","MessageType": "AD","Url": "https://webappri.blob.core.windows.net/webappri/Microsoft_Azure_logo_small.png"}
+```
+2. Go to azure portal in the resource group of deployment above and click on **Azure Cosmos Db Account** then select **cacheContainer** then click on **Documents**. Click on **New Document**. Replace the whole json payload with above content and click **Save**
+
+#### Step 7 Publish Asp.net core Web, Api and Function applications.
