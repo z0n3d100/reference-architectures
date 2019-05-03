@@ -22,11 +22,7 @@ namespace VotingWeb.Clients
         private static CosmosClient client;
         private static CosmosDatabase database;
         private static CosmosContainer container;
-
-        
-
         private static IDatabase cache;
-  
         const string databaseId = "cacheDB";
         const string containerId = "cacheContainer";
 
@@ -61,7 +57,6 @@ namespace VotingWeb.Clients
             });
         }
 
-
         public async Task<IList<Ad>> GetAds()
         {
             
@@ -71,7 +66,6 @@ namespace VotingWeb.Clients
             {
                 var response = await cache.StringGetAsync("1").ConfigureAwait(false);
              
-
                 if (String.IsNullOrEmpty(response))
                 {
                     var sqlQueryText = "SELECT * FROM c WHERE c.MessageType = 'AD'";
@@ -104,8 +98,6 @@ namespace VotingWeb.Clients
             {
                 throw new AdRepositoryException("Repository Connection Exception", ex);
             }
-
-
 
             return ads;
 

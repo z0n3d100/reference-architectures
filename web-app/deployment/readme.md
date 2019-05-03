@@ -44,7 +44,7 @@ az storage account check-name -n ${STORAGEACCNAME}
 
 #### Step 4 Enter the passwords for certificate and for the sql server administrator
 
-**Note:** Sql administrator has a minimum password size of 8 characters minimum and other requirements. Check https://docs.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=sql-server-2017 for Sql administrator password requirements
+**Note:** Sql administrator has a minimum password size of 8 characters requirement. For sql password requirements Check https://docs.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=sql-server-2017 for Sql administrator password requirements
 
 
 **Note:** The script will generate a self signed certificate for the application gateway. Self signed certificates  should only be used for testing purposes.
