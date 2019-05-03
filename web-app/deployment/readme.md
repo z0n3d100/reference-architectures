@@ -91,3 +91,5 @@ example correct json
 2. Open visual studio  right click on VotingWeeb click on **Publish**, select **new profile** then click on **existing**, select the resource group for the deployment select the votingweb app service deployment.
 
 3. Open FunctionVoteCounter.sln solution right click on VoteCounter project click on **Publish**, select **new profile** then click on **existing**, select the resource group select the function app service deployment.
+
+4. At this point you should be able to test the application. Open the url https://yourwebfrontend.yourlocation.cloudapp.azure.com/. Ignore the certificate validation error on the browser.
