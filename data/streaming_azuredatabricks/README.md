@@ -27,17 +27,15 @@ A deployment for this reference architecture is available on [GitHub](https://gi
 6. Install a Java IDE, with the following resources:
     - JDK 1.8
     - Scala SDK 2.11
-    - Maven 3.5.4
+    - Maven 3.6.1
 
 ### Download the New York City taxi and neighborhood data files
 
-1. Create a directory named `DataFile` under the `data/streaming_azuredatabricks` directory in your local file system.
+1. Open a web browser and navigate to https://uofi.app.box.com/v/NYCtaxidata/folder/2332219935.
 
-2. Open a web browser and navigate to https://uofi.app.box.com/v/NYCtaxidata/folder/2332219935.
+2. Click the **Download** button on this page to download a zip file of all the taxi data for that year.
 
-3. Click the **Download** button on this page to download a zip file of all the taxi data for that year.
-
-4. Extract the zip file to the `DataFile` directory.
+3. Extract the zip file to the `data/streaming_azuredatabricks/DataFile` directory.
 
     > [!NOTE]
     > This zip file contains other zip files. Don't extract the child zip files.
@@ -54,12 +52,6 @@ A deployment for this reference architecture is available on [GitHub](https://gi
                     trip_data_3.zip
                     ...
     ```
-
-5. Open a web browser and navigate to https://www.zillow.com/howto/api/neighborhood-boundaries.htm. 
-
-6. Click on **New York Neighborhood Boundaries** to download the file.
-
-7. Copy the **ZillowNeighborhoods-NY.zip** file from your browser's **downloads** directory to the `DataFile` directory.
 
 ### Deploy the Azure resources
 
@@ -217,7 +209,7 @@ For this section, you require the Log Analytics workspace ID and primary key. Th
 
 ### Build the .jar files for the Databricks job and Databricks monitoring
 
-1. Use your Java IDE to import the Maven project file named **pom.xml** located in the root of the **data/streaming_azuredatabricks** directory. 
+1. Use your Java IDE to import the Maven project file named **pom.xml** located in the root of the **data/streaming_azuredatabricks/azure** directory. 
 
 2. Perform a clean build. The output of this build is files named **azure-databricks-job-1.0-SNAPSHOT.jar** and **azure-databricks-monitoring-0.9.jar**. 
 
@@ -244,9 +236,9 @@ For this section, you require the Log Analytics workspace ID and primary key. Th
 
 2. Select a **standard** cluster mode.
 
-3. Set **Databricks runtime version** to **4.3 (includes Apache Spark 2.3.1, Scala 2.11)**
+3. Set **Databricks runtime version** to **5.3 (includes Apache Spark 2.4.0, Scala 2.11)**
 
-4. Set **Python version** to **2**.
+4. Set **Python version** to **3**.
 
 5. Set **Driver Type** to **Same as worker**
 
@@ -256,9 +248,9 @@ For this section, you require the Log Analytics workspace ID and primary key. Th
 
 8. Deselect **Enable autoscaling**. 
 
-9. Below the **Auto Termination** dialog box, click on **Init Scripts**. 
+9. Click on **Advances Setting** section and then on the **Init Scripts** tab. 
 
-10. Enter **dbfs:/databricks/init/<cluster-name>/spark-metrics.sh**, substituting the cluster name created in step 1 for <cluster-name>.
+10. Enter **dbfs:/databricks/init/<<cluster-name>>/spark-metrics.sh**, substituting <<cluster-name>> for the cluster name selected in step 1.
 
 11. Click the **Add** button.
 
@@ -289,25 +281,23 @@ For this section, you require the Log Analytics workspace ID and primary key. Th
     
     3. Click on the drop-down arrow beside your account name, click on **create**, and click on **Library** to open the **New Library** dialog.
     
-    4. In the **Source** drop-down control, select **Maven Coordinate**.
+    4. On **Library Source**, select **Maven**.
     
-    5. Under the **Install Maven Artifacts** heading, enter `com.microsoft.azure:azure-eventhubs-spark_2.11:2.3.5` in the **Coordinate** text box. 
+    5. Enter `com.microsoft.azure:azure-eventhubs-spark_2.11:2.3.5` in the **Coordinates** text box. 
     
     6. Click on **Create Library** to open the **Artifacts** window.
     
-    7. Under **Status on running clusters** check the **Attach automatically to all clusters** checkbox.
+    7. Under **Status on running clusters** check the **Install automatically to all clusters** checkbox.
     
     8. Repeat steps 1 - 7 for the `com.microsoft.azure.cosmosdb:azure-cosmos-cassandra-spark-helper:1.0.0` Maven coordinate.
     
     9. Repeat steps 1 - 6 for the `org.geotools:gt-shapefile:19.2` Maven coordinate.
     
-    10. Click on **Advanced Options**.
+    10. Enter `http://download.osgeo.org/webdav/geotools/` in the **Repository** text box. 
     
-    11. Enter `http://download.osgeo.org/webdav/geotools/` in the **Repository** text box. 
+    11. Click **Create Library** to open the **Artifacts** window. 
     
-    12. Click **Create Library** to open the **Artifacts** window. 
-    
-    13. Under **Status on running clusters** check the **Attach automatically to all clusters** checkbox.
+    12. Under **Status on running clusters** check the **Install automatically to all clusters** checkbox.
 
 8. Add the dependent libraries added in step 7 to the job created at the end of step 6:
     1. In the Azure Databricks workspace, click on **Jobs**.
@@ -375,3 +365,5 @@ Created 30000 records for TaxiFare
 To verify the Databricks job is running correctly, open the Azure portal and navigate to the Cosmos DB database. Open the **Data Explorer** blade and examine the data in the **taxi records** table. 
 
 [1] <span id="note1">Donovan, Brian; Work, Dan (2016): New York City Taxi Trip Data (2010-2013). University of Illinois at Urbana-Champaign. https://doi.org/10.13012/J8PN93H8
+
+[2] ZillowNeighborhoods-NY.zip file used as sample data is property of Zillow Research https://www.zillow.com/research/data/
