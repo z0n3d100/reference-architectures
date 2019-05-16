@@ -52,11 +52,7 @@ namespace FunctionApp1
             {
                 log.Error(ex.StackTrace);
             }
-
-
-
-
-         
+        
         }
     }
 }
