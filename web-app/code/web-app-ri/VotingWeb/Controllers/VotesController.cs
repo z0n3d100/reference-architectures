@@ -50,7 +50,7 @@ namespace VotingWeb.Controllers
             }
             catch (Exception ex) when (ex is VoteDataException)
             {
-                logger.LogError(ex.Message,ex.InnerException.StackTrace);
+                logger.LogError(ex.Message,ex.InnerException);
                 return BadRequest("Bad Request");
             }
         }
@@ -69,7 +69,7 @@ namespace VotingWeb.Controllers
             }
             catch (Exception ex) when (ex is VoteDataException)
             {
-                logger.LogError(ex.Message, ex.InnerException.StackTrace);
+                logger.LogError(ex.Message, ex.InnerException);
                 return BadRequest("Bad Request");
             }
 
@@ -90,7 +90,7 @@ namespace VotingWeb.Controllers
             }
             catch (Exception ex) when (ex is VoteQueueException)
             {
-                logger.LogError(ex.Message,ex.InnerException.StackTrace);
+                logger.LogError(ex.Message,ex.InnerException);
                 return BadRequest("Bad Request");
             }
     
@@ -107,7 +107,7 @@ namespace VotingWeb.Controllers
             }
             catch (Exception ex) when (ex is VoteQueueException)
             {
-                logger.LogError(ex.Message,ex.InnerException.StackTrace);
+                logger.LogError(ex.Message,ex.InnerException);
                 return BadRequest("Bad Request");
             }
         }
@@ -122,7 +122,7 @@ namespace VotingWeb.Controllers
             }
             catch (Exception ex) when (ex is AdRepositoryException)
             {
-                logger.LogError(ex.Message,ex.InnerException.StackTrace);
+                logger.LogError(ex.Message,ex.InnerException);
                 return BadRequest("Bad Request");
             }
         }

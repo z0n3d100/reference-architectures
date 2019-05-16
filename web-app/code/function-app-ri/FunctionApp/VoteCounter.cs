@@ -50,7 +50,7 @@ namespace FunctionApp1
                                     ex is SecurityException ||
                                     ex is SqlException)
             {
-                log.Error(ex.StackTrace);
+                log.Error("database error",ex);
             }
         
         }

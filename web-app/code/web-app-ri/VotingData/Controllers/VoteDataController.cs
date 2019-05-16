@@ -15,13 +15,13 @@
     public class VoteDataController : ControllerBase
     {
         private readonly ILogger<VoteDataController> logger;
-        private readonly VotingDBContext _context;
-        private readonly string _validOptionsString;
+        private readonly VotingDBContext context;
+        private readonly string validOptionsString;
 
         public VoteDataController(VotingDBContext context, ILogger<VoteDataController> logger)
         {
             this.logger = logger;
-            _context = context;
+            this.context = context;
         }
 
         // GET api/VoteData
@@ -31,11 +31,11 @@
             try
             {
                 
-                return await _context.Counts.ToListAsync();
+                return await context.Counts.ToListAsync();
             }
             catch (Exception ex) when ( ex is SqlException)
             {         
-                logger.LogError(ex.StackTrace);
+                logger.LogError("database error",ex);
                 return BadRequest("Bad Request");
             }
         }
@@ -46,10 +46,10 @@
         {
             try
             {
-                var candidate = await _context.Counts.FirstOrDefaultAsync(c => c.Candidate == name);
+                var candidate = await context.Counts.FirstOrDefaultAsync(c => c.Candidate == name);
                 if (candidate == null)
                 {
-                    await _context.Counts.AddAsync(new Counts
+                    await context.Counts.AddAsync(new Counts
                     {
                         Candidate = name,
                         Count = 1
@@ -58,10 +58,10 @@
                 else
                 {
                     candidate.Count++;
-                    _context.Entry(candidate).State = EntityState.Modified;
+                    context.Entry(candidate).State = EntityState.Modified;
                 }
 
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
                 return NoContent();
 
             }
@@ -69,7 +69,7 @@
                                        ex is DbUpdateException ||
                                        ex is DbUpdateConcurrencyException)
             {
-                logger.LogError(ex.StackTrace);
+                logger.LogError("database error",ex);
                 return BadRequest("Bad Request");
             }
 
@@ -85,12 +85,12 @@
         {
             try
             {
-                var candidate = await _context.Counts.FirstOrDefaultAsync(c => c.Candidate == name);
+                var candidate = await context.Counts.FirstOrDefaultAsync(c => c.Candidate == name);
 
                 if (candidate != null)
                 {
-                    _context.Counts.Remove(candidate);
-                    await _context.SaveChangesAsync();
+                    context.Counts.Remove(candidate);
+                    await context.SaveChangesAsync();
 
                 }
 
@@ -101,7 +101,7 @@
                                     ex is DbUpdateException ||
                                     ex is DbUpdateConcurrencyException)
             {
-                logger.LogError(ex.StackTrace);
+                logger.LogError("database error",ex);
                 return BadRequest("Bad Request");
             }
 

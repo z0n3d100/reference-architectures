@@ -68,7 +68,7 @@ namespace VotingWeb
             catch (Exception ex) when (ex is VoteDataException ||
                                        ex is AdRepositoryException)
             {
-                logger.LogError(ex.Message, ex.InnerException.StackTrace);
+                logger.LogError(ex.Message, ex.InnerException);
             }
          
      
