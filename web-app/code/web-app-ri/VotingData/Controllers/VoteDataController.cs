@@ -33,7 +33,7 @@ namespace VotingData.Controllers
             }
             catch (Exception ex) when ( ex is SqlException)
             {         
-                logger.LogError("Sql Exception",ex);
+                logger.LogError(ex,"Sql Exception");
                 return BadRequest("Bad Request");
             }
         }
