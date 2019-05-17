@@ -41,7 +41,7 @@ namespace VotingWeb.Controllers
             }
             catch (Exception ex) when (ex is VoteDataException)
             {
-                logger.LogError(ex.InnerException,ex.Message);
+                logger.LogError(ex,"Exception getting the Votes from Database");
                 return BadRequest("Bad Request");
             }
         }
@@ -60,7 +60,7 @@ namespace VotingWeb.Controllers
             }
             catch (Exception ex) when (ex is VoteDataException)
             {
-                logger.LogError(ex.InnerException,ex.Message);
+                logger.LogError(ex,"Exception creating vote in database");
                 return BadRequest("Bad Request");
             }
 
@@ -81,7 +81,7 @@ namespace VotingWeb.Controllers
             }
             catch (Exception ex) when (ex is VoteQueueException)
             {
-                logger.LogError(ex.InnerException,ex.Message);
+                logger.LogError(ex,"Exception sending vote to the queue");
                 return BadRequest("Bad Request");
             }
     
@@ -96,9 +96,9 @@ namespace VotingWeb.Controllers
                 await this.client.DeleteCandidateAsync(name);
                 return new OkResult();
             }
-            catch (Exception ex) when (ex is VoteQueueException)
+            catch (Exception ex) when (ex is VoteDataException)
             {
-                logger.LogError(ex.InnerException,ex.Message);
+                logger.LogError(ex,"Exception deleting the vote from Database");
                 return BadRequest("Bad Request");
             }
         }
@@ -113,7 +113,7 @@ namespace VotingWeb.Controllers
             }
             catch (Exception ex) when (ex is AdRepositoryException)
             {
-                logger.LogError(ex.InnerException,ex.Message);
+                logger.LogError(ex,"Exception getting ads from cache");
                 return BadRequest("Bad Request");
             }
         }
