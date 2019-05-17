@@ -2,33 +2,24 @@
 //  Copyright (c) Microsoft Corporation.  All rights reserved.
 //  Licensed under the MIT License (MIT). See License.txt in the repo root for license information.
 // ------------------------------------------------------------
+using System;
+using System.Net.Mime;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using VotingWeb.Clients;
+using VotingWeb.Interfaces;
 
 namespace VotingWeb
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Mime;
-    using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.HttpOverrides;
-    using Microsoft.AspNetCore.HttpsPolicy;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Azure.ServiceBus;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
-    using VotingWeb.Interfaces;
-    using VotingWeb.Clients;
-    using VotingWeb.Exceptions;
-
     public class Startup
     {
-        private readonly ILogger logger;
+        private readonly ILogger<Startup> logger;
 
         public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
@@ -42,7 +33,6 @@ namespace VotingWeb
         public void ConfigureServices(IServiceCollection services)
         {
             // // Add framework services.
-            // services.AddMvc();
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -53,25 +43,16 @@ namespace VotingWeb
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            try
-            {
-                services.AddSingleton<IVoteQueueClient>(s =>
-                new VoteQueueClient(Configuration.GetValue<string>("ConnectionStrings:sbConnectionString")
-                ,Configuration.GetValue<string>("ConnectionStrings:queueName")));
+          
+            services.AddSingleton<IVoteQueueClient>(s =>
+            new VoteQueueClient(Configuration.GetValue<string>("ConnectionStrings:sbConnectionString")
+            ,Configuration.GetValue<string>("ConnectionStrings:queueName")));
 
-                services.AddSingleton<IAdRepository>(s => 
-                new AdRepository(Configuration.GetValue<string>("ConnectionStrings:RedisConnectionString"),
-                                     Configuration.GetValue<string>("ConnectionStrings:CosmosUri"),
-                                     Configuration.GetValue<string>("ConnectionStrings:CosmosKey")));
-
-            }
-            catch (Exception ex) when (ex is VoteDataException ||
-                                       ex is AdRepositoryException)
-            {
-                logger.LogError(ex.Message, ex.InnerException);
-            }
-         
-     
+            services.AddSingleton<IAdRepository>(s => 
+            new AdRepository(Configuration.GetValue<string>("ConnectionStrings:RedisConnectionString"),
+                             Configuration.GetValue<string>("ConnectionStrings:CosmosUri"),
+                             Configuration.GetValue<string>("ConnectionStrings:CosmosKey")));
+    
             services.AddHttpClient<IVoteDataClient, VoteDataClient>(c => {
                 c.BaseAddress = new Uri(Configuration.GetValue<string>("ConnectionStrings:VotingDataAPIBaseUri"));
 

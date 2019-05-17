@@ -3,16 +3,16 @@
 //  Licensed under the MIT License (MIT). See License.txt in the repo root for license information.
 // ------------------------------------------------------------
 
+using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using VotingWeb.Interfaces;
+using VotingWeb.Exceptions;
+
 namespace VotingWeb.Controllers
 {
-    using System;
-    using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Logging;
-    using Newtonsoft.Json;
-    using VotingWeb.Interfaces;
-    using VotingWeb.Exceptions;
-
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class VotesController : Controller
@@ -37,7 +37,7 @@ namespace VotingWeb.Controllers
         public async Task<IActionResult> Get()
         {
             try {
-                 return this.Json(await this.client.GetCounts());
+                 return this.Json(await this.client.GetCountsAsync());
             }
             catch (Exception ex) when (ex is VoteDataException)
             {
@@ -53,7 +53,7 @@ namespace VotingWeb.Controllers
         {
             try
             {           
-                var response = await this.client.AddVote(name);
+                var response = await this.client.AddVoteAsync(name);
                 if (response.IsSuccessStatusCode) return this.Ok();
                 var errorMessage = await response.Content.ReadAsStringAsync();
                 return BadRequest(errorMessage);
@@ -93,7 +93,7 @@ namespace VotingWeb.Controllers
         {
             try
             {
-                await this.client.DeleteCandidate(name);
+                await this.client.DeleteCandidateAsync(name);
                 return new OkResult();
             }
             catch (Exception ex) when (ex is VoteQueueException)
@@ -109,7 +109,7 @@ namespace VotingWeb.Controllers
         {
             try
             {
-                return this.Json(await this.repositoryClient.GetAds());
+                return this.Json(await this.repositoryClient.GetAdsAsync());
             }
             catch (Exception ex) when (ex is AdRepositoryException)
             {

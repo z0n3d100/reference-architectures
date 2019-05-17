@@ -1,18 +1,13 @@
-﻿
-
-using System;
-using System.Threading.Tasks;
-using Microsoft.Azure.Cosmos;
-using VotingWeb.Interfaces;
-using VotingWeb.Models;
-using System.Net;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Azure.Cosmos;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 using VotingWeb.Exceptions;
-
-
+using VotingWeb.Interfaces;
+using VotingWeb.Models;
 
 namespace VotingWeb.Clients
 {
@@ -57,7 +52,7 @@ namespace VotingWeb.Clients
             });
         }
 
-        public async Task<IList<Ad>> GetAds()
+        public async Task<IList<Ad>> GetAdsAsync()
         {
             
             List<Ad> ads = new List<Ad>();

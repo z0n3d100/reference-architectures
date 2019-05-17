@@ -3,8 +3,6 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-    <ApplicationInsightsResourceId>/subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/VotingData</ApplicationInsightsResourceId>
-    <ApplicationInsightsAnnotationResourceId>/subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/VotingData</ApplicationInsightsAnnotationResourceId>
     <UserSecretsId>746f30e9-2ecb-4b24-b825-02d383365fc3</UserSecretsId>
   </PropertyGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Release'">

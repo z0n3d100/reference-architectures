@@ -1,29 +1,29 @@
-using System.Net.Http;
+using System;
 using System.Collections.Generic;
-using VotingWeb.Models;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using VotingWeb.Interfaces;
-using System;
 using VotingWeb.Exceptions;
+using VotingWeb.Interfaces;
+using VotingWeb.Models;
 
 namespace VotingWeb.Clients
 {
     public class VoteDataClient : IVoteDataClient
     {
-        private HttpClient HttpClient { get; set; }
+        private readonly HttpClient httpClient; 
 
         public VoteDataClient(HttpClient httpClient)
         {
-            HttpClient = httpClient;
+            this.httpClient = httpClient;
         }
 
-        public async Task<IList<Counts>> GetCounts()
+        public async Task<IList<Counts>> GetCountsAsync()
         {
             try
             {
                 var request = new HttpRequestMessage(HttpMethod.Get,$"/api/VoteData");
-                var response = await HttpClient.SendAsync(request);
+                var response = await httpClient.SendAsync(request);
                 response.EnsureSuccessStatusCode();
                 return JsonConvert.DeserializeObject<IList<Counts>>(await response.Content.ReadAsStringAsync());
             }
@@ -37,12 +37,12 @@ namespace VotingWeb.Clients
 
         }
 
-        public async Task<HttpResponseMessage> AddVote(string candidate)
+        public async Task<HttpResponseMessage> AddVoteAsync(string candidate)
         {
             try
             {
                 var request = new HttpRequestMessage(HttpMethod.Put, $"/api/VoteData/{candidate}");
-                return await HttpClient.SendAsync(request);
+                return await httpClient.SendAsync(request);
             }
             catch (Exception ex) when (ex is ArgumentNullException ||
                               ex is InvalidOperationException ||
@@ -53,12 +53,12 @@ namespace VotingWeb.Clients
 
         }
 
-        public async Task DeleteCandidate(string candidate)
+        public async Task DeleteCandidateAsync(string candidate)
         {
             try
             {
                 var request = new HttpRequestMessage(HttpMethod.Delete, $"/api/VoteData/{candidate}");
-                var response = await HttpClient.SendAsync(request);
+                var response = await httpClient.SendAsync(request);
                 response.EnsureSuccessStatusCode();
             }
             catch (Exception ex) when (ex is ArgumentNullException ||

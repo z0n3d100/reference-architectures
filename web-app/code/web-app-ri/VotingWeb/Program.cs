@@ -2,23 +2,16 @@
 //  Copyright (c) Microsoft Corporation.  All rights reserved.
 //  Licensed under the MIT License (MIT). See License.txt in the repo root for license information.
 // ------------------------------------------------------------
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 
 namespace VotingWeb
 {
-    using System;
-    using System.Net.Http;
-    using Microsoft.AspNetCore;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging.ApplicationInsights;
-    using Microsoft.Extensions.Logging;
-    using Microsoft.Extensions.Configuration;
-    using VotingWeb.Clients;
-
     public static class Program
     {
-
-
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();

@@ -1,22 +1,20 @@
-﻿namespace VotingData.Controllers
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Data.SqlClient;
-    using System.Text;
-    using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Logging;
-    using VotingData.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
+using VotingData.Models;
 
+namespace VotingData.Controllers
+{
     [Route("api/[controller]")]
     [ApiController]
     public class VoteDataController : ControllerBase
     {
         private readonly ILogger<VoteDataController> logger;
         private readonly VotingDBContext context;
-        private readonly string validOptionsString;
 
         public VoteDataController(VotingDBContext context, ILogger<VoteDataController> logger)
         {
@@ -35,7 +33,7 @@
             }
             catch (Exception ex) when ( ex is SqlException)
             {         
-                logger.LogError(ex,"Sql Exception when reading from database");
+                logger.LogError("Sql Exception",ex);
                 return BadRequest("Bad Request");
             }
         }
