@@ -1,15 +1,13 @@
+using System;
+using System.Data.SqlClient;
+using System.Security;
+using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.ServiceBus.Messaging;
-using System.Data.SqlClient;
-using System;
-using System.Threading.Tasks;
-using System.Configuration;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Security;
 
-namespace FunctionApp1
+namespace FunctionApp
 {
     public static class VoteCounter
     {
@@ -17,7 +15,6 @@ namespace FunctionApp1
         public static async Task Run([ServiceBusTrigger("votingqueue", AccessRights.Manage,
             Connection = "SERVICEBUS_CONNECTION_STRING")]string myQueueItem, TraceWriter log)
         {
-            log.Info($"C# ServiceBus queue trigger function processed message: {myQueueItem}");
 
             JObject jObject = JObject.Parse(myQueueItem);
             var Id=(string)jObject["Id"];
@@ -50,7 +47,7 @@ namespace FunctionApp1
                                     ex is SecurityException ||
                                     ex is SqlException)
             {
-                log.Error("database error",ex);
+                log.Error("Sql Exception",ex);
             }
         
         }

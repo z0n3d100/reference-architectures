@@ -59,7 +59,7 @@ namespace VotingWeb.Clients
                                  ex is ServerBusyException ||
                                  ex is ServiceBusTimeoutException)
             {
-                throw new VoteQueueException("Exception occurred with sending message to queue",ex);
+                throw new VoteQueueException("Service Bus Exception occurred with sending message to queue",ex);
                             
             }
 

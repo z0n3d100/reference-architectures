@@ -6,20 +6,11 @@
 namespace VotingWeb.Controllers
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Text;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Azure.ServiceBus;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
     using VotingWeb.Interfaces;
-    using VotingWeb.Clients;
-    using VotingWeb.Models;
-    using Newtonsoft.Json.Linq;
     using VotingWeb.Exceptions;
 
     [Produces("application/json")]
@@ -50,7 +41,7 @@ namespace VotingWeb.Controllers
             }
             catch (Exception ex) when (ex is VoteDataException)
             {
-                logger.LogError(ex.Message,ex.InnerException);
+                logger.LogError(ex.InnerException,ex.Message);
                 return BadRequest("Bad Request");
             }
         }
@@ -69,7 +60,7 @@ namespace VotingWeb.Controllers
             }
             catch (Exception ex) when (ex is VoteDataException)
             {
-                logger.LogError(ex.Message, ex.InnerException);
+                logger.LogError(ex.InnerException,ex.Message);
                 return BadRequest("Bad Request");
             }
 
@@ -90,7 +81,7 @@ namespace VotingWeb.Controllers
             }
             catch (Exception ex) when (ex is VoteQueueException)
             {
-                logger.LogError(ex.Message,ex.InnerException);
+                logger.LogError(ex.InnerException,ex.Message);
                 return BadRequest("Bad Request");
             }
     
@@ -107,7 +98,7 @@ namespace VotingWeb.Controllers
             }
             catch (Exception ex) when (ex is VoteQueueException)
             {
-                logger.LogError(ex.Message,ex.InnerException);
+                logger.LogError(ex.InnerException,ex.Message);
                 return BadRequest("Bad Request");
             }
         }
@@ -122,7 +113,7 @@ namespace VotingWeb.Controllers
             }
             catch (Exception ex) when (ex is AdRepositoryException)
             {
-                logger.LogError(ex.Message,ex.InnerException);
+                logger.LogError(ex.InnerException,ex.Message);
                 return BadRequest("Bad Request");
             }
         }

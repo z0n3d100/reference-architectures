@@ -35,7 +35,7 @@
             }
             catch (Exception ex) when ( ex is SqlException)
             {         
-                logger.LogError("database error",ex);
+                logger.LogError(ex,"Sql Exception when reading from database");
                 return BadRequest("Bad Request");
             }
         }
@@ -69,13 +69,11 @@
                                        ex is DbUpdateException ||
                                        ex is DbUpdateConcurrencyException)
             {
-                logger.LogError("database error",ex);
+                logger.LogError(ex,"Sql Exception Saving to Database");
                 return BadRequest("Bad Request");
             }
 
         }
-
-
 
         // DELETE api/VoteData/name
 
@@ -101,7 +99,7 @@
                                     ex is DbUpdateException ||
                                     ex is DbUpdateConcurrencyException)
             {
-                logger.LogError("database error",ex);
+                logger.LogError(ex,"Sql Exception Deleting from Database");
                 return BadRequest("Bad Request");
             }
 

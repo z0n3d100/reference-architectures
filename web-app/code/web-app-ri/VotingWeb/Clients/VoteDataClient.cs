@@ -31,7 +31,7 @@ namespace VotingWeb.Clients
                                  ex is InvalidOperationException ||
                                  ex is HttpRequestException)
             {
-                throw new VoteDataException("Request Exception Occurred", ex);
+                throw new VoteDataException("Http Request Exception Occurred when getting votes", ex);
             }
 
 
@@ -48,7 +48,7 @@ namespace VotingWeb.Clients
                               ex is InvalidOperationException ||
                               ex is HttpRequestException)
             {
-                throw new VoteDataException("Request Exception Occurred", ex);
+                throw new VoteDataException("Http Request Exception Occurred when adding vote", ex);
             }
 
         }
@@ -65,7 +65,7 @@ namespace VotingWeb.Clients
                           ex is InvalidOperationException ||
                           ex is HttpRequestException)
             {
-                throw new VoteDataException("Request Exception Occurred", ex);
+                throw new VoteDataException("Http Request Exception Occurred when deleting vote", ex);
             }
 
         }
