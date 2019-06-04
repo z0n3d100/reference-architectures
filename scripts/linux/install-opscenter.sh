@@ -15,7 +15,7 @@ echo "Calling opscenter.sh with the settings:"
 echo cloud_type $cloud_type
 echo seed_node_dns_name $seed_node_dns_name
 
-apt-get -y install unzip
+apt-get -y install unzip default-jre
 
 wget https://github.com/DSPN/install-datastax-ubuntu/archive/master.zip
 unzip master.zip
