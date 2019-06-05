@@ -49,6 +49,7 @@
                 },
                 {
                     "type": "VirtualNetworkGateway",
+                    "resourceGroupName": "onprem-vnet-rg",
                     "settings": {
                         "name": "onprem-vpn-gateway1",
                         "gatewayType": "Vpn",

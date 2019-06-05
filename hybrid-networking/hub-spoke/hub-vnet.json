@@ -32,8 +32,8 @@
                 },
                 {
                     "type": "VirtualMachine",
+                    "resourceGroupName": "hub-vnet-rg",
                     "settings": {
-                        "resourceGroupName": "hub-vnet-rg",
                         "vmCount": 1,
                         "namePrefix": "hubjb",
                         "computerNamePrefix": "hubjb",
@@ -53,6 +53,7 @@
                 },  
                 {
                     "type": "VirtualNetworkGateway",
+                    "resourceGroupName": "hub-vnet-rg",
                     "settings": {
                         "name": "hub-vpn-gateway1",
                         "gatewayType": "Vpn",
