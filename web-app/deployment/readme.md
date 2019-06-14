@@ -11,7 +11,7 @@ mkdir deployweb
 cd deployweb
 ```
 ```
-export DEPLOYMENT=https://raw.githubusercontent.com/mspnp/reference-architectures/web-app/deployment/
+export DEPLOYMENT=https://raw.githubusercontent.com/mspnp/reference-architectures/master/web-app/deployment/
 export RGNAME=resourceGroupName
 export RGLOCATION=yourLocation
 export SQLSERVERNAME=yourSqlServerName
@@ -42,7 +42,7 @@ az storage account check-name -n ${STORAGEACCNAME}
 
 
 
-#### Step 4 Enter the passwords for certificate and for the sql server administrator
+#### Step 4 Enter the passwords for certificate and for the sql server administrator and export the variables to be used by the deployment script.
 
 **Note:** Sql administrator has a minimum password size of 8 characters requirement. For sql password requirements Check https://docs.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=sql-server-2017 for Sql administrator password requirements
 
@@ -51,9 +51,11 @@ az storage account check-name -n ${STORAGEACCNAME}
 
 ```
 read -s CERTPASS
+export CERTPASS
 ```
 ```
 read -s SQLADMINPASSWORD
+export SQLADMINPASSWORD
 ```
 
 #### Step 5 From the azure cloud shell download the deployment script, assign execute permissions and run it
@@ -63,7 +65,7 @@ wget ${DEPLOYMENT}rundeployment.sh
 chmod +x rundeployment.sh
 ```
 ```
-.\rundeployment.sh
+./rundeployment.sh
 ```
 
 #### Step 6 Insert Document in Cosmos Db
