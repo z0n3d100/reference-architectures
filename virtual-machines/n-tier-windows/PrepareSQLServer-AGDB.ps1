@@ -32,7 +32,7 @@ configuration SQLServerDBDsc
         [Int]$RetryIntervalSec=30
     )
 
-    Import-DscResource -ModuleName xStorage, PSDesiredStateConfiguration, xSmbShare, xComputerManagement, xNetworking, xActiveDirectory, xFailoverCluster, SqlServer, SqlServerDsc
+    Import-DscResource -ModuleName StorageDsc, PSDesiredStateConfiguration, xSmbShare, xComputerManagement, xNetworking, xActiveDirectory, xFailoverCluster, SqlServer, SqlServerDsc
 
     [System.Management.Automation.PSCredential]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainNetbiosName}\$($Admincreds.UserName)", $Admincreds.Password)
 
@@ -54,20 +54,20 @@ configuration SQLServerDBDsc
     {
         if ($ClusterOwnerNode -eq $env:COMPUTERNAME)
         {
-            xWaitforDisk Disk2
+            WaitforDisk Disk2
             {
                 DiskId = 2
                 RetryIntervalSec = 60
                 RetryCount = 20
             }
 
-            xDisk FVolume
+            Disk FVolume
             {
                 DiskId = 2
                 DriveLetter = 'F'
                 FSLabel = 'Data'
                 FSFormat = 'NTFS'
-                DependsOn = '[xWaitForDisk]Disk2'
+                DependsOn = '[WaitForDisk]Disk2'
             }
 
             File BackupDirectory
@@ -75,7 +75,7 @@ configuration SQLServerDBDsc
                 Ensure = "Present" 
                 Type = "Directory" 
                 DestinationPath = "F:\Backup"
-                # DependsOn = '[SqlAGReplica]AddReplica'    
+                DependsOn = '[Disk]FVolume'
             }
 
             xSMBShare DBBackupShare

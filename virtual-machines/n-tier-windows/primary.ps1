@@ -10,7 +10,7 @@
 # $RetryIntervalSec   -  defines the seconds between each retry to check if the 
 #                        domain has been provisioned 
 Configuration CreateForest {
-    param
+    Param
     #v1.4
     (
         [Parameter(Mandatory)]
@@ -40,14 +40,11 @@ Configuration CreateForest {
         [Int]$RetryCount=20,
         [Int]$RetryIntervalSec=30
     )
-
+    
     Import-DscResource -ModuleName xStorage, xActiveDirectory, xNetworking, xPendingReboot
 
-    # $AdminSecPass = ConvertTo-SecureString $AdminCreds.Password -AsPlainText -Force
-    # $SafeSecPass = ConvertTo-SecureString $SafeModeAdminCreds.Password -AsPlainText -Force
-    
-    [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($AdminCreds.UserName)", $AdminCreds.Password)
-    [System.Management.Automation.PSCredential ]$SafeDomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($SafeModeAdminCreds.UserName)", $SafeModeAdminCreds.Password)
+    [System.Management.Automation.PSCredential]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($AdminCreds.UserName)", $AdminCreds.Password)
+    [System.Management.Automation.PSCredential]$SafeDomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($SafeModeAdminCreds.UserName)", $SafeModeAdminCreds.Password)
 
     $Interface = Get-NetAdapter|Where-Object Name -Like "Ethernet*"|Select-Object -First 1
     $InterfaceAlias = $($Interface.Name)
@@ -123,7 +120,6 @@ Configuration CreateForest {
             DomainUserCredential = $DomainCreds
             RetryCount = $RetryCount
             RetryIntervalSec = $RetryIntervalSec
-            RebootRetryCount = 5
             DependsOn = "[xADDomain]AddDomain"
         } 
 

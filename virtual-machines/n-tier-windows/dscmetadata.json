@@ -1,0 +1,1 @@
+{"Modules":["StorageDsc","xSmbShare","xComputerManagement","xNetworking","xActiveDirectory","xFailoverCluster","SqlServer","SqlServerDsc"]}
