@@ -54,16 +54,19 @@ configuration SQLServerDBDsc
     {
         if ($ClusterOwnerNode -eq $env:COMPUTERNAME)
         {
+            $uniqueid = Get-Disk | Where-Object { $_.FriendlyName -like 'Msft Virtual Disk' } | Select-Object -First 1 -ExpandProperty UniqueId
             WaitforDisk Disk2
             {
-                DiskId = 2
+                DiskId = $uniqueid
+                DiskIdType = 'UniqueId'
                 RetryIntervalSec = 60
                 RetryCount = 20
             }
 
             Disk FVolume
             {
-                DiskId = 2
+                DiskId = $uniqueid
+                DiskIdType = 'UniqueId'
                 DriveLetter = 'F'
                 FSLabel = 'Data'
                 FSFormat = 'NTFS'
