@@ -49,7 +49,7 @@
                             },
                             "rules": [
                                 {
-                                    "name": "AllowRDP-Spoke1",
+                                    "name": "AllowRemote-Spoke1",
                                     "protocols": [
                                         "TCP"
                                     ],
@@ -60,11 +60,12 @@
                                         "10.1.0.0/16"
                                     ],
                                     "destinationPorts": [
+                                        "22",
                                         "3389"
                                     ]
                                 },
                                 {
-                                    "name": "AllowRDP-Spoke2",
+                                    "name": "AllowRemote-Spoke2",
                                     "protocols": [
                                         "TCP"
                                     ],
@@ -75,6 +76,7 @@
                                         "10.2.0.0/16"
                                     ],
                                     "destinationPorts": [
+                                        "22",
                                         "3389"
                                     ]
                                 }
@@ -90,7 +92,7 @@
                             },
                             "rules": [
                                 {
-                                    "name": " AllowRDP-Spoke1-Spoke2",
+                                    "name": " AllowRemote-Spoke1-Spoke2",
                                     "protocols": [
                                         "TCP"
                                     ],
@@ -101,11 +103,12 @@
                                         "10.2.0.0/16"
                                     ],
                                     "destinationPorts": [
+                                        "22",
                                         "3389"
                                     ]
                                 },
                                 {
-                                    "name": "AllowRDP-Spoke2-Spoke1",
+                                    "name": "AllowRemote-Spoke2-Spoke1",
                                     "protocols": [
                                         "TCP"
                                     ],
@@ -116,6 +119,7 @@
                                         "10.1.0.0/16"
                                     ],
                                     "destinationPorts": [
+                                        "22",
                                         "3389"
                                     ]
                                 }
