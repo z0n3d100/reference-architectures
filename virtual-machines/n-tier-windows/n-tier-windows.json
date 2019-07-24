@@ -424,7 +424,7 @@
                                             "ClusterName": "AOCluster",
                                             "ClusterOwnerNode": "sql1",
                                             "ClusterIP": "10.0.3.30",
-                                            "witnessStorageBlobEndPoint": "https://[replace-with-storageaccountname].blob.core.windows.net",
+                                            "witnessStorageAccount": "[replace-with-storage]",
                                             "witnessStorageAccountKey": "[replace-with-storagekey]"
                                         }
                                     }
@@ -468,7 +468,7 @@
                                             "ClusterName": "AOCluster",
                                             "ClusterOwnerNode": "sql1",
                                             "ClusterIP": "10.0.3.30",
-                                            "witnessStorageBlobEndPoint": "https://[replace-with-storageaccountname].blob.core.windows.net",
+                                            "witnessStorageAccount": "[replace-with-storage]",
                                             "witnessStorageAccountKey": "[replace-with-storagekey]"
                                         }
                                     }
@@ -494,7 +494,7 @@
                                     "settings": {
                                         "configuration": {
                                             "url": "https://github.com/mspnp/reference-architectures/raw/master/virtual-machines/n-tier-windows/PrepareSQLServer.ps1.zip",
-                                            "script": "PrepareSqlServer-AGDB.ps1",
+                                            "script": "PrepareSqlServer.ps1",
                                             "function": "SQLServerDBDsc"
                                         }
                                     },
@@ -505,18 +505,11 @@
                                                 "userName": "adminUser",
                                                 "password": "[replace-with-password]"
                                             },
-                                            "sqlServiceCreds": {
-                                                "userName": "sqlservicetestuser",
-                                                "password": "[replace-with-sql-password]"
-                                            },
                                             "ClusterName": "AOCluster",
-                                            "ClusterOwnerNode": "sql1",
-                                            "ClusterIP": "10.0.3.30",
-                                            "witnessStorageBlobEndPoint": "https://[replace-with-storageaccountname].blob.core.windows.net",
-                                            "witnessStorageAccountKey": "[replace-with-storagekey]"
+                                            "ClusterOwnerNode": "sql1"
                                         }
                                     }
-                                }                            
+                                }
                             ]
                         }
                     ]
