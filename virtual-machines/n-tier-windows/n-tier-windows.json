@@ -424,7 +424,7 @@
                                             "ClusterName": "AOCluster",
                                             "ClusterOwnerNode": "sql1",
                                             "ClusterIP": "10.0.3.30",
-                                            "witnessStorageAccount": "[replace-with-storage]",
+                                            "witnessStorageAccount": "[replace-with-storageaccountname]",
                                             "witnessStorageAccountKey": "[replace-with-storagekey]"
                                         }
                                     }
