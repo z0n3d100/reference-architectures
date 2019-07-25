@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -e 
+set -o pipefail
 
 cloud_type="azure"
 seed_node_name=$1
@@ -22,6 +24,7 @@ echo seed_node_dns_name $seed_node_dns_name
 echo data_center_name $data_center_name
 echo opscenter_dns_name $opscenter_dns_name
 
+apt-get -y update
 apt-get -y install unzip default-jre
 
 wget https://github.com/DSPN/install-datastax-ubuntu/archive/master.zip
