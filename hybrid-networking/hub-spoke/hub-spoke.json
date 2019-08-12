@@ -36,12 +36,8 @@
                                     "addressPrefix": "10.0.255.224/27"
                                 },
                                 {
-                                    "name": "dmz",
-                                    "addressPrefix": "10.0.0.32/27"
-                                },
-                                {
                                     "name": "mgmt",
-                                    "addressPrefix": "10.0.0.64/27"
+                                    "addressPrefix": "10.0.0.32/27"
                                 }
                             ]
                         }
@@ -55,8 +51,8 @@
                             "vmCount": 1,
                             "namePrefix": "jb",
                             "size": "Standard_DS1_v2",
-                            "adminUsername": "<user name>",
-                            "adminPassword": "<password>",
+                            "adminUsername": "[replace-with-username]",
+                            "adminPassword": "[replace-with-password]",
                             "osType": "windows",
                             "virtualNetwork": {
                                 "resourceGroupName": "onprem-vnet-rg",
@@ -78,8 +74,8 @@
                             "vmCount": 1,
                             "namePrefix": "jbl",
                             "size": "Standard_DS1_v2",
-                            "adminUsername": "<user name>",
-                            "adminPassword": "<password>",
+                            "adminUsername": "[replace-with-username]",
+                            "adminPassword": "[replace-with-password]",
                             "osType": "linux",
                             "virtualNetwork": {
                                 "resourceGroupName": "onprem-vnet-rg",
@@ -101,8 +97,8 @@
                             "vmCount": 1,
                             "namePrefix": "hubjb",
                             "computerNamePrefix": "hubjb",
-                            "adminUsername": "<user name>",
-                            "adminPassword": "<password>",
+                            "adminUsername": "[replace-with-username]",
+                            "adminPassword": "[replace-with-password]",
                             "osType": "windows",
                             "virtualNetwork": {
                                 "name": "hub-vnet"
@@ -112,7 +108,7 @@
                                     "isPublic": false,
                                     "subnetName": "mgmt",
                                     "privateIPAllocationMethod": "Static",
-                                    "startingIPAddress": "10.0.0.68"
+                                    "startingIPAddress": "10.0.0.36"
                                 }
                             ]
                         },
@@ -121,8 +117,8 @@
                             "vmCount": 1,
                             "namePrefix": "hubjbl",
                             "computerNamePrefix": "hubjbl",
-                            "adminUsername": "<user name>",
-                            "adminPassword": "<password>",
+                            "adminUsername": "[replace-with-username]",
+                            "adminPassword": "[replace-with-password]",
                             "osType": "linux",
                             "virtualNetwork": {
                                 "name": "hub-vnet"
@@ -132,7 +128,7 @@
                                     "isPublic": false,
                                     "subnetName": "mgmt",
                                     "privateIPAllocationMethod": "Static",
-                                    "startingIPAddress": "10.0.0.69"
+                                    "startingIPAddress": "10.0.0.37"
                                 }
                             ]
                         }
@@ -173,7 +169,7 @@
                             "resourceGroupName": "hub-vnet-rg",
                             "connectionType": "Vnet2Vnet",
                             "name": "hub-onprem-conn",
-                            "sharedKey": "",
+                            "sharedKey": "[replace-with-shared-key]",
                             "routingWeight": 1,
                             "virtualNetworkGateway1": {
                                 "resourceGroupName": "onprem-vnet-rg",
@@ -193,7 +189,7 @@
                             "resourceGroupName": "onprem-vnet-rg",
                             "connectionType": "Vnet2Vnet",
                             "name": "onprem-hub-conn",
-                            "sharedKey": "",
+                            "sharedKey": "[replace-with-shared-key]",
                             "routingWeight": 1,
                             "virtualNetworkGateway1": {
                                 "resourceGroupName": "hub-vnet-rg",
@@ -218,7 +214,7 @@
                             "subnets": [
                                 {
                                     "name": "mgmt",
-                                    "addressPrefix": "10.1.0.64/27"
+                                    "addressPrefix": "10.1.0.32/27"
                                 },
                                 {
                                     "name": "workload",
@@ -247,7 +243,7 @@
                             "subnets": [
                                 {
                                     "name": "mgmt",
-                                    "addressPrefix": "10.2.0.64/27"
+                                    "addressPrefix": "10.2.0.32/27"
                                 },
                                 {
                                     "name": "workload",
@@ -277,8 +273,8 @@
                             "vmCount": 1,
                             "namePrefix": "s1jb",
                             "computerNamePrefix": "s1jb",
-                            "adminUsername": "<user name>",
-                            "adminPassword": "<password>",
+                            "adminUsername": "[replace-with-username]",
+                            "adminPassword": "[replace-with-password]",
                             "osType": "windows",
                             "virtualNetwork": {
                                 "resourceGroupName": "spoke1-vnet-rg",
@@ -289,7 +285,7 @@
                                     "isPublic": false,
                                     "subnetName": "mgmt",
                                     "privateIPAllocationMethod": "Static",
-                                    "startingIPAddress": "10.1.0.68"
+                                    "startingIPAddress": "10.1.0.36"
                                 }
                             ]
                         },
@@ -298,8 +294,8 @@
                             "vmCount": 1,
                             "namePrefix": "s1jbl",
                             "computerNamePrefix": "s1jbl",
-                            "adminUsername": "<user name>",
-                            "adminPassword": "<password>",
+                            "adminUsername": "[replace-with-username]",
+                            "adminPassword": "[replace-with-password]",
                             "osType": "linux",
                             "virtualNetwork": {
                                 "resourceGroupName": "spoke1-vnet-rg",
@@ -310,7 +306,7 @@
                                     "isPublic": false,
                                     "subnetName": "mgmt",
                                     "privateIPAllocationMethod": "Static",
-                                    "startingIPAddress": "10.1.0.69"
+                                    "startingIPAddress": "10.1.0.37"
                                 }
                             ]
                         },
@@ -319,8 +315,8 @@
                             "vmCount": 1,
                             "namePrefix": "s2jb",
                             "computerNamePrefix": "s2jb",
-                            "adminUsername": "<user name>",
-                            "adminPassword": "<password>",
+                            "adminUsername": "[replace-with-username]",
+                            "adminPassword": "[replace-with-password]",
                             "osType": "windows",
                             "virtualNetwork": {
                                 "resourceGroupName": "spoke2-vnet-rg",
@@ -331,7 +327,7 @@
                                     "isPublic": false,
                                     "subnetName": "mgmt",
                                     "privateIPAllocationMethod": "Static",
-                                    "startingIPAddress": "10.2.0.68"
+                                    "startingIPAddress": "10.2.0.36"
                                 }
                             ]
                         },
@@ -340,8 +336,8 @@
                             "vmCount": 1,
                             "namePrefix": "s2jbl",
                             "computerNamePrefix": "s2jbl",
-                            "adminUsername": "<user name>",
-                            "adminPassword": "<password>",
+                            "adminUsername": "[replace-with-username]",
+                            "adminPassword": "[replace-with-password]",
                             "osType": "linux",
                             "virtualNetwork": {
                                 "resourceGroupName": "spoke2-vnet-rg",
@@ -352,7 +348,7 @@
                                     "isPublic": false,
                                     "subnetName": "mgmt",
                                     "privateIPAllocationMethod": "Static",
-                                    "startingIPAddress": "10.2.0.69"
+                                    "startingIPAddress": "10.2.0.37"
                                 }
                             ]
                         }
@@ -373,12 +369,8 @@
                                     "addressPrefix": "10.0.255.224/27"
                                 },
                                 {
-                                    "name": "dmz",
-                                    "addressPrefix": "10.0.0.32/27"
-                                },
-                                {
                                     "name": "mgmt",
-                                    "addressPrefix": "10.0.0.64/27"
+                                    "addressPrefix": "10.0.0.32/27"
                                 }
                             ],
                             "virtualNetworkPeerings": [
