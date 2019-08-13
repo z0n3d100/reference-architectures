@@ -238,7 +238,7 @@
                                             },
                                             "SafeModeAdminCreds": {
                                                 "UserName": "testsafeadminuser",
-                                                "Password": "[replace-with-safe-password]"
+                                                "Password": "[replace-with-safe-mode-password]"
                                             }
                                         }
                                     }
