@@ -75,8 +75,8 @@
                             "vmCount": 1,
                             "namePrefix": "jb",
                             "size": "Standard_DS1_v2",
-                            "adminUsername": "",
-                            "adminPassword": "",
+                            "adminUsername": "[replace-with-username]",
+                            "adminPassword": "[replace-with-password]",
                             "osType": "windows",
                             "virtualNetwork": {
                                 "name": "onprem-vnet"
@@ -95,8 +95,8 @@
                             "vmCount": 1,
                             "namePrefix": "hubjb",
                             "computerNamePrefix": "hubjb",
-                            "adminUsername": "",
-                            "adminPassword": "",
+                            "adminUsername": "[replace-with-username]",
+                            "adminPassword": "[replace-with-password]",
                             "osType": "windows",
                             "virtualNetwork": {
                                 "name": "hub-vnet"
@@ -114,8 +114,8 @@
                             "computerNamePrefix": "ad",
                             "namePrefix": "ad",
                             "size": "Standard_DS3_v2",
-                            "adminUsername": "",
-                            "adminPassword": "",
+                            "adminUsername": "[replace-with-username]",
+                            "adminPassword": "[replace-with-password]",
                             "osType": "windows",
                             "virtualNetwork": {
                                 "name": "onprem-vnet"
@@ -161,12 +161,12 @@
                                             "DomainName": "contoso.com",
                                             "DomainNetbiosName": "CONTOSO",
                                             "AdminCreds": {
-                                                "UserName": "",
-                                                "Password": ""
+                                                "UserName": "[replace-with-username]",
+                                                "Password": "[replace-with-password]"
                                             },
                                             "SafeModeAdminCreds": {
-                                                "UserName": "",
-                                                "Password": ""
+                                                "UserName": "[replace-with-safe-mode-username]",
+                                                "Password": "[replace-with-safe-mode-password]"
                                             }
                                         }
                                     }
@@ -203,12 +203,12 @@
                                             "DomainNetbiosName": "CONTOSO",
                                             "PrimaryDcIpAddress": "192.168.0.4",
                                             "AdminCreds": {
-                                                "UserName": "",
-                                                "Password": ""
+                                                "UserName": "[replace-with-username]",
+                                                "Password": "[replace-with-password]"
                                             },
                                             "SafeModeAdminCreds": {
-                                                "UserName": "",
-                                                "Password": ""
+                                                "UserName": "[replace-with-safe-mode-username]",
+                                                "Password": "[replace-with-safe-mode-password]"
                                             }
                                         }
                                     }
@@ -252,7 +252,7 @@
                             "resourceGroupName": "onprem-vnet-rg",
                             "connectionType": "Vnet2Vnet",
                             "name": "onprem-hub-conn",
-                            "sharedKey": "",
+                            "sharedKey": "[replace-with-shared-key]",
                             "routingWeight": 1,
                             "virtualNetworkGateway1": {
                                 "resourceGroupName": "onprem-vnet-rg",
@@ -272,7 +272,7 @@
                             "resourceGroupName": "hub-vnet-rg",
                             "connectionType": "Vnet2Vnet",
                             "name": "hub-onprem-conn",
-                            "sharedKey": "",
+                            "sharedKey": "[replace-with-shared-key]",
                             "routingWeight": 1,
                             "virtualNetworkGateway1": {
                                 "resourceGroupName": "hub-vnet-rg",
@@ -292,8 +292,8 @@
                         "vmCount": 2,
                         "computerNamePrefix": "azuread",
                         "namePrefix": "azuread",
-                        "adminUsername": "",
-                        "adminPassword": "",
+                        "adminUsername": "[replace-with-username]",
+                        "adminPassword": "[replace-with-password]",
                         "osType": "windows",
                         "virtualNetwork": {
                             "resourceGroupName": "hub-vnet-rg",
@@ -330,12 +330,12 @@
                                         "DomainNetbiosName": "CONTOSO",
                                         "PrimaryDcIpAddress": "192.168.0.4",
                                         "AdminCreds": {
-                                            "UserName": "",
-                                            "Password": ""
+                                            "UserName": "[replace-with-username]",
+                                            "Password": "[replace-with-password]"
                                         },
                                         "SafeModeAdminCreds": {
-                                            "UserName": "",
-                                            "Password": ""
+                                            "UserName": "[replace-with-safe-mode-username]",
+                                            "Password": "[replace-with-safe-mode-password]"
                                         }
                                     }
                                 }
@@ -355,7 +355,7 @@
                             "subnets": [
                                 {
                                     "name": "mgmt",
-                                    "addressPrefix": "10.1.0.64/27"
+                                    "addressPrefix": "10.1.0.32/27"
                                 },
                                 {
                                     "name": "workload",
@@ -389,7 +389,7 @@
                             "subnets": [
                                 {
                                     "name": "mgmt",
-                                    "addressPrefix": "10.2.0.64/27"
+                                    "addressPrefix": "10.2.0.32/27"
                                 },
                                 {
                                     "name": "workload",
@@ -424,8 +424,8 @@
                             "vmCount": 1,
                             "namePrefix": "sp1jb",
                             "computerNamePrefix": "sp1jb",
-                            "adminUsername": "",
-                            "adminPassword": "",
+                            "adminUsername": "[replace-with-username]",
+                            "adminPassword": "[replace-with-password]",
                             "osType": "windows",
                             "virtualNetwork": {
                                 "name": "spoke1-vnet"
@@ -442,8 +442,8 @@
                             "vmCount": 1,
                             "namePrefix": "s2jb",
                             "computerNamePrefix": "s2jb",
-                            "adminUsername": "",
-                            "adminPassword": "",
+                            "adminUsername": "[replace-with-username]",
+                            "adminPassword": "[replace-with-password]",
                             "osType": "windows",
                             "virtualNetwork": {
                                 "name": "spoke2-vnet"
