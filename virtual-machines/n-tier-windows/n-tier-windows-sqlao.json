@@ -20,7 +20,7 @@
                                     "autoUpgradeMinorVersion": true,
                                     "settings": {
                                         "configuration": {
-                                            "url": "https://github.com/mspnp/reference-architectures/raw/andrew/ra-update/virtual-machines/n-tier-windows/PrepareSQLServer.ps1.zip",
+                                            "url": "https://github.com/mspnp/reference-architectures/raw/master/virtual-machines/n-tier-windows/PrepareSQLServer.ps1.zip",
                                             "script": "PrepareSqlServer.ps1",
                                             "function": "SqlServerPrepareDsc"
                                         }
@@ -64,7 +64,7 @@
                                     "autoUpgradeMinorVersion": true,
                                     "settings": {
                                         "configuration": {
-                                            "url": "https://github.com/mspnp/reference-architectures/raw/andrew/ra-update/virtual-machines/n-tier-windows/PrepareSQLServer.ps1.zip",
+                                            "url": "https://github.com/mspnp/reference-architectures/raw/master/virtual-machines/n-tier-windows/PrepareSQLServer.ps1.zip",
                                             "script": "PrepareSqlServer.ps1",
                                             "function": "SqlServerPrepareDsc"
                                         }
@@ -108,7 +108,7 @@
                                     "autoUpgradeMinorVersion": true,
                                     "settings": {
                                         "configuration": {
-                                            "url": "https://github.com/mspnp/reference-architectures/raw/andrew/ra-update/virtual-machines/n-tier-windows/PrepareSQLServer.ps1.zip",
+                                            "url": "https://github.com/mspnp/reference-architectures/raw/master/virtual-machines/n-tier-windows/PrepareSQLServer.ps1.zip",
                                             "script": "PrepareSqlServer.ps1",
                                             "function": "SQLServerDBDsc"
                                         }

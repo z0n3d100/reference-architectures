@@ -361,7 +361,7 @@
                                     "autoUpgradeMinorVersion": true,
                                     "settings": {
                                         "fileUris": [
-                                            "https://github.com/mspnp/reference-architectures/raw/andrew/ra-update/virtual-machines/n-tier-linux/install-cassandra.sh"
+                                            "https://github.com/mspnp/reference-architectures/raw/master/virtual-machines/n-tier-linux/install-cassandra.sh"
                                         ],
                                         "commandToExecute": "[concat('bash install-cassandra.sh data1.private.contoso.com ops1.private.contoso.com ra-ntier-dc-', resourceGroup().location)]"
                                     },
@@ -408,7 +408,7 @@
                                     "autoUpgradeMinorVersion": true,
                                     "settings": {
                                         "fileUris": [
-                                            "https://github.com/mspnp/reference-architectures/raw/andrew/ra-update/virtual-machines/n-tier-linux/install-opscenter.sh"
+                                            "https://github.com/mspnp/reference-architectures/raw/master/virtual-machines/n-tier-linux/install-opscenter.sh"
                                         ],
                                         "commandToExecute": "bash install-opscenter.sh data1.private.contoso.com"
                                     },
