@@ -147,7 +147,8 @@
                         "vms": [
                             "ra-dmz-web-vm1",
                             "ra-dmz-web-vm2",
-                            "ra-dmz-data-vm1"
+                            "ra-dmz-data-vm1",
+                            "ra-dmz-data-vm2"
                         ],
                         "extensions": [
                             {
@@ -565,7 +566,7 @@
                                 "sku": {
                                     "name": "Standard"
                                 },
-                                "name": "hub-firewall-pip",
+                                "name": "dmz-firewall-pip",
                                 "apiVersion": "2018-12-01",
                                 "location": "[resourceGroup().location]",
                                 "properties": {
@@ -576,7 +577,7 @@
                             },
                             {
                                 "type": "Microsoft.Network/azureFirewalls",
-                                "name": "hub-firewall",
+                                "name": "dmz-firewall",
                                 "apiVersion": "2018-12-01",
                                 "location": "[resourceGroup().location]",
                                 "properties": {
@@ -586,17 +587,17 @@
                                             "name": "ip-config",
                                             "properties": {
                                                 "publicIPAddress": {
-                                                    "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'hub-firewall-pip')]"
+                                                    "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'dmz-firewall-pip')]"
                                                 },
                                                 "subnet": {
-                                                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'hub-vnet', 'AzureFirewallSubnet')]"
+                                                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'ra-vnet', 'AzureFirewallSubnet')]"
                                                 }
                                             }
                                         }
                                     ],
                                     "networkRuleCollections": [
                                         {
-                                            "name": "hub-spoke-rules",
+                                            "name": "dmz-fw-rules",
                                             "properties": {
                                                 "priority": 100,
                                                 "action": {
@@ -604,7 +605,7 @@
                                                 },
                                                 "rules": [
                                                     {
-                                                        "name": "Allow-Remote-Spoke1",
+                                                        "name": "Allow-Remote-fw",
                                                         "protocols": [
                                                             "TCP"
                                                         ],
@@ -627,7 +628,7 @@
                                     "natRuleCollections": []
                                 },
                                 "dependsOn": [
-                                    "[resourceId('Microsoft.Network/publicIPAddresses', 'hub-firewall-pip')]"
+                                    "[resourceId('Microsoft.Network/publicIPAddresses', 'dmz-firewall-pip')]"
                                 ]
                             }
                         ]
