@@ -35,7 +35,7 @@
                             },
                             {
                               "name": "AzureFirewallSubnet",
-                              "addressPrefix": "10.0.4.0/26"
+                              "addressPrefix": "10.0.4.0/24"
                             }
                           ]
                       }
@@ -610,14 +610,14 @@
                                                             "TCP"
                                                         ],
                                                         "sourceAddresses": [
-                                                            "192.168.0.0/16"
+                                                            "*"
                                                         ],
                                                         "destinationAddresses": [
-                                                            "10.0.0.0/16"
+                                                            "10.0.1.0/24"
                                                         ],
                                                         "destinationPorts": [
-                                                            "22",
-                                                            "3389"
+                                                            "80",
+                                                            "443"
                                                         ]
                                                     }
                                                 ]
@@ -643,15 +643,15 @@
                         {
                             "name": "ra-vnet",
                             "subnets": [
-                                "GatewaySubnet"
+                                "web"
                             ]
                         }
                     ],
                     "routes": [
                         {
                           "name": "fw-route",
-                          "addressPrefix": "10.0.0.0/16",
-                          "nextHop": "VnetLocal"
+                          "addressPrefix": "0.0.0.0/0",
+                          "nextHop": "10.0.4.4"
                         }
                     ]
                 }
