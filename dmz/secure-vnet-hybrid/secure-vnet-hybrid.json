@@ -141,6 +141,39 @@
                   }
               },
               {
+                "type": "VirtualMachine",
+                "settings":{
+                    "vmCount": 2,
+                    "namePrefix": "ra-dmz-biz",
+                    "computerNamePrefix": "biz",
+                    "size": "Standard_DS1_v2",
+                    "osType": "linux",
+                    "adminUsername": "testuser",
+                    "adminPassword": "AweS0me@PW",
+                    "virtualNetwork": {
+                        "name": "ra-vnet"
+                    },
+                    "nics": [
+                      {
+                        "isPublic": false,
+                        "subnetName": "biz",
+                        "privateIPAllocationMethod": "Dynamic",
+                        "isPrimary": true,
+                        "enableIPForwarding": false
+                      }
+                    ],
+                    "imageReference": {
+                      "publisher": "Canonical",
+                      "offer": "UbuntuServer",
+                      "sku": "14.04.5-LTS",
+                      "version": "latest"
+                    },
+                    "dataDisks": {
+                      "count": 1
+                    }
+                }
+              },
+              {
                 "type": "VirtualMachineExtension",
                 "settings": [
                     {
@@ -330,7 +363,14 @@
                 "settings": [
                   {
                     "name": "mgmt-nsg",
-                    "subnets": [ "mgmt" ],
+                    "virtualNetworks": [
+                      {
+                        "name": "ra-vnet",
+                        "subnets": [
+                          "mgmt"
+                        ]
+                      }
+                    ],
                     "securityRules": [
                       {
                         "name": "on-prem-rdp-allow",
@@ -391,7 +431,14 @@
                   },
                   {
                     "name": "web-nsg",
-                    "subnets": [ "web" ],
+                    "virtualNetworks": [
+                      {
+                        "name": "ra-vnet",
+                        "subnets": [
+                          "web"
+                        ]
+                      }
+                    ],
                     "securityRules": [
                       {
                         "name": "on-prem-allow",
@@ -436,23 +483,19 @@
                         "destinationPortRange": 22,
                         "access": "Allow",
                         "protocol": "*"
-                      },
-                      {
-                        "name": "vnet-deny",
-                        "direction": "Inbound",
-                        "priority": 500,
-                        "sourceAddressPrefix": "*",
-                        "sourcePortRange": "*",
-                        "destinationAddressPrefix": "*",
-                        "destinationPortRange": "*",
-                        "access": "Deny",
-                        "protocol": "*"
                       }
                     ]
                   },
                   {
                     "name": "biz-nsg",
-                    "subnets": [ "biz" ],
+                    "virtualNetworks": [
+                      {
+                        "name": "ra-vnet",
+                        "subnets": [
+                          "biz"
+                        ]
+                      }
+                    ],
                     "securityRules": [
                       {
                         "name": "web-allow",
@@ -486,23 +529,19 @@
                         "destinationPortRange": 22,
                         "access": "Allow",
                         "protocol": "*"
-                      },
-                      {
-                        "name": "vnet-deny",
-                        "direction": "Inbound",
-                        "priority": 400,
-                        "sourceAddressPrefix": "*",
-                        "sourcePortRange": "*",
-                        "destinationAddressPrefix": "*",
-                        "destinationPortRange": "*",
-                        "access": "Deny",
-                        "protocol": "*"
                       }
                     ]
                   },
                   {
                     "name": "data-nsg",
-                    "subnets": [ "data" ],
+                    "virtualNetworks": [
+                      {
+                        "name": "ra-vnet",
+                        "subnets": [
+                          "data"
+                        ]
+                      }
+                    ],
                     "securityRules": [
                       {
                         "name": "biz-allow",
@@ -605,15 +644,15 @@
                                                 },
                                                 "rules": [
                                                     {
-                                                        "name": "Allow-Remote-fw",
+                                                        "name": "Allow-TCP-fw",
                                                         "protocols": [
                                                             "TCP"
                                                         ],
                                                         "sourceAddresses": [
-                                                            "*"
+                                                            "192.168.0.0/16"
                                                         ],
                                                         "destinationAddresses": [
-                                                            "10.0.1.0/24"
+                                                            "10.0.4.0/24"
                                                         ],
                                                         "destinationPorts": [
                                                             "80",
@@ -638,7 +677,28 @@
             {
                 "type": "RouteTable",
                 "settings": {
-                    "name": "intranet-dmz-fw-rt1",
+                    "name": "fw-to-web",
+                    "virtualNetworks": [
+                        {
+                            "name": "ra-vnet",
+                            "subnets": [
+                                "GatewaySubnet"
+                            ]
+                        }
+                    ],
+                    "routes": [
+                        {
+                          "name": "fw-route",
+                          "addressPrefix": "10.0.1.0/24",
+                          "nextHop": "10.0.4.4"
+                        }
+                    ]
+                }
+              },
+              {
+                "type": "RouteTable",
+                "settings": {
+                    "name": "web-to-fw",
                     "virtualNetworks": [
                         {
                             "name": "ra-vnet",
