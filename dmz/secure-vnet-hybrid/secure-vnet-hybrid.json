@@ -201,6 +201,41 @@
                 ]
               },
               {
+                "type": "VirtualMachineExtension",
+                "settings": [
+                    {
+                        "vms": [
+                            "ra-dmz-jb-vm1"
+                        ],
+                        "extensions": [
+                            {
+                              "name": "IaaSAntimalware",
+                              "publisher": "Microsoft.Azure.Security",
+                              "type": "IaaSAntimalware",
+                              "typeHandlerVersion": "1.3",
+                              "autoUpgradeMinorVersion": true,
+                              "settings": {
+                                "AntimalwareEnabled": true,
+                                "RealtimeProtectionEnabled": "false",
+                                "ScheduledScanSettings": {
+                                  "isEnabled": "false",
+                                  "day": "7",
+                                  "time": "120",
+                                  "scanType": "Quick"
+                                },
+                                "Exclusions": {
+                                  "Extensions": ".gif",
+                                  "Paths": "c:\\test",
+                                  "Processes": "test.exe"
+                                }
+                              },
+                              "protectedSettings": { }
+                            }
+                        ]
+                    }
+                ]
+              },
+              {
                 "type": "LoadBalancer",
                 "settings": [
                     {
