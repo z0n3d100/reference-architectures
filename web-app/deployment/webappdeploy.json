@@ -59,7 +59,7 @@
       "type": "string"
     },
     "frontdoors_VotingFrontDoor_name": {
-      "defaultValue": "VotingFrontDoor",
+      "defaultValue": "[concat( 'VotingFrontDoor-',uniqueString(resourceGroup().id) ) ]",
       "type": "string"
     },
     "SqlConnectionString": {
