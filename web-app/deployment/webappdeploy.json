@@ -65,29 +65,7 @@
     "SqlConnectionString": {
       "defaultValue": "SQL_CONNECTION_STRING",
       "type": "securestring"
-    },
-    "certData": {
-      "defaultValue": "BASE64_FORPFX",
-      "type": "securestring",
-      "metadata": {
-        "description": "Base-64 encoded form of the .pfx file"
-      }
-    },
-    "certPassword": {
-      "defaultValue": "CERT_PASSWORD_FORPFX",
-      "type": "securestring",
-      "metadata": {
-        "description": "Password for .pfx certificate"
-      }
-    },
-    "pubcertData": {
-      "defaultValue": "PUBLIC_CERT_OFCERTIFICATE_OPTIONAL",
-      "type": "securestring",
-      "metadata": {
-        "description": "Base-64 for public key of pfx"
-      }
     }
-
   },
 
   "variables": {

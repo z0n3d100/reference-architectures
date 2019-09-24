@@ -17,7 +17,7 @@ export RGLOCATION=yourLocation
 export SQLSERVERNAME=yourSqlServerName
 export SQLSERVERDB=yousqlSqlServerDb
 export SQLADMINUSER=yoursqlAdminUser
-export DNSNAME=uniquednsnameOfGateway
+export DNSNAME=uniquednsnameOfWebApp
 export STORAGEACCNAME=yourstorageaccountName
 ```
 
@@ -47,11 +47,7 @@ az storage account check-name -n ${STORAGEACCNAME}
 **Note:** Sql administrator has a minimum password size of 8 characters requirement. For sql password requirements Check https://docs.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=sql-server-2017 for Sql administrator password requirements
 
 
-**Note:** The script will generate a self signed certificate for the application gateway. Self signed certificates  should only be used for testing purposes.
 
-```
-read -s CERTPASS
-export CERTPASS
 ```
 ```
 read -s SQLADMINPASSWORD
