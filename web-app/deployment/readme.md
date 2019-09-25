@@ -42,10 +42,9 @@ az storage account check-name -n ${STORAGEACCNAME}
 
 
 
-#### Step 4 Enter the passwords for certificate and for the sql server administrator and export the variables to be used by the deployment script.
+#### Step 4 Enter the password for the sql server administrator and export the variable to be used by the deployment script.
 
 **Note:** Sql administrator has a minimum password size of 8 characters requirement. For sql password requirements Check https://docs.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=sql-server-2017 for Sql administrator password requirements
-
 
 
 ```
