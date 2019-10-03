@@ -17,7 +17,7 @@ export RGLOCATION=yourLocation
 export SQLSERVERNAME=yourSqlServerName
 export SQLSERVERDB=yousqlSqlServerDb
 export SQLADMINUSER=yoursqlAdminUser
-export DNSNAME=uniquednsnameOfGateway
+export DNSNAME=uniquednsnameOfWebApp
 export STORAGEACCNAME=yourstorageaccountName
 ```
 
@@ -42,16 +42,11 @@ az storage account check-name -n ${STORAGEACCNAME}
 
 
 
-#### Step 4 Enter the passwords for certificate and for the sql server administrator and export the variables to be used by the deployment script.
+#### Step 4 Enter the password for the sql server administrator and export the variable to be used by the deployment script.
 
 **Note:** Sql administrator has a minimum password size of 8 characters requirement. For sql password requirements Check https://docs.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=sql-server-2017 for Sql administrator password requirements
 
 
-**Note:** The script will generate a self signed certificate for the application gateway. Self signed certificates  should only be used for testing purposes.
-
-```
-read -s CERTPASS
-export CERTPASS
 ```
 ```
 read -s SQLADMINPASSWORD

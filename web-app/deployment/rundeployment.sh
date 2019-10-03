@@ -5,16 +5,6 @@
 
 az group create --name "${RGNAME}" --location "${RGLOCATION}"
 
-# Generates the self signed certificate to be used by the gateway
-openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048  -keyout gatewaycertkey.key -out gatewaycertrequest.csr -subj "/C=US/ST=WA/L=Redmond/O=Microsoft/OU=Gateway/CN=${DNSNAME}.${RGLOCATION}.cloudapp.azure.com/emailAddress=email@email.com"
-
-openssl pkcs12 -export -out gatewaycertificate.pfx -inkey gatewaycertkey.key -in gatewaycertrequest.csr -passout pass:${CERTPASS}
-
-# It stores the base64 value of the certificate to be passed
-# to the arm template
-certdata=`base64 gatewaycertificate.pfx --wrap=0`
-
-
 # Creates the storage account for the resource used by application
 az storage account create -n ${STORAGEACCNAME} -g ${RGNAME} -l ${RGLOCATION} --sku standard_LRS
 
@@ -53,7 +43,7 @@ sqlcmd -S tcp:${SQLSERVERNAME}.database.windows.net,1433 -d votingdb -U $SQLADMI
 
 # it runs the arm template deployment passing the dns name of gateway
 # the certificate and its password 
-az group deployment create --resource-group $RGNAME --template-uri ${DEPLOYMENT}webappdeploy.json --parameters VotingWeb_name=${DNSNAME} SqlConnectionString="$sqlcon" certData=${certdata} certPassword=${CERTPASS}
+az group deployment create --resource-group $RGNAME --template-uri ${DEPLOYMENT}webappdeploy.json --parameters VotingWeb_name=${DNSNAME} SqlConnectionString="$sqlcon" 
 
 cosmosacc=`az cosmosdb list -g ${RGNAME} | jq -r .[0].name`
 
