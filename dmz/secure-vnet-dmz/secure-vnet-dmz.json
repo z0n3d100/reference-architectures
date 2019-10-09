@@ -360,6 +360,68 @@
                   ]
               },
               {
+                "type": "LoadBalancer",
+                "settings": [
+                    {
+                        "name": "fe-config1-biz",
+                        "virtualNetwork": {
+                            "name": "ra-vnet"
+                        },
+                        "frontendIPConfigurations": [
+                          {
+                            "name": "fe-config1",
+                            "loadBalancerType": "Internal",
+                            "internalLoadBalancerSettings": {
+                              "privateIPAddress": "10.0.2.100",
+                              "subnetName": "biz"
+                            }
+                          }
+                        ],
+                        "loadBalancingRules": [
+                          {
+                            "name": "lbr1",
+                            "frontendPort": 80,
+                            "backendPort": 80,
+                            "protocol": "Tcp",
+                            "backendPoolName": "bep1",
+                            "frontendIPConfigurationName": "fe-config1",
+                            "enableFloatingIP": false,
+                            "probeName": "lbp1"
+                          }
+                        ],
+                        "probes": [
+                          {
+                            "name": "lbp1",
+                            "port": 80,
+                            "protocol": "Http",
+                            "requestPath": "/"
+                          }
+                        ],
+                        "backendPools": [
+                          {
+                              "name": "bep1",
+                              "nics": [
+                                  "ra-dmz-biz-vm1-nic1",
+                                  "ra-dmz-biz-vm2-nic1"
+                              ]
+                          }
+                      ],
+                        "inboundNatRules": [
+                          {
+                            "name": "ssh",
+                            "frontendIPConfigurationName": "fe-config1",
+                            "startingFrontendPort": 50000,
+                            "backendPort": 22,
+                            "frontendPort": 50000,
+                            "natRuleType": "All",
+                            "protocol": "Tcp",
+                            "nicIndex": 0
+                          }
+                        ]
+                      }
+                  ]
+              },
+              {
                 "type": "VirtualNetworkGateway",
                 "settings":[
                   {
@@ -644,7 +706,6 @@
                                 "apiVersion": "2018-12-01",
                                 "location": "[resourceGroup().location]",
                                 "properties": {
-                                    "ipAddress": "13.89.143.40",
                                     "publicIPAddressVersion": "IPv4",
                                     "publicIPAllocationMethod": "Static",
                                     "idleTimeoutInMinutes": 4
@@ -720,7 +781,7 @@
                                                           "*"
                                                       ],
                                                       "destinationAddresses": [
-                                                          "13.89.143.40"
+                                                        "[reference(resourceId('Microsoft.Network/publicIPAddresses', 'dmz-firewall-pip')).ipAddress]"
                                                       ],
                                                       "destinationPorts": [
                                                           "80"
