@@ -121,6 +121,35 @@
                             }
                         ]
                     }
+                },
+                {
+                    "type": "NetworkSecurityGroup",
+                    "settings": [
+                      {
+                        "name": "mgmt-nsg",
+                        "virtualNetworks": [
+                          {
+                            "name": "ra-onprem-vnet",
+                            "subnets": [
+                              "sql"
+                            ]
+                          }
+                        ],
+                        "securityRules": [
+                          {
+                            "name": "on-prem-rdp-allow",
+                            "direction": "Inbound",
+                            "priority": 100,
+                            "sourceAddressPrefix": "*",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": 3389,
+                            "access": "Allow",
+                            "protocol": "*"
+                          }
+                        ]
+                      }
+                    ]
                 }
             ]
         }
