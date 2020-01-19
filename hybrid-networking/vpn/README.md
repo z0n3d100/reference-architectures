@@ -32,7 +32,7 @@ The deployment uses [Azure Building Blocks](https://github.com/mspnp/template-bu
 
 1. Navigate to the `/hybrid-networking/vpn` folder of the reference architectures GitHub repository.
 
-2. Open the `hybrid-onprem.json` file. Search for instances of `AdminPassword`, `SafeModeAdminPassword` and `Password` and change values for the passwords.
+2. Open the `hybrid-onprem.json` file. Search for instances of `adminPassword` and change values for the passwords.
 
 3. Run the following command:
 
@@ -40,7 +40,7 @@ The deployment uses [Azure Building Blocks](https://github.com/mspnp/template-bu
     azbb -s <subscription_id> -g <resource_group_name> -l <region> -p hybrid-onprem.json --deploy
     ```
 
-4. Open the `hybrid-vpn.json` file. Search for instances of `AdminPassword`, `SafeModeAdminPassword` and `Password` and change values for the passwords.
+4. Open the `hybrid-vpn.json` file. Search for instances of `adminPassword` and change values for the passwords.
 
 5. Run the following command:
 
