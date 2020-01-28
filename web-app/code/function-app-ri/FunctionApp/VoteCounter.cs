@@ -1,3 +1,8 @@
+// ------------------------------------------------------------
+//  Copyright (c) Microsoft Corporation.  All rights reserved.
+//  Licensed under the MIT License (MIT). See License.txt in the repo root for license information.
+// ------------------------------------------------------------
+
 using System;
 using System.Data.SqlClient;
 using System.Security;
@@ -15,41 +20,34 @@ namespace FunctionApp
         public static async Task Run([ServiceBusTrigger("votingqueue", AccessRights.Manage,
             Connection = "SERVICEBUS_CONNECTION_STRING")]string myQueueItem, TraceWriter log)
         {
-
             JObject jObject = JObject.Parse(myQueueItem);
-            var Id=(string)jObject["Id"];
-
-            string connectionString;
+            var id = (string)jObject["Id"];
 
             try
             {
-                connectionString = Environment.GetEnvironmentVariable("sqldb_connection");              
+                var connectionString = Environment.GetEnvironmentVariable("sqldb_connection");
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    string text;
                     conn.Open();
 
-                    text = $"UPDATE dbo.Counts  SET Count = Count + 1 WHERE ID = '{Id}';";
+                    var text = $"UPDATE dbo.Counts  SET Count = Count + 1 WHERE ID = '{id}';";
 
                     using (SqlCommand cmd = new SqlCommand(text, conn))
                     {
-                        // Execute the command and log the # rows affected.
                         var rows = await cmd.ExecuteNonQueryAsync();
                         if (rows == 0)
                         {
-                            log.Error(String.Format("id entry not found on the database {0}",Id));
+                            log.Error($"id entry not found on the database {id}");
                         }
                     }
                 }
-
             }
             catch (Exception ex) when (ex is ArgumentNullException ||
                                     ex is SecurityException ||
                                     ex is SqlException)
             {
-                log.Error("Sql Exception",ex);
+                log.Error("Sql Exception", ex);
             }
-        
         }
     }
 }

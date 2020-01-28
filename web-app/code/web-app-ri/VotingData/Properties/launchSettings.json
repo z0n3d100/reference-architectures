@@ -3,7 +3,6 @@
   "profiles": {
     "VotingData": {
       "commandName": "Project",
-      "launchBrowser": true,
       "launchUrl": "api/votedata",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

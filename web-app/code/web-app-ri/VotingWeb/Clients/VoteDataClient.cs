@@ -1,3 +1,8 @@
+// ------------------------------------------------------------
+//  Copyright (c) Microsoft Corporation.  All rights reserved.
+//  Licensed under the MIT License (MIT). See License.txt in the repo root for license information.
+// ------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -11,7 +16,7 @@ namespace VotingWeb.Clients
 {
     public class VoteDataClient : IVoteDataClient
     {
-        private readonly HttpClient httpClient; 
+        private readonly HttpClient httpClient;
 
         public VoteDataClient(HttpClient httpClient)
         {
@@ -22,7 +27,7 @@ namespace VotingWeb.Clients
         {
             try
             {
-                var request = new HttpRequestMessage(HttpMethod.Get,$"/api/VoteData");
+                var request = new HttpRequestMessage(HttpMethod.Get, $"/api/VoteData");
                 var response = await httpClient.SendAsync(request);
                 response.EnsureSuccessStatusCode();
                 return JsonConvert.DeserializeObject<IList<Counts>>(await response.Content.ReadAsStringAsync());
@@ -33,8 +38,6 @@ namespace VotingWeb.Clients
             {
                 throw new VoteDataException("Http Request Exception Occurred when getting votes", ex);
             }
-
-
         }
 
         public async Task<HttpResponseMessage> AddVoteAsync(string candidate)
@@ -50,7 +53,6 @@ namespace VotingWeb.Clients
             {
                 throw new VoteDataException("Http Request Exception Occurred when adding vote", ex);
             }
-
         }
 
         public async Task DeleteCandidateAsync(string candidate)
@@ -67,7 +69,6 @@ namespace VotingWeb.Clients
             {
                 throw new VoteDataException("Http Request Exception Occurred when deleting vote", ex);
             }
-
         }
     }
 }

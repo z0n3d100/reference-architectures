@@ -1,4 +1,9 @@
-﻿using System;
+﻿// ------------------------------------------------------------
+//  Copyright (c) Microsoft Corporation.  All rights reserved.
+//  Licensed under the MIT License (MIT). See License.txt in the repo root for license information.
+// ------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
@@ -22,24 +27,21 @@ namespace VotingData.Controllers
             this.context = context;
         }
 
-        // GET api/VoteData
         [HttpGet]
         public async Task<ActionResult<IList<Counts>>> Get()
         {
             try
             {
-                
                 return await context.Counts.ToListAsync();
             }
-            catch (Exception ex) when ( ex is SqlException)
-            {         
-                logger.LogError(ex,"Sql Exception");
+            catch (Exception ex) when (ex is SqlException)
+            {
+                logger.LogError(ex, "Sql Exception");
                 return BadRequest("Bad Request");
             }
         }
 
         [HttpPut("{name}")]
-
         public async Task<IActionResult> Put(string name)
         {
             try
@@ -61,22 +63,17 @@ namespace VotingData.Controllers
 
                 await context.SaveChangesAsync();
                 return NoContent();
-
             }
-            catch (Exception ex) when (ex is SqlException || 
+            catch (Exception ex) when (ex is SqlException ||
                                        ex is DbUpdateException ||
                                        ex is DbUpdateConcurrencyException)
             {
-                logger.LogError(ex,"Sql Exception Saving to Database");
+                logger.LogError(ex, "Sql Exception Saving to Database");
                 return BadRequest("Bad Request");
             }
-
         }
 
-        // DELETE api/VoteData/name
-
         [HttpDelete("{name}")]
-
         public async Task<IActionResult> Delete(string name)
         {
             try
@@ -87,21 +84,17 @@ namespace VotingData.Controllers
                 {
                     context.Counts.Remove(candidate);
                     await context.SaveChangesAsync();
-
                 }
 
-                return new OkResult();
-
+                return Ok();
             }
             catch (Exception ex) when (ex is SqlException ||
                                     ex is DbUpdateException ||
                                     ex is DbUpdateConcurrencyException)
             {
-                logger.LogError(ex,"Sql Exception Deleting from Database");
+                logger.LogError(ex, "Sql Exception Deleting from Database");
                 return BadRequest("Bad Request");
             }
-
         }
-        
-}
+    }
 }

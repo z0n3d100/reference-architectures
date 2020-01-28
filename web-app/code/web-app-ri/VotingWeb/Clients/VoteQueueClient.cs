@@ -1,3 +1,8 @@
+// ------------------------------------------------------------
+//  Copyright (c) Microsoft Corporation.  All rights reserved.
+//  Licensed under the MIT License (MIT). See License.txt in the repo root for license information.
+// ------------------------------------------------------------
+
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,19 +12,15 @@ using VotingWeb.Interfaces;
 
 namespace VotingWeb.Clients
 {
-    public  class VoteQueueClient: IVoteQueueClient
+    public class VoteQueueClient : IVoteQueueClient
     {
-        private static IQueueClient queueClient;
-        private string sbConnectionString;
-        private string queueName;
+        private readonly IQueueClient queueClient;
 
-        public VoteQueueClient(string connectionString,string queueName)
+        public VoteQueueClient(string connectionString, string queueName)
         {
             try
             {
-                this.sbConnectionString = connectionString;
-                this.queueName = queueName;
-                queueClient = new QueueClient(sbConnectionString, queueName);
+                queueClient = new QueueClient(connectionString, queueName);
             }
             catch (Exception ex) when (ex is ArgumentException ||
                               ex is ServiceBusException ||
@@ -27,16 +28,11 @@ namespace VotingWeb.Clients
                               ex is ArgumentNullException)
             {
                 throw new VoteQueueException("Initialization Error for service bus", ex);
-
             }
-
         }
-
-   
 
         public async Task SendVoteAsync(string messageBody)
         {
-
             try
             {
                 var message = new Message(Encoding.UTF8.GetBytes(messageBody))
@@ -52,13 +48,9 @@ namespace VotingWeb.Clients
                                  ex is ServerBusyException ||
                                  ex is ServiceBusTimeoutException)
             {
-                throw new VoteQueueException("Service Bus Exception occurred with sending message to queue",ex);
-                            
+                throw new VoteQueueException("Service Bus Exception occurred with sending message to queue", ex);
+
             }
-
         }
-
-       
     }
-   
 }
