@@ -8,8 +8,7 @@ using System.Data.SqlClient;
 using System.Security;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
-using Microsoft.ServiceBus.Messaging;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 
 namespace FunctionApp
@@ -17,8 +16,9 @@ namespace FunctionApp
     public static class VoteCounter
     {
         [FunctionName("VoteCounter")]
-        public static async Task Run([ServiceBusTrigger("votingqueue", AccessRights.Manage,
-            Connection = "SERVICEBUS_CONNECTION_STRING")]string myQueueItem, TraceWriter log)
+        public static async Task Run(
+            [ServiceBusTrigger("votingqueue", Connection = "SERVICEBUS_CONNECTION_STRING")]string myQueueItem,
+            ILogger log)
         {
             JObject jObject = JObject.Parse(myQueueItem);
             var id = (int)jObject["Id"];
@@ -39,7 +39,7 @@ namespace FunctionApp
                         var rows = await cmd.ExecuteNonQueryAsync();
                         if (rows == 0)
                         {
-                            log.Error($"id entry not found on the database {id}");
+                            log.LogError("id entry not found on the database {id}", id);
                         }
                     }
                 }
@@ -48,7 +48,7 @@ namespace FunctionApp
                                     ex is SecurityException ||
                                     ex is SqlException)
             {
-                log.Error("Sql Exception", ex);
+                log.LogError(ex, "Sql Exception");
             }
         }
     }
