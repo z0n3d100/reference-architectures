@@ -21,7 +21,7 @@ namespace FunctionApp
             Connection = "SERVICEBUS_CONNECTION_STRING")]string myQueueItem, TraceWriter log)
         {
             JObject jObject = JObject.Parse(myQueueItem);
-            var id = (string)jObject["Id"];
+            var id = (int)jObject["Id"];
 
             try
             {
@@ -30,10 +30,12 @@ namespace FunctionApp
                 {
                     conn.Open();
 
-                    var text = $"UPDATE dbo.Counts  SET Count = Count + 1 WHERE ID = '{id}';";
+                    var text = "UPDATE dbo.Counts  SET Count = Count + 1 WHERE ID = @ID;";
 
                     using (SqlCommand cmd = new SqlCommand(text, conn))
                     {
+                        cmd.Parameters.AddWithValue("@ID", id);
+
                         var rows = await cmd.ExecuteNonQueryAsync();
                         if (rows == 0)
                         {
