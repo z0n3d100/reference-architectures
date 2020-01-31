@@ -6,10 +6,10 @@
 using System;
 using System.Data.SqlClient;
 using System.Security;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
 
 namespace FunctionApp
 {
@@ -20,8 +20,7 @@ namespace FunctionApp
             [ServiceBusTrigger("votingqueue", Connection = "SERVICEBUS_CONNECTION_STRING")]string myQueueItem,
             ILogger log)
         {
-            JObject jObject = JObject.Parse(myQueueItem);
-            var id = (int)jObject["Id"];
+            var vote = JsonSerializer.Deserialize<Vote>(myQueueItem);
 
             try
             {
@@ -34,12 +33,12 @@ namespace FunctionApp
 
                     using (SqlCommand cmd = new SqlCommand(text, conn))
                     {
-                        cmd.Parameters.AddWithValue("@ID", id);
+                        cmd.Parameters.AddWithValue("@ID", vote.Id);
 
                         var rows = await cmd.ExecuteNonQueryAsync();
                         if (rows == 0)
                         {
-                            log.LogError("id entry not found on the database {id}", id);
+                            log.LogError("id entry not found on the database {id}", vote.Id);
                         }
                     }
                 }
@@ -50,6 +49,11 @@ namespace FunctionApp
             {
                 log.LogError(ex, "Sql Exception");
             }
+        }
+
+        private class Vote
+        {
+            public int Id { get; set; }
         }
     }
 }
