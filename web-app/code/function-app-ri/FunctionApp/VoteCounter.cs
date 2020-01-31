@@ -6,22 +6,21 @@
 using System;
 using System.Data.SqlClient;
 using System.Security;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
-using Microsoft.ServiceBus.Messaging;
-using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace FunctionApp
 {
     public static class VoteCounter
     {
         [FunctionName("VoteCounter")]
-        public static async Task Run([ServiceBusTrigger("votingqueue", AccessRights.Manage,
-            Connection = "SERVICEBUS_CONNECTION_STRING")]string myQueueItem, TraceWriter log)
+        public static async Task Run(
+            [ServiceBusTrigger("votingqueue", Connection = "SERVICEBUS_CONNECTION_STRING")]string myQueueItem,
+            ILogger log)
         {
-            JObject jObject = JObject.Parse(myQueueItem);
-            var id = (int)jObject["Id"];
+            var vote = JsonSerializer.Deserialize<Vote>(myQueueItem);
 
             try
             {
@@ -34,12 +33,12 @@ namespace FunctionApp
 
                     using (SqlCommand cmd = new SqlCommand(text, conn))
                     {
-                        cmd.Parameters.AddWithValue("@ID", id);
+                        cmd.Parameters.AddWithValue("@ID", vote.Id);
 
                         var rows = await cmd.ExecuteNonQueryAsync();
                         if (rows == 0)
                         {
-                            log.Error($"id entry not found on the database {id}");
+                            log.LogError("id entry not found on the database {id}", vote.Id);
                         }
                     }
                 }
@@ -48,8 +47,13 @@ namespace FunctionApp
                                     ex is SecurityException ||
                                     ex is SqlException)
             {
-                log.Error("Sql Exception", ex);
+                log.LogError(ex, "Sql Exception");
             }
+        }
+
+        private class Vote
+        {
+            public int Id { get; set; }
         }
     }
 }
