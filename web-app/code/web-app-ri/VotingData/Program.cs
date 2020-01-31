@@ -3,9 +3,9 @@
 //  Licensed under the MIT License (MIT). See License.txt in the repo root for license information.
 // ------------------------------------------------------------
 
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
 
@@ -15,44 +15,27 @@ namespace VotingData
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host
                 .CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    var env = hostingContext.HostingEnvironment;
-                    if (env.IsDevelopment())
-                    {
-                        config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                              .AddJsonFile($"appsettings.{env.EnvironmentName}.json",
-                                            optional: false, reloadOnChange: true);
-                    }
+                .ConfigureWebHostDefaults(webBuilder =>
+                    webBuilder
+                        .ConfigureLogging((hostingContext, logging) =>
+                        {
+                            if (hostingContext.HostingEnvironment.IsDevelopment())
+                            {
+                                logging.AddDebug();
+                            }
 
-                    config.AddEnvironmentVariables();
-                })
-                .UseApplicationInsights()
-                .ConfigureLogging((hostingContext, logging) =>
-                {
-                    if (hostingContext.HostingEnvironment.IsDevelopment())
-                    {
-                        logging.AddDebug();
-                    }
-                    else
-                    {
-                        logging.AddApplicationInsights((string)hostingContext
-                            .Configuration
-                            .GetValue(typeof(string), "ApplicationInsights:InstrumentationKey"));
-                        // Optional: Apply filters to configure LogLevel Trace or above is sent to
-                        // ApplicationInsights for all categories.
-                        logging.AddFilter<ApplicationInsightsLoggerProvider>("", LogLevel.Trace);
-                        // Additional filtering For category starting in "Microsoft",
-                        // only Warning or above will be sent to Application Insights.
-                        logging.AddFilter<ApplicationInsightsLoggerProvider>("Microsoft", LogLevel.Warning);
-                    }
-                })
-                .UseStartup<Startup>();
+                            logging.AddApplicationInsights((string)hostingContext
+                                .Configuration
+                                .GetValue(typeof(string), "ApplicationInsights:InstrumentationKey"));
+                            logging.AddFilter<ApplicationInsightsLoggerProvider>("", LogLevel.Trace);
+                            logging.AddFilter<ApplicationInsightsLoggerProvider>("Microsoft", LogLevel.Warning);
+                        })
+                        .UseStartup<Startup>());
     }
 }

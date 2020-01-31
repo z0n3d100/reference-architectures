@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using VotingWeb.Exceptions;
 using VotingWeb.Interfaces;
 using VotingWeb.Models;
@@ -30,7 +29,7 @@ namespace VotingWeb.Clients
                 var request = new HttpRequestMessage(HttpMethod.Get, $"/api/VoteData");
                 var response = await httpClient.SendAsync(request);
                 response.EnsureSuccessStatusCode();
-                return JsonConvert.DeserializeObject<IList<Counts>>(await response.Content.ReadAsStringAsync());
+                return await response.Content.ReadAsAsync<IList<Counts>>();
             }
             catch (Exception ex) when (ex is ArgumentNullException ||
                                  ex is InvalidOperationException ||

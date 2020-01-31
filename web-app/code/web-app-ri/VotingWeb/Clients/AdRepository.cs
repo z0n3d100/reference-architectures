@@ -6,9 +6,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos;
-using Newtonsoft.Json;
 using StackExchange.Redis;
 using VotingWeb.Exceptions;
 using VotingWeb.Interfaces;
@@ -19,7 +19,7 @@ namespace VotingWeb.Clients
     public class AdRepository : IAdRepository
     {
         private static CosmosClient client;
-        private static CosmosContainer container;
+        private static Container container;
         private static IDatabase cache;
         const string databaseId = "cacheDB";
         const string containerId = "cacheContainer";
@@ -33,7 +33,7 @@ namespace VotingWeb.Clients
                 Lazy<ConnectionMultiplexer> lazyConnection = GetLazyConnection(cacheConnectionString);
                 cache = lazyConnection.Value.GetDatabase();
                 client = new CosmosClient(cosmosEndpointUri, cosmosKey);
-                container = client.Databases[databaseId].Containers[containerId];
+                container = client.GetDatabase(databaseId).GetContainer(containerId);
             }
             catch (Exception ex) when (ex is RedisConnectionException ||
                                       ex is RedisException)
@@ -65,21 +65,25 @@ namespace VotingWeb.Clients
                 if (String.IsNullOrEmpty(response))
                 {
                     var sqlQueryText = "SELECT * FROM c WHERE c.MessageType = 'AD'";
-                    var partitionKeyValue = "AD";  // Message type 
+                    var partitionKeyValue = "AD";
 
-                    CosmosSqlQueryDefinition queryDefinition = new CosmosSqlQueryDefinition(sqlQueryText);
-                    CosmosResultSetIterator<Ad> queryResultSetIterator = container.Items.CreateItemQuery<Ad>(queryDefinition, partitionKeyValue);
-                    while (queryResultSetIterator.HasMoreResults)
+                    var queryDefinition = new QueryDefinition(sqlQueryText);
+                    FeedIterator<Ad> feedIterator =
+                        container.GetItemQueryIterator<Ad>(
+                            queryDefinition,
+                            requestOptions: new QueryRequestOptions { PartitionKey = new PartitionKey(partitionKeyValue) });
+
+                    while (feedIterator.HasMoreResults)
                     {
-                        CosmosQueryResponse<Ad> currentResultSet = await queryResultSetIterator.FetchNextSetAsync();
+                        FeedResponse<Ad> currentResultSet = await feedIterator.ReadNextAsync();
                         ads.AddRange(currentResultSet);
                     }
 
-                    await cache.StringSetAsync("1", JsonConvert.SerializeObject(ads.First()), TimeSpan.FromMinutes(10));
+                    await cache.StringSetAsync("1", JsonSerializer.Serialize(ads.First()), TimeSpan.FromMinutes(10));
                 }
                 else
                 {
-                    ads.Add(JsonConvert.DeserializeObject<Ad>(response));
+                    ads.Add(JsonSerializer.Deserialize<Ad>(response));
                 }
             }
             catch (Exception ex) when (ex is RedisConnectionException ||
