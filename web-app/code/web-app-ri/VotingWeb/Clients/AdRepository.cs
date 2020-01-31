@@ -6,9 +6,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos;
-using Newtonsoft.Json;
 using StackExchange.Redis;
 using VotingWeb.Exceptions;
 using VotingWeb.Interfaces;
@@ -79,11 +79,11 @@ namespace VotingWeb.Clients
                         ads.AddRange(currentResultSet);
                     }
 
-                    await cache.StringSetAsync("1", JsonConvert.SerializeObject(ads.First()), TimeSpan.FromMinutes(10));
+                    await cache.StringSetAsync("1", JsonSerializer.Serialize(ads.First()), TimeSpan.FromMinutes(10));
                 }
                 else
                 {
-                    ads.Add(JsonConvert.DeserializeObject<Ad>(response));
+                    ads.Add(JsonSerializer.Deserialize<Ad>(response));
                 }
             }
             catch (Exception ex) when (ex is RedisConnectionException ||

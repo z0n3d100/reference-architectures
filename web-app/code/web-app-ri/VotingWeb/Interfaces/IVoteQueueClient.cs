@@ -9,6 +9,6 @@ namespace VotingWeb.Interfaces
 {
     public interface IVoteQueueClient
     {
-        Task SendVoteAsync(string messageBody);
+        Task SendVoteAsync(int id);
     }
 }

@@ -5,6 +5,7 @@
 
 using System;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Azure.ServiceBus;
 using VotingWeb.Exceptions;
@@ -31,11 +32,13 @@ namespace VotingWeb.Clients
             }
         }
 
-        public async Task SendVoteAsync(string messageBody)
+        public async Task SendVoteAsync(int id)
         {
+            var messageBody = new { Id = id };
+
             try
             {
-                var message = new Message(Encoding.UTF8.GetBytes(messageBody))
+                var message = new Message(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(messageBody)))
                 {
                     ContentType = "application/json",
                 };

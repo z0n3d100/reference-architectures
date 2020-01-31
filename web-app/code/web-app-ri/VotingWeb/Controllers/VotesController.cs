@@ -7,7 +7,6 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using VotingWeb.Exceptions;
 using VotingWeb.Interfaces;
 
@@ -75,8 +74,7 @@ namespace VotingWeb.Controllers
         {
             try
             {
-                var data = new { Id = id };
-                await queueClient.SendVoteAsync(JsonConvert.SerializeObject(data));
+                await queueClient.SendVoteAsync(id);
                 return this.Ok();
             }
             catch (Exception ex) when (ex is VoteQueueException)
