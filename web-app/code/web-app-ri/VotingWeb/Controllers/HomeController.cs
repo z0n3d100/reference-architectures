@@ -3,10 +3,10 @@
 //  Licensed under the MIT License (MIT). See License.txt in the repo root for license information.
 // ------------------------------------------------------------
 
+using Microsoft.AspNetCore.Mvc;
+
 namespace VotingWeb.Controllers
 {
-    using Microsoft.AspNetCore.Mvc;
-
     public class HomeController : Controller
     {
         public IActionResult Index()

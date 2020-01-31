@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using VotingWeb.Interfaces;
 using VotingWeb.Exceptions;
+using VotingWeb.Interfaces;
 
 namespace VotingWeb.Controllers
 {
@@ -21,6 +21,7 @@ namespace VotingWeb.Controllers
         private readonly IVoteDataClient client;
         private readonly IVoteQueueClient queueClient;
         private readonly IAdRepository repositoryClient;
+
         public VotesController(IVoteDataClient client,
                                IVoteQueueClient queueClient,
                                ILogger<VotesController> logger,
@@ -32,77 +33,73 @@ namespace VotingWeb.Controllers
             this.repositoryClient = repositoryClient;
         }
 
-        // GET: api/Votes
         [HttpGet("")]
         public async Task<IActionResult> Get()
         {
-            try {
-                 return this.Json(await this.client.GetCountsAsync());
+            try
+            {
+                return this.Json(await this.client.GetCountsAsync());
             }
             catch (Exception ex) when (ex is VoteDataException)
             {
-                logger.LogError(ex,"Exception getting the Votes from Database");
+                logger.LogError(ex, "Exception getting the Votes from Database");
                 return BadRequest("Bad Request");
             }
         }
 
-        // PUT: api/Votes/Add/name
         [HttpPut("{name}")]
         [Route("[action]/{name}")]
         public async Task<IActionResult> Add(string name)
         {
             try
-            {           
+            {
                 var response = await this.client.AddVoteAsync(name);
-                if (response.IsSuccessStatusCode) return this.Ok();
+                if (response.IsSuccessStatusCode)
+                {
+                    return this.Ok();
+                }
+
                 var errorMessage = await response.Content.ReadAsStringAsync();
                 return BadRequest(errorMessage);
             }
             catch (Exception ex) when (ex is VoteDataException)
             {
-                logger.LogError(ex,"Exception creating vote in database");
+                logger.LogError(ex, "Exception creating vote in database");
                 return BadRequest("Bad Request");
             }
-
         }
 
-
-        // PUT: api/Votes/Vote/id
         [HttpPut("{id}")]
         [Route("[action]/{id}")]
         public async Task<IActionResult> Vote(int id)
         {
-
             try
-            {                              
+            {
                 var data = new { Id = id };
                 await queueClient.SendVoteAsync(JsonConvert.SerializeObject(data));
                 return this.Ok();
             }
             catch (Exception ex) when (ex is VoteQueueException)
             {
-                logger.LogError(ex,"Exception sending vote to the queue");
+                logger.LogError(ex, "Exception sending vote to the queue");
                 return BadRequest("Bad Request");
             }
-    
         }
 
-        // DELETE: api/Votes/name
         [HttpDelete("{name}")]
         public async Task<IActionResult> Delete(string name)
         {
             try
             {
                 await this.client.DeleteCandidateAsync(name);
-                return new OkResult();
+                return this.Ok();
             }
             catch (Exception ex) when (ex is VoteDataException)
             {
-                logger.LogError(ex,"Exception deleting the vote from Database");
+                logger.LogError(ex, "Exception deleting the vote from Database");
                 return BadRequest("Bad Request");
             }
         }
-
 
         [HttpGet("{cache}")]
         public async Task<IActionResult> Cache()
@@ -113,10 +110,9 @@ namespace VotingWeb.Controllers
             }
             catch (Exception ex) when (ex is AdRepositoryException)
             {
-                logger.LogError(ex,"Exception getting ads from cache");
+                logger.LogError(ex, "Exception getting ads from cache");
                 return BadRequest("Bad Request");
             }
         }
     }
-    
 }

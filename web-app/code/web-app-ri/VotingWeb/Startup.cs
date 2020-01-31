@@ -2,6 +2,7 @@
 //  Copyright (c) Microsoft Corporation.  All rights reserved.
 //  Licensed under the MIT License (MIT). See License.txt in the repo root for license information.
 // ------------------------------------------------------------
+
 using System;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Builder;
@@ -40,20 +41,21 @@ namespace VotingWeb
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-          
             services.AddSingleton<IVoteQueueClient>(s =>
-            new VoteQueueClient(Configuration.GetValue<string>("ConnectionStrings:sbConnectionString")
-            ,Configuration.GetValue<string>("ConnectionStrings:queueName")));
+                new VoteQueueClient(
+                    Configuration.GetValue<string>("ConnectionStrings:sbConnectionString"),
+                    Configuration.GetValue<string>("ConnectionStrings:queueName")));
 
-            services.AddSingleton<IAdRepository>(s => 
-            new AdRepository(Configuration.GetValue<string>("ConnectionStrings:RedisConnectionString"),
-                             Configuration.GetValue<string>("ConnectionStrings:CosmosUri"),
-                             Configuration.GetValue<string>("ConnectionStrings:CosmosKey")));
-    
-            services.AddHttpClient<IVoteDataClient, VoteDataClient>(c => {
+            services.AddSingleton<IAdRepository>(s =>
+                new AdRepository(
+                    Configuration.GetValue<string>("ConnectionStrings:RedisConnectionString"),
+                    Configuration.GetValue<string>("ConnectionStrings:CosmosUri"),
+                    Configuration.GetValue<string>("ConnectionStrings:CosmosKey")));
+
+            services.AddHttpClient<IVoteDataClient, VoteDataClient>(c =>
+            {
                 c.BaseAddress = new Uri(Configuration.GetValue<string>("ConnectionStrings:VotingDataAPIBaseUri"));
 
                 c.DefaultRequestHeaders.Add(
@@ -95,7 +97,6 @@ namespace VotingWeb
                         name: "default",
                         template: "{controller=Home}/{action=Index}/{id?}");
                 });
-
         }
     }
 }
