@@ -3,7 +3,6 @@
 //  Licensed under the MIT License (MIT). See License.txt in the repo root for license information.
 // ------------------------------------------------------------
 
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -24,18 +23,6 @@ namespace VotingData
                 .CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                     webBuilder
-                        .ConfigureAppConfiguration((hostingContext, config) =>
-                        {
-                            var env = hostingContext.HostingEnvironment;
-                            if (env.IsDevelopment())
-                            {
-                                config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                                      .AddJsonFile($"appsettings.{env.EnvironmentName}.json",
-                                                    optional: false, reloadOnChange: true);
-                            }
-
-                            config.AddEnvironmentVariables();
-                        })
                         .ConfigureLogging((hostingContext, logging) =>
                         {
                             if (hostingContext.HostingEnvironment.IsDevelopment())
