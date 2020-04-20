@@ -49,7 +49,6 @@ az storage account check-name -n ${STORAGEACCNAME}
 
 
 ```
-```
 read -s SQLADMINPASSWORD
 export SQLADMINPASSWORD
 ```
