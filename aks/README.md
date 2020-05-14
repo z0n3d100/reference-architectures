@@ -1,3 +1,10 @@
+### Prequisites
+
+> Note: execute the following prequisite steps from VSCode for a better experience
+
+1. provision [a regional hub and a spoke virtual networks](./secure-baseline/networking/network-deploy.azcli)
+2. create [the BU 0001's app team secure AKS cluster (ID: A0008)](./secure-baseline/network-deploy.azcli)
+
 ### Deploy a basic workload
 
 The following example creates the ASPNET Core Docker sample web app and an Ingress object to route to its service.
