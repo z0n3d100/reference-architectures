@@ -1,0 +1,40 @@
+#  ------------------------------------------------------------
+#   Copyright (c) Microsoft Corporation.  All rights reserved.
+#   Licensed under the MIT License (MIT). See License.txt in the repo root #  for license information.
+#  ------------------------------------------------------------
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: aspnetapp
+  labels:
+    app: aspnetapp
+spec:
+  containers:
+  - name: aspnetcore-webapp-sample
+    image: mcr.microsoft.com/dotnet/core/samples:aspnetapp
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: aspnetapp-service
+spec:
+  selector:
+    app: aspnetapp
+  ports:
+  - name: http
+    port: 80
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: aspnetapp-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: aspnetapp-service
+          servicePort: http
+---
