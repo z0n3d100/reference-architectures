@@ -10,6 +10,9 @@
 The following example creates the ASPNET Core Docker sample web app and an Ingress object to route to its service.
 
 ```bash
+# Create application namespace
+kubectl create ns a0008
+
 # Apply the contents
 kubectl apply -f https://github.com/mspnp/reference-architectures/tree/fcp/aks-baseline/aks/secure-baseline/workload/aspnetapp.yaml
 ```
@@ -17,7 +20,7 @@ kubectl apply -f https://github.com/mspnp/reference-architectures/tree/fcp/aks-b
 Now the ASPNET Core webapp sample is all setup. Wait until is ready to process requests running:
 
 ```bash
-kubectl wait --namespace default \
+kubectl wait --namespace a0008 \
   --for=condition=ready pod \
   --selector=app=aspnetapp \
   --timeout=90s

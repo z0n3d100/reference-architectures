@@ -7,6 +7,7 @@ kind: Pod
 apiVersion: v1
 metadata:
   name: aspnetapp
+  namespace: a0008
   labels:
     app: aspnetapp
 spec:
@@ -18,6 +19,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: aspnetapp-service
+  namespace: a0008
 spec:
   selector:
     app: aspnetapp
