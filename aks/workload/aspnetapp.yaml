@@ -29,7 +29,14 @@ apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: aspnetapp-ingress
+  namespace: a0008
+  annotations:
+    # defines controller implementing this ingress resource: https://docs.microsoft.com/en-us/azure/dev-spaces/how-to/ingress-https-traefik
+    # ingress.class annotation is being deprecated in Kubernetes 1.18: https://kubernetes.io/docs/concepts/services-networking/ingress/#deprecated-annotation
+    # For backwards compatibility, when this annotation is set, precedence is given over the new field ingressClassName under spec.
+    kubernetes.io/ingress.class: traefik
 spec:
+  # ingressClassName: "traefik"
   rules:
   - http:
       paths:
