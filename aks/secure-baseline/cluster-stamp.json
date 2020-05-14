@@ -519,6 +519,10 @@
         "aksClusterName": {
             "type": "string",
             "value": "[variables('clusterName')]"
+        },
+		"appGatewayPublicIpFqdn": {
+           "value": "[reference(resourceId(subscription().subscriptionId,variables('vNetResourceGroup'),'Microsoft.Network/publicIpAddresses','pip-BU0001A0008-00')).dnsSettings.fqdn]",
+           "type": "string"
         }
     }
 }
