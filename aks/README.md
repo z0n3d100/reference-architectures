@@ -10,7 +10,7 @@
    ```
 4. query the BU 0001's Azure Application Gateway Public Ip FQDN
    ``` bash
-   export APP_GATEWAY_PUBLIC_IP_FQDN=$(az group deployment show --resource-group rg-bu0001a0008 -n cluster-stamp --query properties.outputs.appGatewayPublicIpFqdn.value -o tsv)
+   export APP_GATEWAY_PUBLIC_IP_FQDN=$(az deployment group show --resource-group rg-enterprise-networking-spokes -n spoke-BU0001A0008 --query properties.outputs.appGatewayPublicIpFqdn.value -o tsv)
    ```
 
 ### Manually deploy a basic workload
