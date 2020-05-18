@@ -29,6 +29,8 @@ spec:
         env:
         - name: ASPNETCORE_URLS
           value: "http://*:8080"
+      nodeSelector:
+       agentpool: npuser01
 ---
 kind: Service
 apiVersion: v1
