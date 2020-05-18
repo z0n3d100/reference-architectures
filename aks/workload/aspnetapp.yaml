@@ -23,6 +23,9 @@ spec:
       containers:
       - name: aspnetcore-webapp-sample
         image: mcr.microsoft.com/dotnet/core/samples:aspnetapp
+        env:
+        - name: ASPNETCORE_URLS
+          value: "http://*:8080"
 ---
 kind: Service
 apiVersion: v1
@@ -35,6 +38,7 @@ spec:
   ports:
   - name: http
     port: 80
+    targetPort: 8080
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
