@@ -27,6 +27,7 @@ spec:
       containers:
       - name: aspnetcore-webapp-sample
         image: mcr.microsoft.com/dotnet/core/samples:aspnetapp
+        imagePullPolicy: Always
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
