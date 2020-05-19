@@ -29,9 +29,13 @@ spec:
         image: mcr.microsoft.com/dotnet/core/samples:aspnetapp
         securityContext:
           allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
         env:
         - name: ASPNETCORE_URLS
           value: "http://*:8080"
+        - name: COMPlus_EnableDiagnostics
+          # https://github.com/dotnet/dotnet-docker/issues/940
+          value: "0"
       nodeSelector:
        agentpool: npuser01
 ---
