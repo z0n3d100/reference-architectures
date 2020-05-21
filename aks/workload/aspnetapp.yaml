@@ -43,6 +43,16 @@ spec:
       nodeSelector:
        agentpool: npuser01
 ---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: aspnetapp-pdb
+spec:
+  minAvailable: 75%
+  selector:
+    matchLabels:
+      app: aspnetapp
+---
 kind: Service
 apiVersion: v1
 metadata:
