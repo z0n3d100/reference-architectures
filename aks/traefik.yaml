@@ -185,3 +185,5 @@ spec:
       - name: config
         configMap:
           name: traefik-ingress-config
+      nodeSelector:
+       agentpool: npuser01
