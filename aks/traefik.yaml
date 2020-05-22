@@ -131,7 +131,7 @@ metadata:
   labels:
     app: traefik-ingress-ilb
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: traefik-ingress-ilb
