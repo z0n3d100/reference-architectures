@@ -34,6 +34,17 @@ spec:
                 values:
                 - aspnetapp
             topologyKey: "kubernetes.io/hostname"
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - traefik-ingress-ilb
+              topologyKey: "kubernetes.io/hostname"
       containers:
       - name: aspnetcore-webapp-sample
         image: mcr.microsoft.com/dotnet/core/samples:aspnetapp
