@@ -8,7 +8,11 @@
    ``` bash
    az aks get-credentials -g rg-bu0001a0008 -n <cluster-name> --admin
    ```
-4. query the BU 0001's Azure Application Gateway Public Ip FQDN
+4. install Traefik
+   ```bash
+   kubectl apply -f https://raw.githubusercontent.com/mspnp/reference-architectures/master/aks/secure-baseline/traefik.yaml
+   ```
+5. query the BU 0001's Azure Application Gateway Public Ip FQDN
    ``` bash
    export APP_GATEWAY_PUBLIC_IP_FQDN=$(az deployment group show --resource-group rg-enterprise-networking-spokes -n spoke-BU0001A0008 --query properties.outputs.appGatewayPublicIpFqdn.value -o tsv)
    ```

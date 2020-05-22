@@ -1,0 +1,187 @@
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: traefik-ingress-controller
+  namespace: kube-system
+  labels:
+    app: traefik-ingress-ilb
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: traefik-ingress-controller
+  namespace: kube-system
+  labels:
+    app: traefik-ingress-ilb
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+      - services
+      - endpoints
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - extensions
+    resources:
+      - ingresses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - extensions
+    resources:
+      - ingresses/status
+    verbs:
+      - update
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: traefik-watch-published-service
+  namespace: kube-system
+  labels:
+    app: traefik-ingress-ilb
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: traefik-ingress-controller
+subjects:
+- kind: ServiceAccount
+  name: traefik-ingress-controller
+  namespace: kube-system
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: traefik-watch-workloads
+  namespace: a0008
+  labels:
+    app: traefik-ingress-ilb
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: traefik-ingress-controller
+subjects:
+- kind: ServiceAccount
+  name: traefik-ingress-controller
+  namespace: kube-system
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: traefik-ingress-config
+  namespace: kube-system
+  labels:
+    app: traefik-ingress-ilb
+data:
+  traefik.toml: |
+    logLevel = "info"
+    defaultEntryPoints = ["http", "httpn"]
+    [entryPoints]
+      [entryPoints.http]
+      address = ":8080"
+      compress = true
+      [entryPoints.httpn]
+      address = ":8880"
+      compress = true
+    [ping]
+    entryPoint = "http"
+    [kubernetes]
+    namespaces = ["kube-system","a0008"]
+    ingressClass = "traefik"
+      [kubernetes.ingressEndpoint]
+      publishedService = "kube-system/traefik-ingress-service"
+    [traefikLog]
+      format = "json"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-ingress-service
+  namespace: kube-system
+  labels:
+    app: traefik-ingress-ilb
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+    service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "snet-clusteringressservices"
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Cluster
+  selector:
+    app: traefik-ingress-ilb
+  ports:
+  - port: 80
+    name: http
+    targetPort: http
+  - port: 443
+    name: https
+    targetPort: httpn
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traefik-ingress-controller
+  namespace: kube-system
+  labels:
+    app: traefik-ingress-ilb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traefik-ingress-ilb
+  template:
+    metadata:
+      labels:
+        app: traefik-ingress-ilb
+    spec:
+      serviceAccountName: traefik-ingress-controller
+      terminationGracePeriodSeconds: 60
+      containers:
+      - image: traefik:1.7.20
+        name: traefik-ingress-controller
+        resources:
+          {}
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: "http"
+          failureThreshold: 1
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 2
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: "http"
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 2
+        volumeMounts:
+        - mountPath: /config
+          name: config
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        - name: httpn
+          containerPort: 8880
+          protocol: TCP
+        - name: https
+          containerPort: 443
+          protocol: TCP
+        args:
+        - --configfile=/config/traefik.toml
+
+      volumes:
+      - name: config
+        configMap:
+          name: traefik-ingress-config
