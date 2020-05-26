@@ -10,13 +10,13 @@ The provided `rundeployment.sh` will create all dependencies necessary for the w
 mkdir deployweb
 cd deployweb
 
+export DEPLOYMENT=https://raw.githubusercontent.com/mspnp/reference-architectures/master/web-app/deployment/
 export RGNAME=[yourResourceGroupName]
 export RGLOCATION=[yourAzureRegionIdentifier]
 export SQLSERVERNAME=[yourSqlServerName]
 export SQLSERVERDB=[youSqlServerDb]
 export SQLADMINUSER=[yourSqlAdminUser]
 export DNSNAME=[yourGloballyUniqueDNSNameOfWebApp]
-export STORAGEACCNAME=[yourGloballyUniqueStorageAccountName]
 ```
 
 > **_NOTE:_**  The DNS Name of your web application needs to be globally unique. You can use the following command to validate that the name is unique before you run the rest of the script. If you find the name is already used, change `DNSNAME` to another value.
@@ -28,45 +28,38 @@ token=`az account get-access-token -o tsv --query accessToken`
 curl -H "Authorization: Bearer ${token}" "https://management.azure.com/subscriptions/${subscription}/providers/Microsoft.Network/locations/${RGLOCATION}/CheckDnsNameAvailability?domainNameLabel=${DNSNAME}&api-version=2018-11-01"
 ```
 
-> **_NOTE:_**  The Storage Account Name of your web application needs to be globally unique. You can use the following command to validate that the name is unique before you run the rest of the script. If you find the name is already used, change `STORAGEACCNAME` to another value.
-
-```bash
-az storage account check-name -n ${STORAGEACCNAME}
-```
-
-SQL Database accounts (including the admin) have a minimum password size of eight characters ([amongst other requirements](https://docs.microsoft.com/sql/relational-databases/security/password-policy?view=azuresqldb-current)). Capture a suitable password into `SQLADMINPASSWORD`.
+SQL Database accounts (including the admin) have a minimum password size of eight characters ([amongst other requirements](https://docs.microsoft.com/sql/relational-databases/security/password-policy?view=azuresqldb-current)). Capture a suitable password into `SQLADMINPASSWORD` using the command sequence below.
 
 ```bash
 read -s SQLADMINPASSWORD
 export SQLADMINPASSWORD
 ```
 
-Download `rundeployment.sh` from this repo and execute it.
+Download `rundeployment.sh` from this repo and execute it. This will take about 20 minutes to execute.
 
 ```bash
-wget https://raw.githubusercontent.com/mspnp/reference-architectures/master/web-app/deployment/rundeployment.sh
+wget ${DEPLOYMENT}rundeployment.sh
 chmod +x rundeployment.sh
 ./rundeployment.sh
 ```
 
-At this point you have all of the Azure resources in place: SQL Database, Cosmos DB, App Service, and Azure Storage.  There is no content in Cosmos DB nor is the web application code itself yet deployed.
+At this point you have all of the Azure resources in place: SQL Database, Cosmos DB, App Service, Application Insights, Azure Cache for Redis, Azure Front Door, Azure Service Bus, and Azure Storage.  There is no AD content in Cosmos DB nor is the web application code itself yet deployed.
 
 ## Populate Cosmos DB Starter Content (Optional)
 
-The Cosmos DB server you deployed has a container named `cacheContainer` that is designed to hold advertisements for the website's footer. While they are not required for the Reference Implementation to function here is an example of content you could include. The script you ran above dropped a **Microsoft_Azure_logo_small.png** file into the storage account. We can reference that file in a fake ad.
+The Cosmos DB server you deployed has a container named `cacheContainer` that is designed to hold advertisements for the website's footer. While they are not required for the Reference Implementation to function here is an example of content you could include. We provide a file called **Microsoft_Azure_logo_small.png** in this repo. You can reference that file in a fake ad.
 
 ```bash
-imageUrl=`az storage account show -n ${STORAGEACCNAME} | jq -r .primaryEndpoints.blob`rsrcontainer/Microsoft_Azure_logo_small.png
-echo $imageUrl
+echo ${DEPLOYMENT}Microsoft_Azure_logo_small.png
 ```
+
+Using the Azure Portal or Azure Storage Explorer add this document to the `cacheContainer` container in the Cosmos DB Server created above.
 
 ```json
-{"id": "1","Message": "Powered by Azure","MessageType": "AD","Url": "[yourImageUrlHere]"}
+{"id": "1","Message": "Powered by Azure","MessageType": "AD","Url": "[the full url from prior echo statement]"}
 ```
 
-Using the Azure Portal, Azure CLI, or Azure Storage Explorer add this document to the `cacheContainer` container in the Cosmos DB Server created above.
-
-To do this from the Azure Portal, in the resource group of deployment  click on **Azure Cosmos Db Account** then select **cacheContainer** then click on **Documents**. Click on **New Document**. Replace the whole json payload with above content and click **Save**.
+To do this from the Azure Portal, in the resource group of deployment, click on **Azure Cosmos Db Account** then select **cacheContainer** in **Data Explorer**.  Click on **Items** and then **New Item**. Replace the whole json payload with above content and click **Save**.
 
 ## Publish Web Application and Azure Function
 
@@ -83,3 +76,11 @@ We'll publish the web applications directly from Visual Studio. As with the reso
    1. Right click on **VoteCounter** project. Click on **Publish**, select **new profile** then click on **existing**. Select the same resource group as above. Select the function app service deployment.
 
 Your website is fully deployed now. You can open the url <https://yourwebfrontend.yourlocation.cloudapp.azure.com/>, ignoring the certificate validation error on the browser.
+
+## Clean Up Resources
+
+All resources were created in the resource group you identified in `RGNAME`. To delete everything deployed with these steps you can execute the following _destructive_ command. This will take about five minutes.
+
+```bash
+az group delete -n ${RGNAME}
+```

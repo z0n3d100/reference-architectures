@@ -1,5 +1,5 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "VotingApi_name": {
@@ -38,18 +38,6 @@
       "defaultValue": "[concat( 'votingcosmos-',uniqueString(resourceGroup().id) ) ]",
       "type": "string"
     },
-    "alertrules_VotingApi_name": {
-      "defaultValue": "[concat( 'failureanomalieswebapi-',uniqueString(resourceGroup().id) ) ]",
-      "type": "string"
-    },
-    "alertrules_VotingWeb_name": {
-      "defaultValue": "[concat( 'failureanomaliesweb-',uniqueString(resourceGroup().id) ) ]",
-      "type": "string"
-    },
-    "alertrules_FunctionVoteCounter_name": {
-      "defaultValue": "[concat( 'failureanomaliesfunction-',uniqueString(resourceGroup().id) ) ]",
-      "type": "string"
-    },
     "FunctionstorageAccount": {
       "defaultValue": "[toLower(concat('function', uniqueString(resourceGroup().id) )) ]",
       "type": "string"
@@ -67,12 +55,10 @@
       "type": "securestring"
     }
   },
-
   "variables": {
     "location": "[resourceGroup().location]"
   },
   "resources": [
-
     {
       "type": "Microsoft.Cache/Redis",
       "apiVersion": "2017-10-01",
@@ -90,7 +76,6 @@
         }
       }
     },
-
     {
       "type": "Microsoft.DocumentDB/databaseAccounts",
       "apiVersion": "2015-04-08",
@@ -105,7 +90,8 @@
         "enableAutomaticFailover": false,
         "enableMultipleWriteLocations": true,
         "isVirtualNetworkFilterEnabled": false,
-        "virtualNetworkRules": [],
+        "virtualNetworkRules": [
+        ],
         "databaseAccountOfferType": "Standard",
         "consistencyPolicy": {
           "defaultConsistencyLevel": "Session",
@@ -118,7 +104,8 @@
             "failoverPriority": 0
           }
         ],
-        "capabilities": []
+        "capabilities": [
+        ]
       }
     },
     {
@@ -132,9 +119,7 @@
       },
       "kind": "web",
       "properties": {
-        "Application_Type": "web",
-        "Flow_Type": "Redfield",
-        "Request_Source": "AppServiceEnablementCreate"
+        "Application_Type": "web"
       }
     },
     {
@@ -144,9 +129,7 @@
       "location": "[variables('location')]",
       "kind": "web",
       "properties": {
-        "Application_Type": "web",
-        "Flow_Type": "Redfield",
-        "HockeyAppId": ""
+        "Application_Type": "web"
       }
     },
     {
@@ -156,12 +139,9 @@
       "location": "[variables('location')]",
       "kind": "web",
       "properties": {
-        "Application_Type": "web",
-        "Flow_Type": "Redfield",
-        "HockeyAppId": ""
+        "Application_Type": "web"
       }
     },
-
     {
       "type": "Microsoft.ServiceBus/namespaces",
       "apiVersion": "2017-04-01",
@@ -178,7 +158,6 @@
         "status": "Active"
       }
     },
-
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2018-07-01",
@@ -192,11 +171,13 @@
       "properties": {
         "networkAcls": {
           "bypass": "AzureServices",
-          "virtualNetworkRules": [],
-          "ipRules": [],
+          "virtualNetworkRules": [
+          ],
+          "ipRules": [
+          ],
           "defaultAction": "Allow"
         },
-        "supportsHttpsTrafficOnly": false,
+        "supportsHttpsTrafficOnly": true,
         "encryption": {
           "services": {
             "file": {
@@ -210,7 +191,6 @@
         }
       }
     },
-
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2018-07-01",
@@ -224,11 +204,13 @@
       "properties": {
         "networkAcls": {
           "bypass": "AzureServices",
-          "virtualNetworkRules": [],
-          "ipRules": [],
+          "virtualNetworkRules": [
+          ],
+          "ipRules": [
+          ],
           "defaultAction": "Allow"
         },
-        "supportsHttpsTrafficOnly": false,
+        "supportsHttpsTrafficOnly": true,
         "encryption": {
           "services": {
             "file": {
@@ -303,105 +285,6 @@
         "reserved": false,
         "targetWorkerCount": 0,
         "targetWorkerSizeId": 0
-      }
-    },
-    {
-      "type": "microsoft.insights/alertrules",
-      "apiVersion": "2014-04-01",
-      "name": "[parameters('alertrules_FunctionVoteCounter_name')]",
-      "location": "[variables('location')]",
-      "dependsOn": [
-        "[resourceId('microsoft.insights/components', parameters('FunctionVoteCounter_name'))]"
-      ],
-      "tags": {
-        "[concat('hidden-link:/subscriptions/',subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/microsoft.insights/components/',parameters('FunctionVoteCounter_name'))]": "Resource"
-      },
-      "properties": {
-        "name": "[parameters('alertrules_FunctionVoteCounter_name')]",
-        "description": "",
-        "isEnabled": true,
-        "condition": {
-          "odata.type": "Microsoft.Azure.Management.Insights.Models.ThresholdRuleCondition",
-          "dataSource": {
-            "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
-            "resourceUri": "[resourceId('microsoft.insights/components', parameters('FunctionVoteCounter_name'))]",
-            "metricName": "advanced::A3108E3D-5E26-44CF-B232-783F5E20EF10::ewAiAEgAeQBwAGUAcgBpAG8AbgBBAHAAcABsAGkAYwBhAHQAaQBvAG4AUwBpAGQAIgA6AG4AdQBsAGwALAAiAEgAeQBwAGUAcgBpAG8AbgBTAHUAYgBqAGUAYwB0AFMAaQBkACIAOgBuAHUAbABsACwAIgBIAHkAcABlAHIAaQBvAG4ATwBiAHMAZQByAHYAZQByAFMAaQBkACIAOgBuAHUAbABsACwAIgBDAHUAcwB0AG8AbQBlAHIAQQBjAGMAbwB1AG4AdABJAGQAIgA6ACIAMAAwADAAMAAwADAAMAAwAC0AMAAwADAAMAAtADAAMAAwADAALQAwADAAMAAwAC0AMAAwADAAMAAwADAAMAAwADAAMAAwADAAIgAsACIAQQBwAHAAbABpAGMAYQB0AGkAbwBuAE4AYQBtAGUAIgA6AG4AdQBsAGwALAAiAEEAcABwAGwAaQBjAGEAdABpAG8AbgBJAGQAIgA6AG4AdQBsAGwALAAiAFAAcgBvAGYAaQBsAGUASQBkACIAOgAwACwAIgBXAGkAbgBkAG8AdwBTAGkAegBlAEkAbgBNAGkAbgB1AHQAZQBzACIAOgA2ADAALAAiAE0AZQB0AHIAaQBjAE4AYQBtAGUAIgA6ACIAIgAsACIAVABoAHIAZQBzAGgAbwBsAGQAIgA6ADIALgAwACwAIgBBAGwAZQByAHQAVABlAG0AcABsAGEAdABlAEkAZAAiADoAIgAiACwAIgBSAHUAbABlAEkAZAAiADoAIgAiACwAIgBSAHUAbABlAE4AYQBtAGUAIgA6ACIAIgAsACIAUgB1AGwAZQBEAGUAcwBjAHIAaQBwAHQAaQBvAG4AIgA6ACIAIgAsACIAUgBlAHMAbwB1AHIAYwBlAEkAZAAiADoAbgB1AGwAbAAsACIAUwB1AGIAcwBjAHIAaQBwAHQAaQBvAG4ASQBkACIAOgBuAHUAbABsACwAIgBBAGcAZwByAGUAZwBhAHQAZQBGAHUAbgBjAHQAaQBvAG4AIgA6ACIAIgAsACIAQwBvAG0AcABhAHIAaQBzAG8AbgBPAHAAZQByAGEAdABvAHIAIgA6ACIAewBcACIAQgBhAHMAZQBsAGkAbgBlAFQAaQBtAGUAcwBwAGEAbgBcACIAOgBcACIAMAAwADoANAAwADoAMAAwAFwAIgAsAFwAIgBJAG4AcwBpAGcAaAB0AHMAUwBlAHIAdgBpAGMAZQBMAGEAZwBcACIAOgBcACIAMAAwADoAMAAwADoAMAAwAFwAIgAsAFwAIgBCAHUAZgBmAGUAcgBUAGkAbQBlAFwAIgA6AFwAIgAwADAAOgAwADEAOgAwADAAXAAiACwAXAAiAEIAbABvAGIAUwB0AG8AcgBhAGcAZQBMAG8AZwBnAGkAbgBnAEUAbgBhAGIAbABlAGQAXAAiADoAZgBhAGwAcwBlACwAXAAiAFUAcwBlAHIAUwB1AHAAcAByAGUAcwBzAGkAbwBuAHMAXAAiADoAbgB1AGwAbAAsAFwAIgBQAHIAbwBmAGkAbABlAEkAZABcACIAOgAwACwAXAAiAEUAbQBhAGkAbABUAHkAcABlAFwAIgA6ADAALABcACIAUgBkAGQARgBhAGkAbAB1AHIAZQBzAFMAcABpAGsAZQBUAGgAcgBlAHMAaABvAGwAZABcACIAOgAzAC4AMAAsAFwAIgBSAGEAdwBQAHIAbwBhAGMAdABpAHYAZQBSAHUAbABlAEMAbwBuAGYAaQBnAFwAIgA6AG4AdQBsAGwAfQAiACwAIgBFAG4AYQBiAGwAZQBTAGUAbgBkAEUAbQBhAGkAbABUAG8AQwB1AHMAdABvAG0AIgA6AGYAYQBsAHMAZQAsACIAQwB1AHMAdABvAG0ARQBtAGEAaQBsAHMARQBuAGMAbwBkAGUAZAAiADoAIgAiACwAIgBFAG4AYQBiAGwAZQBTAGUAbgBkAEUAbQBhAGkAbABUAG8ATwB3AG4AZQByAHMAIgA6AGYAYQBsAHMAZQB9AA=="
-          },
-          "operator": "GreaterThan",
-          "threshold": 2,
-          "windowSize": "PT1H"
-        },
-        "action": {
-          "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
-          "sendToServiceOwners": true,
-          "customEmails": []
-        }
-      }
-    },
-    {
-      "type": "microsoft.insights/alertrules",
-      "apiVersion": "2014-04-01",
-      "name": "[parameters('alertrules_VotingApi_name')]",
-      "location": "[variables('location')]",
-      "dependsOn": [
-        "[resourceId('microsoft.insights/components', parameters('VotingApi_name'))]"
-      ],
-      "tags": {
-        "[concat('hidden-link:/subscriptions/',subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/microsoft.insights/components/',parameters('VotingApi_name'))]": "Resource"
-      },
-      "properties": {
-        "name": "[parameters('alertrules_VotingApi_name')]",
-        "description": "",
-        "isEnabled": true,
-        "condition": {
-          "odata.type": "Microsoft.Azure.Management.Insights.Models.ThresholdRuleCondition",
-          "dataSource": {
-            "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
-            "resourceUri": "[resourceId('microsoft.insights/components', parameters('VotingApi_name'))]",
-            "metricName": "advanced::A3108E3D-5E26-44CF-B232-783F5E20EF10::ewAiAEgAeQBwAGUAcgBpAG8AbgBBAHAAcABsAGkAYwBhAHQAaQBvAG4AUwBpAGQAIgA6AG4AdQBsAGwALAAiAEgAeQBwAGUAcgBpAG8AbgBTAHUAYgBqAGUAYwB0AFMAaQBkACIAOgBuAHUAbABsACwAIgBIAHkAcABlAHIAaQBvAG4ATwBiAHMAZQByAHYAZQByAFMAaQBkACIAOgBuAHUAbABsACwAIgBDAHUAcwB0AG8AbQBlAHIAQQBjAGMAbwB1AG4AdABJAGQAIgA6ACIAMAAwADAAMAAwADAAMAAwAC0AMAAwADAAMAAtADAAMAAwADAALQAwADAAMAAwAC0AMAAwADAAMAAwADAAMAAwADAAMAAwADAAIgAsACIAQQBwAHAAbABpAGMAYQB0AGkAbwBuAE4AYQBtAGUAIgA6AG4AdQBsAGwALAAiAEEAcABwAGwAaQBjAGEAdABpAG8AbgBJAGQAIgA6AG4AdQBsAGwALAAiAFAAcgBvAGYAaQBsAGUASQBkACIAOgAwACwAIgBXAGkAbgBkAG8AdwBTAGkAegBlAEkAbgBNAGkAbgB1AHQAZQBzACIAOgA2ADAALAAiAE0AZQB0AHIAaQBjAE4AYQBtAGUAIgA6ACIAIgAsACIAVABoAHIAZQBzAGgAbwBsAGQAIgA6ADIALgAwACwAIgBBAGwAZQByAHQAVABlAG0AcABsAGEAdABlAEkAZAAiADoAIgAiACwAIgBSAHUAbABlAEkAZAAiADoAIgAiACwAIgBSAHUAbABlAE4AYQBtAGUAIgA6ACIAIgAsACIAUgB1AGwAZQBEAGUAcwBjAHIAaQBwAHQAaQBvAG4AIgA6ACIAIgAsACIAUgBlAHMAbwB1AHIAYwBlAEkAZAAiADoAbgB1AGwAbAAsACIAUwB1AGIAcwBjAHIAaQBwAHQAaQBvAG4ASQBkACIAOgBuAHUAbABsACwAIgBBAGcAZwByAGUAZwBhAHQAZQBGAHUAbgBjAHQAaQBvAG4AIgA6ACIAIgAsACIAQwBvAG0AcABhAHIAaQBzAG8AbgBPAHAAZQByAGEAdABvAHIAIgA6ACIAewBcACIAQgBhAHMAZQBsAGkAbgBlAFQAaQBtAGUAcwBwAGEAbgBcACIAOgBcACIAMAAwADoANAAwADoAMAAwAFwAIgAsAFwAIgBJAG4AcwBpAGcAaAB0AHMAUwBlAHIAdgBpAGMAZQBMAGEAZwBcACIAOgBcACIAMAAwADoAMAAwADoAMAAwAFwAIgAsAFwAIgBCAHUAZgBmAGUAcgBUAGkAbQBlAFwAIgA6AFwAIgAwADAAOgAwADEAOgAwADAAXAAiACwAXAAiAEIAbABvAGIAUwB0AG8AcgBhAGcAZQBMAG8AZwBnAGkAbgBnAEUAbgBhAGIAbABlAGQAXAAiADoAZgBhAGwAcwBlACwAXAAiAFUAcwBlAHIAUwB1AHAAcAByAGUAcwBzAGkAbwBuAHMAXAAiADoAbgB1AGwAbAAsAFwAIgBQAHIAbwBmAGkAbABlAEkAZABcACIAOgAwACwAXAAiAEUAbQBhAGkAbABUAHkAcABlAFwAIgA6ADAALABcACIAUgBkAGQARgBhAGkAbAB1AHIAZQBzAFMAcABpAGsAZQBUAGgAcgBlAHMAaABvAGwAZABcACIAOgAzAC4AMAAsAFwAIgBSAGEAdwBQAHIAbwBhAGMAdABpAHYAZQBSAHUAbABlAEMAbwBuAGYAaQBnAFwAIgA6AG4AdQBsAGwAfQAiACwAIgBFAG4AYQBiAGwAZQBTAGUAbgBkAEUAbQBhAGkAbABUAG8AQwB1AHMAdABvAG0AIgA6AGYAYQBsAHMAZQAsACIAQwB1AHMAdABvAG0ARQBtAGEAaQBsAHMARQBuAGMAbwBkAGUAZAAiADoAIgAiACwAIgBFAG4AYQBiAGwAZQBTAGUAbgBkAEUAbQBhAGkAbABUAG8ATwB3AG4AZQByAHMAIgA6AGYAYQBsAHMAZQB9AA=="
-          },
-          "operator": "GreaterThan",
-          "threshold": 2,
-          "windowSize": "PT1H"
-        },
-        "action": {
-          "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
-          "sendToServiceOwners": true,
-          "customEmails": []
-        }
-      }
-    },
-    {
-      "type": "microsoft.insights/alertrules",
-      "apiVersion": "2014-04-01",
-      "name": "[parameters('alertrules_VotingWeb_name')]",
-      "location": "[variables('location')]",
-      "dependsOn": [
-        "[resourceId('microsoft.insights/components', parameters('VotingWeb_name'))]"
-      ],
-      "tags": {
-        "[concat('hidden-link:/subscriptions/',subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/microsoft.insights/components/',parameters('VotingWeb_name'))]": "Resource"
-      },
-      "properties": {
-        "name": "[parameters('alertrules_VotingWeb_name')]",
-        "description": "",
-        "isEnabled": true,
-        "condition": {
-          "odata.type": "Microsoft.Azure.Management.Insights.Models.ThresholdRuleCondition",
-          "dataSource": {
-            "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
-            "resourceUri": "[resourceId('microsoft.insights/components', parameters('VotingWeb_name'))]",
-            "metricName": "advanced::A3108E3D-5E26-44CF-B232-783F5E20EF10::ewAiAEgAeQBwAGUAcgBpAG8AbgBBAHAAcABsAGkAYwBhAHQAaQBvAG4AUwBpAGQAIgA6AG4AdQBsAGwALAAiAEgAeQBwAGUAcgBpAG8AbgBTAHUAYgBqAGUAYwB0AFMAaQBkACIAOgBuAHUAbABsACwAIgBIAHkAcABlAHIAaQBvAG4ATwBiAHMAZQByAHYAZQByAFMAaQBkACIAOgBuAHUAbABsACwAIgBDAHUAcwB0AG8AbQBlAHIAQQBjAGMAbwB1AG4AdABJAGQAIgA6ACIAMAAwADAAMAAwADAAMAAwAC0AMAAwADAAMAAtADAAMAAwADAALQAwADAAMAAwAC0AMAAwADAAMAAwADAAMAAwADAAMAAwADAAIgAsACIAQQBwAHAAbABpAGMAYQB0AGkAbwBuAE4AYQBtAGUAIgA6AG4AdQBsAGwALAAiAEEAcABwAGwAaQBjAGEAdABpAG8AbgBJAGQAIgA6AG4AdQBsAGwALAAiAFAAcgBvAGYAaQBsAGUASQBkACIAOgAwACwAIgBXAGkAbgBkAG8AdwBTAGkAegBlAEkAbgBNAGkAbgB1AHQAZQBzACIAOgA2ADAALAAiAE0AZQB0AHIAaQBjAE4AYQBtAGUAIgA6ACIAIgAsACIAVABoAHIAZQBzAGgAbwBsAGQAIgA6ADIALgAwACwAIgBBAGwAZQByAHQAVABlAG0AcABsAGEAdABlAEkAZAAiADoAIgAiACwAIgBSAHUAbABlAEkAZAAiADoAIgAiACwAIgBSAHUAbABlAE4AYQBtAGUAIgA6ACIAIgAsACIAUgB1AGwAZQBEAGUAcwBjAHIAaQBwAHQAaQBvAG4AIgA6ACIAIgAsACIAUgBlAHMAbwB1AHIAYwBlAEkAZAAiADoAbgB1AGwAbAAsACIAUwB1AGIAcwBjAHIAaQBwAHQAaQBvAG4ASQBkACIAOgBuAHUAbABsACwAIgBBAGcAZwByAGUAZwBhAHQAZQBGAHUAbgBjAHQAaQBvAG4AIgA6ACIAIgAsACIAQwBvAG0AcABhAHIAaQBzAG8AbgBPAHAAZQByAGEAdABvAHIAIgA6ACIAewBcACIAQgBhAHMAZQBsAGkAbgBlAFQAaQBtAGUAcwBwAGEAbgBcACIAOgBcACIAMAAwADoANAAwADoAMAAwAFwAIgAsAFwAIgBJAG4AcwBpAGcAaAB0AHMAUwBlAHIAdgBpAGMAZQBMAGEAZwBcACIAOgBcACIAMAAwADoAMAAwADoAMAAwAFwAIgAsAFwAIgBCAHUAZgBmAGUAcgBUAGkAbQBlAFwAIgA6AFwAIgAwADAAOgAwADEAOgAwADAAXAAiACwAXAAiAEIAbABvAGIAUwB0AG8AcgBhAGcAZQBMAG8AZwBnAGkAbgBnAEUAbgBhAGIAbABlAGQAXAAiADoAZgBhAGwAcwBlACwAXAAiAFUAcwBlAHIAUwB1AHAAcAByAGUAcwBzAGkAbwBuAHMAXAAiADoAbgB1AGwAbAAsAFwAIgBQAHIAbwBmAGkAbABlAEkAZABcACIAOgAwACwAXAAiAEUAbQBhAGkAbABUAHkAcABlAFwAIgA6ADAALABcACIAUgBkAGQARgBhAGkAbAB1AHIAZQBzAFMAcABpAGsAZQBUAGgAcgBlAHMAaABvAGwAZABcACIAOgAzAC4AMAAsAFwAIgBSAGEAdwBQAHIAbwBhAGMAdABpAHYAZQBSAHUAbABlAEMAbwBuAGYAaQBnAFwAIgA6AG4AdQBsAGwAfQAiACwAIgBFAG4AYQBiAGwAZQBTAGUAbgBkAEUAbQBhAGkAbABUAG8AQwB1AHMAdABvAG0AIgA6AGYAYQBsAHMAZQAsACIAQwB1AHMAdABvAG0ARQBtAGEAaQBsAHMARQBuAGMAbwBkAGUAZAAiADoAIgAiACwAIgBFAG4AYQBiAGwAZQBTAGUAbgBkAEUAbQBhAGkAbABUAG8ATwB3AG4AZQByAHMAIgA6AGYAYQBsAHMAZQB9AA=="
-          },
-          "operator": "GreaterThan",
-          "threshold": 2,
-          "windowSize": "PT1H"
-        },
-        "action": {
-          "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
-          "sendToServiceOwners": true,
-          "customEmails": []
-        }
       }
     },
     {
@@ -528,21 +411,16 @@
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('FunctionVoteCounter_name')), '2014-04-01').InstrumentationKey]"
             },
-
             {
               "name": "SERVICEBUS_CONNECTION_STRING",
               "value": "[listKeys(resourceId(concat('Microsoft.ServiceBus/namespaces/AuthorizationRules'),parameters('servicebusvotingns_name'),'RootManageSharedAccessKey'),'2015-08-01').primaryConnectionString]"
             },
-
             {
               "name": "sqldb_connection",
               "value": "[parameters('SqlConnectionString')]"
             }
-
           ]
-
         }
-
       }
     },
     {
@@ -605,24 +483,16 @@
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('VotingApi_name')), '2014-04-01').InstrumentationKey]"
             },
-
             {
               "name": "ApplicationInsights:InstrumentationKey",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('VotingApi_name')), '2014-04-01').InstrumentationKey]"
             },
-
-
             {
               "name": "ConnectionStrings:SqlDbConnection",
               "value": "[parameters('SqlConnectionString')]"
             }
           ]
-
-
-
-
         }
-
       }
     },
     {
@@ -685,42 +555,34 @@
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('VotingWeb_name')), '2014-04-01').InstrumentationKey]"
             },
-
             {
               "name": "ConnectionStrings:sbConnectionString",
               "value": "[listKeys(resourceId(concat('Microsoft.ServiceBus/namespaces/AuthorizationRules'),parameters('servicebusvotingns_name'),'RootManageSharedAccessKey'),'2015-08-01').primaryConnectionString]"
             },
-
             {
               "name": "ConnectionStrings:VotingDataAPIBaseUri",
               "value": "[concat('https://',parameters('VotingApi_name'),'.azurewebsites.net')]"
             },
-
             {
               "name": "ApplicationInsights:InstrumentationKey",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('VotingWeb_name')), '2014-04-01').InstrumentationKey]"
             },
-
             {
               "name": "ConnectionStrings:RedisConnectionString",
               "value": "[concat(parameters('Votingrediscache_name'),'.redis.cache.windows.net:6380,abortConnect=false,ssl=true,password=', listKeys(resourceId('Microsoft.Cache/Redis', parameters('Votingrediscache_name')), '2015-08-01').primaryKey)]"
             },
-
             {
               "name": "ConnectionStrings:queueName",
               "value": "votingqueue"
             },
-
             {
               "name": "ConnectionStrings:CosmosUri",
               "value": "[concat('https://',parameters('databaseAccounts_votingcosmos_name'),'.documents.azure.com:443/')]"
             },
-
             {
               "name": "ConnectionStrings:CosmosKey",
               "value": "[listKeys(resourceId(concat('Microsoft.DocumentDB/databaseAccounts'),parameters('databaseAccounts_votingcosmos_name')),'2015-04-08').primaryMasterKey]"
             }
-
           ]
         }
       }
@@ -731,104 +593,98 @@
       "name": "[parameters('frontdoors_VotingFrontDoor_name')]",
       "location": "Global",
       "properties": {
-          "resourceState": "Enabled",
-          "backendPools": [
-              {
-                  "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), concat('/BackendPools/', parameters('frontdoors_VotingFrontDoor_name'), 'BackendPool'))]",
-                  "name": "[concat(parameters('frontdoors_VotingFrontDoor_name'), 'BackendPool')]",
-                  "properties": {
-                      "backends": [
-                          {
-                              "address": "[concat(parameters('VotingWeb_name'),'.azurewebsites.net')]",
-                              "httpPort": 80,
-                              "httpsPort": 443,
-                              "priority": 1,
-                              "weight": 50,
-                              "backendHostHeader": "[concat(parameters('VotingWeb_name'),'.azurewebsites.net')]",
-                              "enabledState": "Enabled"
-                          }
-                      ],
-                      "healthProbeSettings": {
-                          "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), '/healthProbeSettings/healthProbeSettings-1569015585276')]"
-                      },
-                      "loadBalancingSettings": {
-                          "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), '/loadBalancingSettings/loadBalancingSettings-1569015585276')]"
-                      },
-                      "resourceState": "Enabled"
-                  }
-              }
-          ],
-          "healthProbeSettings": [
-              {
-                  "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), '/HealthProbeSettings/healthProbeSettings-1569015585276')]",
-                  "name": "healthProbeSettings-1569015585276",
-                  "properties": {
-                      "intervalInSeconds": 30,
-                      "path": "/",
-                      "protocol": "Https",
-                      "resourceState": "Enabled"
-                  }
-              }
-          ],
-          "frontendEndpoints": [
-              {
-                  "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), concat('/FrontendEndpoints/', parameters('frontdoors_VotingFrontDoor_name'), '-azurefd-net'))]",
-                  "name": "[concat(parameters('frontdoors_VotingFrontDoor_name'), '-azurefd-net')]",
-                  "properties": {
-                      "hostName": "[concat(parameters('frontdoors_VotingFrontDoor_name'), '.azurefd.net')]",
-                      "sessionAffinityEnabledState": "Disabled",
-                      "sessionAffinityTtlSeconds": 0,
-                      "resourceState": "Enabled"
-                  }
-              }
-          ],
-          "loadBalancingSettings": [
-              {
-                  "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), '/LoadBalancingSettings/loadBalancingSettings-1569015585276')]",
-                  "name": "loadBalancingSettings-1569015585276",
-                  "properties": {
-                      "additionalLatencyMilliseconds": 0,
-                      "sampleSize": 4,
-                      "successfulSamplesRequired": 2,
-                      "resourceState": "Enabled"
-                  }
-              }
-          ],
-          "routingRules": [
-              {
-                  "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), '/RoutingRules/Default')]",
-                  "name": "Default",
-                  "properties": {
-                      "frontendEndpoints": [
-                          {
-                              "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), concat('/frontendEndpoints/', parameters('frontdoors_VotingFrontDoor_name'), '-azurefd-net'))]"
-                          }
-                      ],
-                      "acceptedProtocols": [
-                          "Http",
-                          "Https"
-                      ],
-                      "patternsToMatch": [
-                          "/*"
-                      ],
-                      "forwardingProtocol": "HttpsOnly",
-                      "backendPool": {
-                          "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), concat('/backendPools/', parameters('frontdoors_VotingFrontDoor_name'), 'BackendPool'))]"
-                      },
-                      "enabledState": "Enabled",
-                      "resourceState": "Enabled"
-                  }
-              }
-          ],
-          "enabledState": "Enabled",
-          "friendlyName": "[parameters('frontdoors_VotingFrontDoor_name')]"
+        "resourceState": "Enabled",
+        "backendPools": [
+          {
+            "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), concat('/BackendPools/', parameters('frontdoors_VotingFrontDoor_name'), 'BackendPool'))]",
+            "name": "[concat(parameters('frontdoors_VotingFrontDoor_name'), 'BackendPool')]",
+            "properties": {
+              "backends": [
+                {
+                  "address": "[concat(parameters('VotingWeb_name'),'.azurewebsites.net')]",
+                  "httpPort": 80,
+                  "httpsPort": 443,
+                  "priority": 1,
+                  "weight": 50,
+                  "backendHostHeader": "[concat(parameters('VotingWeb_name'),'.azurewebsites.net')]",
+                  "enabledState": "Enabled"
+                }
+              ],
+              "healthProbeSettings": {
+                "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), '/healthProbeSettings/healthProbeSettings-1569015585276')]"
+              },
+              "loadBalancingSettings": {
+                "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), '/loadBalancingSettings/loadBalancingSettings-1569015585276')]"
+              },
+              "resourceState": "Enabled"
+            }
+          }
+        ],
+        "healthProbeSettings": [
+          {
+            "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), '/HealthProbeSettings/healthProbeSettings-1569015585276')]",
+            "name": "healthProbeSettings-1569015585276",
+            "properties": {
+              "intervalInSeconds": 30,
+              "path": "/",
+              "protocol": "Https",
+              "resourceState": "Enabled"
+            }
+          }
+        ],
+        "frontendEndpoints": [
+          {
+            "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), concat('/FrontendEndpoints/', parameters('frontdoors_VotingFrontDoor_name'), '-azurefd-net'))]",
+            "name": "[concat(parameters('frontdoors_VotingFrontDoor_name'), '-azurefd-net')]",
+            "properties": {
+              "hostName": "[concat(parameters('frontdoors_VotingFrontDoor_name'), '.azurefd.net')]",
+              "sessionAffinityEnabledState": "Disabled",
+              "sessionAffinityTtlSeconds": 0,
+              "resourceState": "Enabled"
+            }
+          }
+        ],
+        "loadBalancingSettings": [
+          {
+            "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), '/LoadBalancingSettings/loadBalancingSettings-1569015585276')]",
+            "name": "loadBalancingSettings-1569015585276",
+            "properties": {
+              "additionalLatencyMilliseconds": 0,
+              "sampleSize": 4,
+              "successfulSamplesRequired": 2,
+              "resourceState": "Enabled"
+            }
+          }
+        ],
+        "routingRules": [
+          {
+            "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), '/RoutingRules/Default')]",
+            "name": "Default",
+            "properties": {
+              "frontendEndpoints": [
+                {
+                  "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), concat('/frontendEndpoints/', parameters('frontdoors_VotingFrontDoor_name'), '-azurefd-net'))]"
+                }
+              ],
+              "acceptedProtocols": [
+                "Http",
+                "Https"
+              ],
+              "patternsToMatch": [
+                "/*"
+              ],
+              "forwardingProtocol": "HttpsOnly",
+              "backendPool": {
+                "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), concat('/backendPools/', parameters('frontdoors_VotingFrontDoor_name'), 'BackendPool'))]"
+              },
+              "enabledState": "Enabled",
+              "resourceState": "Enabled"
+            }
+          }
+        ],
+        "enabledState": "Enabled",
+        "friendlyName": "[parameters('frontdoors_VotingFrontDoor_name')]"
       }
-  }
-  ],
-
-  "outputs": {
-
-
-  }
-
+    }
+  ]
 }
