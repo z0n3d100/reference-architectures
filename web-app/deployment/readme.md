@@ -45,7 +45,7 @@ export SQLADMINPASSWORD
 Download `rundeployment.sh` from this repo and execute it.
 
 ```bash
-wget ${DEPLOYMENT}/rundeployment.sh
+wget ${DEPLOYMENT}rundeployment.sh
 chmod +x rundeployment.sh
 ./rundeployment.sh
 ```
