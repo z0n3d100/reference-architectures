@@ -11,10 +11,10 @@ az storage container create -n rsrcontainer --account-name ${STORAGEACCNAME} --p
 wget ${DEPLOYMENT}Microsoft_Azure_logo_small.png
 
 # Uploads image public container
-az storage blob upload -c rsrcontainer -f Microsoft_Azure_logo_small.png -n Microsoft_Azure_logo_small.png --account-name ${STORAGEACCNAME}
+az storage blob upload -c rsrcontainer -f Microsoft_Azure_logo_small.png -n Microsoft_Azure_logo_small.png --account-name ${STORAGEACCNAME} --auth-mode key 
 
-# Grab the full URL to the image uplaoded 
-resourceurl=`az storage account show -n ${STORAGEACCNAME} | jq -r .primaryEndpoints.blob`rsrcontainer/Microsoft_Azure_logo_small.png
+# Grab the full URL to the image uploaded
+exampleAdImageUrl=`az storage account show -n ${STORAGEACCNAME} | jq -r .primaryEndpoints.blob`rsrcontainer/Microsoft_Azure_logo_small.png
 
 # Creates the SQL Database Server and Database with the provided admin details
 az sql server create -l "${RGLOCATION}" -g ${RGNAME} -n ${SQLSERVERNAME}  -u ${SQLADMINUSER} -p ${SQLADMINPASSWORD}
@@ -37,5 +37,5 @@ az deployment group create --resource-group ${RGNAME} --template-uri ${DEPLOYMEN
 
 # Create the CosmosDB Database and Container
 cosmosacc=`az cosmosdb list -g ${RGNAME} | jq -r .[0].name`
-az cosmosdb database create -d cacheDB -n ${cosmosacc} -g ${RGNAME}
-az cosmosdb collection create --name ${cosmosacc} -c cacheContainer -g ${RGNAME} --db-name cacheDB --partition-key-path '/MessageType'
+az cosmosdb sql database create -a ${cosmosacc} -g ${RGNAME} -n cacheDB
+az cosmosdb sql container create -a ${cosmosacc} -g ${RGNAME} -d cacheDB -p '/MessageType' -n cacheContainer

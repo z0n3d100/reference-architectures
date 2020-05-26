@@ -54,18 +54,17 @@ At this point you have all of the Azure resources in place: SQL Database, Cosmos
 
 ## Populate Cosmos DB Starter Content (Optional)
 
-The Cosmos DB server you deployed has a container named `cacheContainer` that is designed to hold advertisements for the website's footer. While they are not required for the Reference Implementation to function here is an example of content you could include. The script you ran above dropped a **Microsoft_Azure_logo_small.png** file into the storage account. We can reference that file in a fake ad.
+The Cosmos DB server you deployed has a container named `cacheContainer` that is designed to hold advertisements for the website's footer. While they are not required for the Reference Implementation to function here is an example of content you could include. The script you ran above dropped a **Microsoft_Azure_logo_small.png** file into the storage account. We can reference that file in a fake ad. The script above created the environment variable called `exampleAdImageUrl` that contains the URL to this image.
 
 ```bash
-imageUrl=`az storage account show -n ${STORAGEACCNAME} | jq -r .primaryEndpoints.blob`rsrcontainer/Microsoft_Azure_logo_small.png
-echo $imageUrl
+echo $exampleAdImageUrl
 ```
 
 ```json
 {"id": "1","Message": "Powered by Azure","MessageType": "AD","Url": "[yourImageUrlHere]"}
 ```
 
-Using the Azure Portal, Azure CLI, or Azure Storage Explorer add this document to the `cacheContainer` container in the Cosmos DB Server created above.
+Using the Azure Portal or Azure Storage Explorer add this document to the `cacheContainer` container in the Cosmos DB Server created above.
 
 To do this from the Azure Portal, in the resource group of deployment, click on **Azure Cosmos Db Account** then select **cacheContainer** then click on **Documents**. Click on **New Document**. Replace the whole json payload with above content and click **Save**.
 
@@ -84,3 +83,11 @@ We'll publish the web applications directly from Visual Studio. As with the reso
    1. Right click on **VoteCounter** project. Click on **Publish**, select **new profile** then click on **existing**. Select the same resource group as above. Select the function app service deployment.
 
 Your website is fully deployed now. You can open the url <https://yourwebfrontend.yourlocation.cloudapp.azure.com/>, ignoring the certificate validation error on the browser.
+
+## Clean Up Resources
+
+All resources were created in the resource group you identified in `RGNAME`. To delete everything deployed with these steps you can execute the following _destructive_ command. This will take about five minutes.
+
+```bash
+az group delete -n ${RGNAME}
+```
