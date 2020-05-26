@@ -90,7 +90,8 @@
         "enableAutomaticFailover": false,
         "enableMultipleWriteLocations": true,
         "isVirtualNetworkFilterEnabled": false,
-        "virtualNetworkRules": [],
+        "virtualNetworkRules": [
+        ],
         "databaseAccountOfferType": "Standard",
         "consistencyPolicy": {
           "defaultConsistencyLevel": "Session",
@@ -103,7 +104,8 @@
             "failoverPriority": 0
           }
         ],
-        "capabilities": []
+        "capabilities": [
+        ]
       }
     },
     {
@@ -169,8 +171,10 @@
       "properties": {
         "networkAcls": {
           "bypass": "AzureServices",
-          "virtualNetworkRules": [],
-          "ipRules": [],
+          "virtualNetworkRules": [
+          ],
+          "ipRules": [
+          ],
           "defaultAction": "Allow"
         },
         "supportsHttpsTrafficOnly": true,
@@ -200,8 +204,10 @@
       "properties": {
         "networkAcls": {
           "bypass": "AzureServices",
-          "virtualNetworkRules": [],
-          "ipRules": [],
+          "virtualNetworkRules": [
+          ],
+          "ipRules": [
+          ],
           "defaultAction": "Allow"
         },
         "supportsHttpsTrafficOnly": true,
@@ -587,99 +593,98 @@
       "name": "[parameters('frontdoors_VotingFrontDoor_name')]",
       "location": "Global",
       "properties": {
-          "resourceState": "Enabled",
-          "backendPools": [
-              {
-                  "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), concat('/BackendPools/', parameters('frontdoors_VotingFrontDoor_name'), 'BackendPool'))]",
-                  "name": "[concat(parameters('frontdoors_VotingFrontDoor_name'), 'BackendPool')]",
-                  "properties": {
-                      "backends": [
-                          {
-                              "address": "[concat(parameters('VotingWeb_name'),'.azurewebsites.net')]",
-                              "httpPort": 80,
-                              "httpsPort": 443,
-                              "priority": 1,
-                              "weight": 50,
-                              "backendHostHeader": "[concat(parameters('VotingWeb_name'),'.azurewebsites.net')]",
-                              "enabledState": "Enabled"
-                          }
-                      ],
-                      "healthProbeSettings": {
-                          "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), '/healthProbeSettings/healthProbeSettings-1569015585276')]"
-                      },
-                      "loadBalancingSettings": {
-                          "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), '/loadBalancingSettings/loadBalancingSettings-1569015585276')]"
-                      },
-                      "resourceState": "Enabled"
-                  }
-              }
-          ],
-          "healthProbeSettings": [
-              {
-                  "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), '/HealthProbeSettings/healthProbeSettings-1569015585276')]",
-                  "name": "healthProbeSettings-1569015585276",
-                  "properties": {
-                      "intervalInSeconds": 30,
-                      "path": "/",
-                      "protocol": "Https",
-                      "resourceState": "Enabled"
-                  }
-              }
-          ],
-          "frontendEndpoints": [
-              {
-                  "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), concat('/FrontendEndpoints/', parameters('frontdoors_VotingFrontDoor_name'), '-azurefd-net'))]",
-                  "name": "[concat(parameters('frontdoors_VotingFrontDoor_name'), '-azurefd-net')]",
-                  "properties": {
-                      "hostName": "[concat(parameters('frontdoors_VotingFrontDoor_name'), '.azurefd.net')]",
-                      "sessionAffinityEnabledState": "Disabled",
-                      "sessionAffinityTtlSeconds": 0,
-                      "resourceState": "Enabled"
-                  }
-              }
-          ],
-          "loadBalancingSettings": [
-              {
-                  "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), '/LoadBalancingSettings/loadBalancingSettings-1569015585276')]",
-                  "name": "loadBalancingSettings-1569015585276",
-                  "properties": {
-                      "additionalLatencyMilliseconds": 0,
-                      "sampleSize": 4,
-                      "successfulSamplesRequired": 2,
-                      "resourceState": "Enabled"
-                  }
-              }
-          ],
-          "routingRules": [
-              {
-                  "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), '/RoutingRules/Default')]",
-                  "name": "Default",
-                  "properties": {
-                      "frontendEndpoints": [
-                          {
-                              "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), concat('/frontendEndpoints/', parameters('frontdoors_VotingFrontDoor_name'), '-azurefd-net'))]"
-                          }
-                      ],
-                      "acceptedProtocols": [
-                          "Http",
-                          "Https"
-                      ],
-                      "patternsToMatch": [
-                          "/*"
-                      ],
-                      "forwardingProtocol": "HttpsOnly",
-                      "backendPool": {
-                          "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), concat('/backendPools/', parameters('frontdoors_VotingFrontDoor_name'), 'BackendPool'))]"
-                      },
-                      "enabledState": "Enabled",
-                      "resourceState": "Enabled"
-                  }
-              }
-          ],
-          "enabledState": "Enabled",
-          "friendlyName": "[parameters('frontdoors_VotingFrontDoor_name')]"
+        "resourceState": "Enabled",
+        "backendPools": [
+          {
+            "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), concat('/BackendPools/', parameters('frontdoors_VotingFrontDoor_name'), 'BackendPool'))]",
+            "name": "[concat(parameters('frontdoors_VotingFrontDoor_name'), 'BackendPool')]",
+            "properties": {
+              "backends": [
+                {
+                  "address": "[concat(parameters('VotingWeb_name'),'.azurewebsites.net')]",
+                  "httpPort": 80,
+                  "httpsPort": 443,
+                  "priority": 1,
+                  "weight": 50,
+                  "backendHostHeader": "[concat(parameters('VotingWeb_name'),'.azurewebsites.net')]",
+                  "enabledState": "Enabled"
+                }
+              ],
+              "healthProbeSettings": {
+                "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), '/healthProbeSettings/healthProbeSettings-1569015585276')]"
+              },
+              "loadBalancingSettings": {
+                "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), '/loadBalancingSettings/loadBalancingSettings-1569015585276')]"
+              },
+              "resourceState": "Enabled"
+            }
+          }
+        ],
+        "healthProbeSettings": [
+          {
+            "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), '/HealthProbeSettings/healthProbeSettings-1569015585276')]",
+            "name": "healthProbeSettings-1569015585276",
+            "properties": {
+              "intervalInSeconds": 30,
+              "path": "/",
+              "protocol": "Https",
+              "resourceState": "Enabled"
+            }
+          }
+        ],
+        "frontendEndpoints": [
+          {
+            "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), concat('/FrontendEndpoints/', parameters('frontdoors_VotingFrontDoor_name'), '-azurefd-net'))]",
+            "name": "[concat(parameters('frontdoors_VotingFrontDoor_name'), '-azurefd-net')]",
+            "properties": {
+              "hostName": "[concat(parameters('frontdoors_VotingFrontDoor_name'), '.azurefd.net')]",
+              "sessionAffinityEnabledState": "Disabled",
+              "sessionAffinityTtlSeconds": 0,
+              "resourceState": "Enabled"
+            }
+          }
+        ],
+        "loadBalancingSettings": [
+          {
+            "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), '/LoadBalancingSettings/loadBalancingSettings-1569015585276')]",
+            "name": "loadBalancingSettings-1569015585276",
+            "properties": {
+              "additionalLatencyMilliseconds": 0,
+              "sampleSize": 4,
+              "successfulSamplesRequired": 2,
+              "resourceState": "Enabled"
+            }
+          }
+        ],
+        "routingRules": [
+          {
+            "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), '/RoutingRules/Default')]",
+            "name": "Default",
+            "properties": {
+              "frontendEndpoints": [
+                {
+                  "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), concat('/frontendEndpoints/', parameters('frontdoors_VotingFrontDoor_name'), '-azurefd-net'))]"
+                }
+              ],
+              "acceptedProtocols": [
+                "Http",
+                "Https"
+              ],
+              "patternsToMatch": [
+                "/*"
+              ],
+              "forwardingProtocol": "HttpsOnly",
+              "backendPool": {
+                "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_VotingFrontDoor_name')), concat('/backendPools/', parameters('frontdoors_VotingFrontDoor_name'), 'BackendPool'))]"
+              },
+              "enabledState": "Enabled",
+              "resourceState": "Enabled"
+            }
+          }
+        ],
+        "enabledState": "Enabled",
+        "friendlyName": "[parameters('frontdoors_VotingFrontDoor_name')]"
       }
-  }
-  ],
-  "outputs": {}
+    }
+  ]
 }
