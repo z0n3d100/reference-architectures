@@ -42,7 +42,7 @@ read -s SQLADMINPASSWORD
 export SQLADMINPASSWORD
 ```
 
-Download `rundeployment.sh` from this repo and execute it.
+Download `rundeployment.sh` from this repo and execute it. This will take about 20 minutes to execute.
 
 ```bash
 wget ${DEPLOYMENT}rundeployment.sh
@@ -50,7 +50,7 @@ chmod +x rundeployment.sh
 ./rundeployment.sh
 ```
 
-At this point you have all of the Azure resources in place: SQL Database, Cosmos DB, App Service, and Azure Storage.  There is no content in Cosmos DB nor is the web application code itself yet deployed.
+At this point you have all of the Azure resources in place: SQL Database, Cosmos DB, App Service, Application Insights, Azure Cache for Redis, Azure Front Door, Azure Service Bus, and Azure Storage.  There is no content in Cosmos DB nor is the web application code itself yet deployed.
 
 ## Populate Cosmos DB Starter Content (Optional)
 
@@ -67,7 +67,7 @@ echo $imageUrl
 
 Using the Azure Portal, Azure CLI, or Azure Storage Explorer add this document to the `cacheContainer` container in the Cosmos DB Server created above.
 
-To do this from the Azure Portal, in the resource group of deployment  click on **Azure Cosmos Db Account** then select **cacheContainer** then click on **Documents**. Click on **New Document**. Replace the whole json payload with above content and click **Save**.
+To do this from the Azure Portal, in the resource group of deployment, click on **Azure Cosmos Db Account** then select **cacheContainer** then click on **Documents**. Click on **New Document**. Replace the whole json payload with above content and click **Save**.
 
 ## Publish Web Application and Azure Function
 

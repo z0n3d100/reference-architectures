@@ -1,5 +1,5 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "VotingApi_name": {
@@ -67,12 +67,10 @@
       "type": "securestring"
     }
   },
-
   "variables": {
     "location": "[resourceGroup().location]"
   },
   "resources": [
-
     {
       "type": "Microsoft.Cache/Redis",
       "apiVersion": "2017-10-01",
@@ -90,7 +88,6 @@
         }
       }
     },
-
     {
       "type": "Microsoft.DocumentDB/databaseAccounts",
       "apiVersion": "2015-04-08",
@@ -132,9 +129,7 @@
       },
       "kind": "web",
       "properties": {
-        "Application_Type": "web",
-        "Flow_Type": "Redfield",
-        "Request_Source": "AppServiceEnablementCreate"
+        "Application_Type": "web"
       }
     },
     {
@@ -144,9 +139,7 @@
       "location": "[variables('location')]",
       "kind": "web",
       "properties": {
-        "Application_Type": "web",
-        "Flow_Type": "Redfield",
-        "HockeyAppId": ""
+        "Application_Type": "web"
       }
     },
     {
@@ -156,12 +149,9 @@
       "location": "[variables('location')]",
       "kind": "web",
       "properties": {
-        "Application_Type": "web",
-        "Flow_Type": "Redfield",
-        "HockeyAppId": ""
+        "Application_Type": "web"
       }
     },
-
     {
       "type": "Microsoft.ServiceBus/namespaces",
       "apiVersion": "2017-04-01",
@@ -178,7 +168,6 @@
         "status": "Active"
       }
     },
-
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2018-07-01",
@@ -210,7 +199,6 @@
         }
       }
     },
-
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2018-07-01",
@@ -307,7 +295,7 @@
     },
     {
       "type": "microsoft.insights/alertrules",
-      "apiVersion": "2014-04-01",
+      "apiVersion": "2016-03-01",
       "name": "[parameters('alertrules_FunctionVoteCounter_name')]",
       "location": "[variables('location')]",
       "dependsOn": [
@@ -340,7 +328,7 @@
     },
     {
       "type": "microsoft.insights/alertrules",
-      "apiVersion": "2014-04-01",
+      "apiVersion": "2016-03-01",
       "name": "[parameters('alertrules_VotingApi_name')]",
       "location": "[variables('location')]",
       "dependsOn": [
@@ -373,7 +361,7 @@
     },
     {
       "type": "microsoft.insights/alertrules",
-      "apiVersion": "2014-04-01",
+      "apiVersion": "2016-03-01",
       "name": "[parameters('alertrules_VotingWeb_name')]",
       "location": "[variables('location')]",
       "dependsOn": [
@@ -528,21 +516,16 @@
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('FunctionVoteCounter_name')), '2014-04-01').InstrumentationKey]"
             },
-
             {
               "name": "SERVICEBUS_CONNECTION_STRING",
               "value": "[listKeys(resourceId(concat('Microsoft.ServiceBus/namespaces/AuthorizationRules'),parameters('servicebusvotingns_name'),'RootManageSharedAccessKey'),'2015-08-01').primaryConnectionString]"
             },
-
             {
               "name": "sqldb_connection",
               "value": "[parameters('SqlConnectionString')]"
             }
-
           ]
-
         }
-
       }
     },
     {
@@ -605,24 +588,16 @@
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('VotingApi_name')), '2014-04-01').InstrumentationKey]"
             },
-
             {
               "name": "ApplicationInsights:InstrumentationKey",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('VotingApi_name')), '2014-04-01').InstrumentationKey]"
             },
-
-
             {
               "name": "ConnectionStrings:SqlDbConnection",
               "value": "[parameters('SqlConnectionString')]"
             }
           ]
-
-
-
-
         }
-
       }
     },
     {
@@ -685,42 +660,34 @@
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('VotingWeb_name')), '2014-04-01').InstrumentationKey]"
             },
-
             {
               "name": "ConnectionStrings:sbConnectionString",
               "value": "[listKeys(resourceId(concat('Microsoft.ServiceBus/namespaces/AuthorizationRules'),parameters('servicebusvotingns_name'),'RootManageSharedAccessKey'),'2015-08-01').primaryConnectionString]"
             },
-
             {
               "name": "ConnectionStrings:VotingDataAPIBaseUri",
               "value": "[concat('https://',parameters('VotingApi_name'),'.azurewebsites.net')]"
             },
-
             {
               "name": "ApplicationInsights:InstrumentationKey",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('VotingWeb_name')), '2014-04-01').InstrumentationKey]"
             },
-
             {
               "name": "ConnectionStrings:RedisConnectionString",
               "value": "[concat(parameters('Votingrediscache_name'),'.redis.cache.windows.net:6380,abortConnect=false,ssl=true,password=', listKeys(resourceId('Microsoft.Cache/Redis', parameters('Votingrediscache_name')), '2015-08-01').primaryKey)]"
             },
-
             {
               "name": "ConnectionStrings:queueName",
               "value": "votingqueue"
             },
-
             {
               "name": "ConnectionStrings:CosmosUri",
               "value": "[concat('https://',parameters('databaseAccounts_votingcosmos_name'),'.documents.azure.com:443/')]"
             },
-
             {
               "name": "ConnectionStrings:CosmosKey",
               "value": "[listKeys(resourceId(concat('Microsoft.DocumentDB/databaseAccounts'),parameters('databaseAccounts_votingcosmos_name')),'2015-04-08').primaryMasterKey]"
             }
-
           ]
         }
       }
@@ -825,10 +792,5 @@
       }
   }
   ],
-
-  "outputs": {
-
-
-  }
-
+  "outputs": {}
 }
