@@ -34,7 +34,7 @@ curl -H "Authorization: Bearer ${token}" "https://management.azure.com/subscript
 az storage account check-name -n ${STORAGEACCNAME}
 ```
 
-SQL Database accounts (including the admin) have a minimum password size of eight characters ([amongst other requirements](https://docs.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=azuresqldb-current)). Capture a suitable password into `SQLADMINPASSWORD`.
+SQL Database accounts (including the admin) have a minimum password size of eight characters ([amongst other requirements](https://docs.microsoft.com/sql/relational-databases/security/password-policy?view=azuresqldb-current)). Capture a suitable password into `SQLADMINPASSWORD`.
 
 ```bash
 read -s SQLADMINPASSWORD
