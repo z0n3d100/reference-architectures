@@ -56,7 +56,7 @@ echo ${DEPLOYMENT}Microsoft_Azure_logo_small.png
 Using the Azure Portal or Azure Storage Explorer add this document to the `cacheContainer` container in the Cosmos DB Server created above.
 
 ```json
-{"id": "1","Message": "Powered by Azure","MessageType": "AD","Url": "[theResultFromAbove]"}
+{"id": "1","Message": "Powered by Azure","MessageType": "AD","Url": "[the full url from prior echo statement]"}
 ```
 
 To do this from the Azure Portal, in the resource group of deployment, click on **Azure Cosmos Db Account** then select **cacheContainer** in **Data Explorer**.  Click on **Items** and then **New Item**. Replace the whole json payload with above content and click **Save**.
