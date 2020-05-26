@@ -1,6 +1,6 @@
 # Example Deployment Steps
 
-For our reference implementation, we are providing a mechanism that you can use to deploy this workload to your own subscription. These steps are not part of the reference implementation, but does represent the type of work that needs to be done. You would typically encapsulate this work in your continuous delivery pipeline (Azure DevOps, Jenkins, etc) in a way that aligns with your operational practices.
+> **_NOTE:_** For our reference implementation, we are providing a mechanism that you can use to deploy this workload to your own subscription. These steps are not part of the reference implementation, but does represent the type of work that needs to be done. You would typically encapsulate this work in your continuous delivery pipeline (Azure DevOps, Jenkins, etc) in a way that aligns with your operational practices.
 
 ## Execute the Provided Deployment Script via Azure Cloud Shell
 
