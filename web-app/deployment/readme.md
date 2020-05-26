@@ -10,6 +10,7 @@ The provided `rundeployment.sh` will create all dependencies necessary for the w
 mkdir deployweb
 cd deployweb
 
+export DEPLOYMENT=https://raw.githubusercontent.com/mspnp/reference-architectures/master/web-app/deployment/
 export RGNAME=[yourResourceGroupName]
 export RGLOCATION=[yourAzureRegionIdentifier]
 export SQLSERVERNAME=[yourSqlServerName]
@@ -44,7 +45,7 @@ export SQLADMINPASSWORD
 Download `rundeployment.sh` from this repo and execute it.
 
 ```bash
-wget https://raw.githubusercontent.com/mspnp/reference-architectures/master/web-app/deployment/rundeployment.sh
+wget ${DEPLOYMENT}/rundeployment.sh
 chmod +x rundeployment.sh
 ./rundeployment.sh
 ```
