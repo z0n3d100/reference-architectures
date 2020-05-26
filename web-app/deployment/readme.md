@@ -1,92 +1,85 @@
-# Web application Deployment
+# Example Deployment Steps
 
-#### Step 1 Create directory and  the environment variables to run the deployment script.
+> **_NOTE:_** For our reference implementation, we are providing a mechanism that you can use to deploy this workload to your own subscription. These steps are not part of the reference implementation, but does represent the type of work that needs to be done. You would typically encapsulate this work in your continuous delivery pipeline (Azure DevOps, Jenkins, etc) in a way that aligns with your operational practices.
 
-Open an azure cloud shell and run below commands.
+## Execute the Provided Deployment Script via Azure Cloud Shell
 
-**Note:** RGLOCATION should be in the right format. Some examples of valid locations are **westus, eastus, northeurope, westeurope, eastasia, southeastasia, northcentralus, southcentralus, centralus, eastus2, westus2, japaneast, japanwest, brazilsouth**. The DNSNAME and STORAGEACCNAME should be **unique and valid**. You will test uniqueness and validity of them after this step.
+The provided `rundeployment.sh` will create all dependencies necessary for the web application and will deploy the web application infrastructure as well. Open an Azure Cloud Shell and run below commands, replacing the \[yourValues\] as appropriate.
 
-```
+```bash
 mkdir deployweb
 cd deployweb
-```
-```
-export DEPLOYMENT=https://raw.githubusercontent.com/mspnp/reference-architectures/master/web-app/deployment/
-export RGNAME=resourceGroupName
-export RGLOCATION=yourLocation
-export SQLSERVERNAME=yourSqlServerName
-export SQLSERVERDB=yousqlSqlServerDb
-export SQLADMINUSER=yoursqlAdminUser
-export DNSNAME=uniquednsnameOfWebApp
-export STORAGEACCNAME=yourstorageaccountName
+
+export RGNAME=[yourResourceGroupName]
+export RGLOCATION=[yourAzureRegionIdentifier]
+export SQLSERVERNAME=[yourSqlServerName]
+export SQLSERVERDB=[youSqlServerDb]
+export SQLADMINUSER=[yourSqlAdminUser]
+export DNSNAME=[yourGloballyUniqueDNSNameOfWebApp]
+export STORAGEACCNAME=[yourGloballyUniqueStorageAccountName]
 ```
 
-#### Step 2 Check if the dns name of gateway is available and is valid
+> **_NOTE:_**  The DNS Name of your web application needs to be globally unique. You can use the following command to validate that the name is unique before you run the rest of the script. If you find the name is already used, change `DNSNAME` to another value.
 
-Enter the bellow commands. If the Dns name is not valid or not available go back and change the DNSNAME value.
-
-```
+```bash
 subscription=`az account show -o tsv --query id`
 token=`az account get-access-token -o tsv --query accessToken`
 
 curl -H "Authorization: Bearer ${token}" "https://management.azure.com/subscriptions/${subscription}/providers/Microsoft.Network/locations/${RGLOCATION}/CheckDnsNameAvailability?domainNameLabel=${DNSNAME}&api-version=2018-11-01"
 ```
 
-#### Step 3 Check if storage account name is valid and is available
+> **_NOTE:_**  The Storage Account Name of your web application needs to be globally unique. You can use the following command to validate that the name is unique before you run the rest of the script. If you find the name is already used, change `STORAGEACCNAME` to another value.
 
-Enter the below command. If the storage account is not available or not valid go back on step 1 and change the STORAGEACCNAME value.
-
-```
+```bash
 az storage account check-name -n ${STORAGEACCNAME}
 ```
 
+SQL Database accounts (including the admin) have a minimum password size of eight characters ([amongst other requirements](https://docs.microsoft.com/sql/relational-databases/security/password-policy?view=azuresqldb-current)). Capture a suitable password into `SQLADMINPASSWORD`.
 
-
-
-#### Step 4 Enter the password for the sql server administrator and export the variable to be used by the deployment script.
-
-**Note:** Sql administrator has a minimum password size of 8 characters requirement. For sql password requirements Check https://docs.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=sql-server-2017 for Sql administrator password requirements
-
-
-```
+```bash
 read -s SQLADMINPASSWORD
 export SQLADMINPASSWORD
 ```
 
-#### Step 5 From the azure cloud shell download the deployment script, assign execute permissions and run it
+Download `rundeployment.sh` from this repo and execute it.
 
-```
-wget ${DEPLOYMENT}rundeployment.sh
+```bash
+wget https://raw.githubusercontent.com/mspnp/reference-architectures/master/web-app/deployment/rundeployment.sh
 chmod +x rundeployment.sh
-```
-```
 ./rundeployment.sh
 ```
 
-#### Step 6 Insert Document in Cosmos Db
-1. After deployment ends in the last step, run below commands to get the resourceURl
+At this point you have all of the Azure resources in place: SQL Database, Cosmos DB, App Service, and Azure Storage.  There is no content in Cosmos DB nor is the web application code itself yet deployed.
 
+## Populate Cosmos DB Starter Content (Optional)
+
+The Cosmos DB server you deployed has a container named `cacheContainer` that is designed to hold advertisements for the website's footer. While they are not required for the Reference Implementation to function here is an example of content you could include. The script you ran above dropped a **Microsoft_Azure_logo_small.png** file into the storage account. We can reference that file in a fake ad.
+
+```bash
+imageUrl=`az storage account show -n ${STORAGEACCNAME} | jq -r .primaryEndpoints.blob`rsrcontainer/Microsoft_Azure_logo_small.png
+echo $imageUrl
 ```
-resourceurl=`az storage account show -n ${STORAGEACCNAME} | jq -r .primaryEndpoints.blob`rsrcontainer/Microsoft_Azure_logo_small.png
-echo $resourceurl
+
+```json
+{"id": "1","Message": "Powered by Azure","MessageType": "AD","Url": "[yourImageUrlHere]"}
 ```
-Copy that value from above command and paste it in  json content below replacing resourceurl
 
-```
-{"id": "1","Message": "Powered by Azure","MessageType": "AD","Url": "resourceurl"}
-```
-example correct json
-```
-{"id": "1","Message": "Powered by Azure","MessageType": "AD","Url": "https://webappri.blob.core.windows.net/webappri/Microsoft_Azure_logo_small.png"}
-```
-2. Go to azure portal in the resource group of deployment above and click on **Azure Cosmos Db Account** then select **cacheContainer** then click on **Documents**. Click on **New Document**. Replace the whole json payload with above content and click **Save**
+Using the Azure Portal, Azure CLI, or Azure Storage Explorer add this document to the `cacheContainer` container in the Cosmos DB Server created above.
 
-#### Step 7 Publish Asp.net core Web, Api and Function applications.
+To do this from the Azure Portal, in the resource group of deployment  click on **Azure Cosmos Db Account** then select **cacheContainer** then click on **Documents**. Click on **New Document**. Replace the whole json payload with above content and click **Save**.
 
-1. Clone the repo. Open Votin.sln solution right click on VotingData click on **Publish**, select **new profile** then click on **existing**, select the resource group for the deployment select the votingdata api app service deployment.
+## Publish Web Application and Azure Function
 
-2. Open visual studio  right click on VotingWeeb click on **Publish**, select **new profile** then click on **existing**, select the resource group for the deployment select the votingweb app service deployment.
+We'll publish the web applications directly from Visual Studio. As with the resources above, this would normally be performed via your continuous delivery pipeline in Azure DevOps, Jenkins, etc.
 
-3. Open FunctionVoteCounter.sln solution right click on VoteCounter project click on **Publish**, select **new profile** then click on **existing**, select the resource group select the function app service deployment.
+1. Clone the repo.
+1. Open **Voting.sln** solution.
+   1. **Deploy the Voting API**
+      1. Right click on the **VotingData** project. Click on **Publish**, select **new profile** then click on **existing**. Select the resource group for the deployment. Select the VotingData api app service deployment.
+   1. **Deploy the Voting website**
+      1. Right click on the **VotingWeb** project. Click on **Publish**, select **new profile** then click on **existing**. Select the resource group for the deployment. Select the VotingWeb app service deployment.
+1. **Deploy the Vote Counter Function App**
+   1. Open **FunctionVoteCounter.sln** solution
+   1. Right click on **VoteCounter** project. Click on **Publish**, select **new profile** then click on **existing**. Select the same resource group as above. Select the function app service deployment.
 
-4. At this point you should be able to test the application. Open the url https://yourwebfrontend.yourlocation.cloudapp.azure.com/. Ignore the certificate validation error on the browser.
+Your website is fully deployed now. You can open the url <https://yourwebfrontend.yourlocation.cloudapp.azure.com/>, ignoring the certificate validation error on the browser.
