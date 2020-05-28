@@ -24,6 +24,16 @@ spec:
       securityContext:
         runAsUser: 10001
         runAsGroup: 3000
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - aspnetapp
+            topologyKey: "kubernetes.io/hostname"
       containers:
       - name: aspnetcore-webapp-sample
         image: mcr.microsoft.com/dotnet/core/samples:aspnetapp
