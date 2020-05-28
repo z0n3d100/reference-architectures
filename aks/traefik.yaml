@@ -142,6 +142,16 @@ spec:
     spec:
       serviceAccountName: traefik-ingress-controller
       terminationGracePeriodSeconds: 60
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - traefik-ingress-ilb
+            topologyKey: "kubernetes.io/hostname"
       containers:
       - image: traefik:1.7.20
         name: traefik-ingress-controller
