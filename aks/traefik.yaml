@@ -4,7 +4,8 @@ metadata:
   name: traefik-ingress-controller
   namespace: kube-system
   labels:
-    app: traefik-ingress-ilb
+    app.kubernetes.io/name: traefik-ingress-ilb
+    app.kubernetes.io/instance: traefik-ingress-ilb
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
@@ -12,12 +13,12 @@ metadata:
   name: traefik-ingress-controller
   namespace: kube-system
   labels:
-    app: traefik-ingress-ilb
+    app.kubernetes.io/name: traefik-ingress-ilb
+    app.kubernetes.io/instance: traefik-ingress-ilb
 rules:
   - apiGroups:
       - ""
     resources:
-      - pods
       - services
       - endpoints
       - secrets
@@ -39,6 +40,20 @@ rules:
       - ingresses/status
     verbs:
       - update
+  - apiGroups:
+      - traefik.containo.us
+    resources:
+      - ingressroutes
+      - ingressroutetcps
+      - ingressrouteudps
+      - middlewares
+      - tlsoptions
+      - tlsstores
+      - traefikservices
+    verbs:
+      - get
+      - list
+      - watch
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -46,7 +61,8 @@ metadata:
   name: traefik-watch-published-service
   namespace: kube-system
   labels:
-    app: traefik-ingress-ilb
+    app.kubernetes.io/name: traefik-ingress-ilb
+    app.kubernetes.io/instance: traefik-ingress-ilb
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -62,7 +78,8 @@ metadata:
   name: traefik-watch-workloads
   namespace: a0008
   labels:
-    app: traefik-ingress-ilb
+    app.kubernetes.io/name: traefik-ingress-ilb
+    app.kubernetes.io/instance: traefik-ingress-ilb
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -78,27 +95,44 @@ metadata:
   name: traefik-ingress-config
   namespace: kube-system
   labels:
-    app: traefik-ingress-ilb
+    app.kubernetes.io/name: traefik-ingress-ilb
+    app.kubernetes.io/instance: traefik-ingress-ilb
 data:
   traefik.toml: |
-    logLevel = "info"
-    defaultEntryPoints = ["http", "httpn"]
-    [entryPoints]
-      [entryPoints.http]
-      address = ":8080"
-      compress = true
-      [entryPoints.httpn]
-      address = ":8880"
-      compress = true
-    [ping]
-    entryPoint = "http"
-    [kubernetes]
-    namespaces = ["kube-system","a0008"]
-    ingressClass = "traefik"
+    [log]
+    level = "INFO"
+    format = "json"
+    [global]
+    # prevent Traefik from checking nrewer version in productions
+    checknewversion = false
+    # prevent Traefik from collecting and sending stats from production
+    sendanonymoususage = false
+    [api]
+    dashboard = false
+    [providers]
+    # Configuration reload frequency:
+    #   * duration that Traefik waits for, after a configuration reload, before taking into account any new configuration refresh event
+    #   * the most recent one is taken into account, and all the previous others are dropped.
+    providersThrottleDuration = 10
+    # Traefik provider that supports the native Kubernetes Ingress specification
+    # and derives the corresponding dynamic configuration from it. https://kubernetes.io/docs/concepts/services-networking/ingress/
+    [providers.kubernetesingress]
+      ingressClass = "traefik-internal"
+      namespaces = ["kube-system","a0008"]
       [kubernetes.ingressEndpoint]
       publishedService = "kube-system/traefik-ingress-service"
-    [traefikLog]
-      format = "json"
+    # Enable gzip compression
+    [http.middlewares]
+      [http.middlewares.test-compress.compress]
+    [entryPoints]
+      [entryPoints.traefik]
+      address = ":9000"
+      [entryPoints.web]
+      address = ":8000"
+      [entryPoints.websecure]
+      address = ":8443"
+    [ping]
+    entryPoint = "traefik"
 ---
 apiVersion: v1
 kind: Service
@@ -106,7 +140,8 @@ metadata:
   name: traefik-ingress-service
   namespace: kube-system
   labels:
-    app: traefik-ingress-ilb
+    app.kubernetes.io/name: traefik-ingress-ilb
+    app.kubernetes.io/instance: traefik-ingress-ilb
   annotations:
     service.beta.kubernetes.io/azure-load-balancer-internal: "true"
     service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "snet-clusteringressservices"
@@ -114,14 +149,15 @@ spec:
   type: LoadBalancer
   externalTrafficPolicy: Cluster
   selector:
-    app: traefik-ingress-ilb
+    app.kubernetes.io/name: traefik-ingress-ilb
+    app.kubernetes.io/instance: traefik-ingress-ilb
   ports:
   - port: 80
     name: http
-    targetPort: http
+    targetPort: web
   - port: 443
     name: https
-    targetPort: httpn
+    targetPort: websecure
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -129,17 +165,26 @@ metadata:
   name: traefik-ingress-controller
   namespace: kube-system
   labels:
-    app: traefik-ingress-ilb
+    app.kubernetes.io/name: traefik-ingress-ilb
+    app.kubernetes.io/instance: traefik-ingress-ilb
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: traefik-ingress-ilb
+      app.kubernetes.io/name: traefik-ingress-ilb
+      app.kubernetes.io/instance: traefik-ingress-ilb
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
   template:
     metadata:
       labels:
-        app: traefik-ingress-ilb
+        app.kubernetes.io/name: traefik-ingress-ilb
+        app.kubernetes.io/instance: traefik-ingress-ilb
     spec:
+      hostNetwork: false
       serviceAccountName: traefik-ingress-controller
       terminationGracePeriodSeconds: 60
       affinity:
@@ -147,20 +192,19 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchExpressions:
-              - key: app
+              - key: app.kubernetes.io/name
                 operator: In
                 values:
                 - traefik-ingress-ilb
             topologyKey: "kubernetes.io/hostname"
       containers:
-      - image: traefik:1.7.20
+      - image: traefik:2.2.1
         name: traefik-ingress-controller
         resources:
-          {}
         readinessProbe:
           httpGet:
             path: /ping
-            port: "http"
+            port: "traefik"
           failureThreshold: 1
           initialDelaySeconds: 10
           periodSeconds: 10
@@ -169,31 +213,44 @@ spec:
         livenessProbe:
           httpGet:
             path: /ping
-            port: "http"
+            port: "traefik"
           failureThreshold: 3
           initialDelaySeconds: 10
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 2
-        volumeMounts:
-        - mountPath: /config
-          name: config
         ports:
-        - name: http
-          containerPort: 8080
+        - name: "traefik"
+          containerPort: 9000
           protocol: TCP
-        - name: httpn
-          containerPort: 8880
+        - name: "web"
+          containerPort: 8000
           protocol: TCP
-        - name: https
-          containerPort: 443
+        - name: "websecure"
+          containerPort: 8443
           protocol: TCP
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsGroup: 65532
+          runAsNonRoot: true
+          runAsUser: 65532
+        volumeMounts:
+          - name: data
+            mountPath: /data
+          - name: config
+            mountPath: /config
         args:
         - --configfile=/config/traefik.toml
-
       volumes:
-      - name: config
-        configMap:
-          name: traefik-ingress-config
+        - name: config
+          configMap:
+            name: traefik-ingress-config
+        - name: data
+          emptyDir: {}
+      securityContext:
+        fsGroup: 65532
       nodeSelector:
        agentpool: npuser01

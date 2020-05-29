@@ -9,16 +9,16 @@ metadata:
   name: aspnetapp-deployment
   namespace: a0008
   labels:
-    app: aspnetapp
+    app.kubernetes.io/name: aspnetapp
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: aspnetapp
+      app.kubernetes.io/name: aspnetapp
   template:
     metadata:
       labels:
-        app: aspnetapp
+        app.kubernetes.io/name: aspnetapp
     spec:
       automountServiceAccountToken: false
       securityContext:
@@ -29,7 +29,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchExpressions:
-              - key: app
+              - key: app.kubernetes.io/name
                 operator: In
                 values:
                 - aspnetapp
@@ -40,7 +40,7 @@ spec:
             podAffinityTerm:
               labelSelector:
                 matchExpressions:
-                - key: app
+                - key: app.kubernetes.io/name
                   operator: In
                   values:
                   - traefik-ingress-ilb
@@ -81,7 +81,7 @@ metadata:
   namespace: a0008
 spec:
   selector:
-    app: aspnetapp
+    app.kubernetes.io/name: aspnetapp
   ports:
   - name: http
     port: 80
@@ -96,9 +96,9 @@ metadata:
     # defines controller implementing this ingress resource: https://docs.microsoft.com/en-us/azure/dev-spaces/how-to/ingress-https-traefik
     # ingress.class annotation is being deprecated in Kubernetes 1.18: https://kubernetes.io/docs/concepts/services-networking/ingress/#deprecated-annotation
     # For backwards compatibility, when this annotation is set, precedence is given over the new field ingressClassName under spec.
-    kubernetes.io/ingress.class: traefik
+    kubernetes.io/ingress.class: traefik-internal
 spec:
-  # ingressClassName: "traefik"
+  # ingressClassName: "traefik-internal"
   rules:
   - http:
       paths:
