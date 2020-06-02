@@ -2,17 +2,17 @@
 
 1. An Azure subscription. If you don't have an Azure subscription, you can create a [free account](https://azure.microsoft.com/free).
 1. [Azure CLI installed](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest).
-1. provision [a regional hub and spoke virtual networks](./secure-baseline/networking/network-deploy.azcli)
-> Note: execute this step from VSCode for a better experience
-1. create [the BU 0001's app team secure AKS cluster (ID: A0008)](./secure-baseline/network-deploy.azcli)
-> Note: execute this step from VSCode for a better experience
-1. download the AKS credentails
+1. Provision [a regional hub and spoke virtual networks](./secure-baseline/networking/network-deploy.azcli)
+   > Note: execute this step from VSCode for a better experience
+1. create [the BU 0001's app team secure AKS cluster (ID: A0008)](./secure-baseline/cluster-deploy.azcli)
+   > Note: execute this step from VSCode for a better experience
+1. Download the AKS credentails
    ``` bash
    az aks get-credentials -g rg-bu0001a0008 -n <cluster-name> --admin
    ```
 ### Generate a CA self-signed cert
 
-> :warning:  WARNING
+> :warning: WARNING
 > Do not use the certificates created by these scripts for production. The certificates are provided for demonstration purposes only. For your production cluster, use your security best practices for digital certificates creation and lifetime management.
 > Self-signed certificates are not trusted by default and they can be difficult to maintain. Also, they may use outdated hash and cipher suites that may not be strong. For better security, purchase a certificate signed by a well-known certificate authority.
 
@@ -23,15 +23,16 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
         -subj "/CN=*.bicycle.contoso.com/O=Contoso Bicycle"
 ```
 
-### Manually deploy a basic workload
+### Manually deploy the Ingress Controller and a basic workload
 
-The following example creates the ASPNET Core Docker sample web app and an Ingress object to route to its service.
+The following example creates the Ingress Controller (Traefik),
+the ASPNET Core Docker sample web app and an Ingress object to route to its service.
 
 ```bash
 # Create application namespace
 kubectl create ns a0008
 
-# Create the traefik default certificate as secret: https://docs.traefik.io/https/tls/#user-defined
+# Create the traefik default certificate as secret
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Secret
@@ -53,7 +54,7 @@ apk add openssl
 echo | openssl s_client -showcerts -servername bicycle.contoso.com -connect traefik-ingress-service:443 2>/dev/null | openssl x509 -inform pem -noout -text
 exit 0
 
-# Apply the contents
+# Install the ASPNET core sample web app
 kubectl apply -f https://raw.githubusercontent.com/mspnp/reference-architectures/master/aks/secure-baseline/aspnetapp.yaml
 
 # the ASPNET Core webapp sample is all setup. Wait until is ready to process requests running:
