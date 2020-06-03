@@ -252,7 +252,5 @@ spec:
             secretName: bicycle-contoso-com-tls-secret
         - name: data
           emptyDir: {}
-      securityContext:
-        fsGroup: 65532
       nodeSelector:
        agentpool: npuser01
