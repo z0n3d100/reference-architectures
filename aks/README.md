@@ -74,8 +74,7 @@ kubectl get ingress aspnetapp-ingress -n a0008
 
 # Validate router to the workload is configured, SSL offloading and redirect to Https schema
 
-kubectl -n a0008 run -i --rm --generator=run-pod/v1 --tty alpine --image=alpine -- sh
-apk add curl
+kubectl -n a0008 run -i --rm --generator=run-pod/v1 --tty curl --image=curlimages/curl -- sh
 curl --insecure -k -I --resolve bu0001a0008-00.bicycle.contoso.com:443:10.240.4.4 https://bu0001a0008-00.bicycle.contoso.com
 exit 0
 ```
