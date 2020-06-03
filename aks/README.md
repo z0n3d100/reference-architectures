@@ -86,19 +86,23 @@ exit 0
 # query the BU 0001's Azure Application Gateway Name
 export APP_GATEWAY_NAME=$(az deployment group show -g rg-bu0001a0008 -n cluster-stamp-bu0001a0008 --query properties.outputs.agwName.value -o tsv)
 
-# export the pfx CA Root certificate
-openssl pkcs12 -export \
-        -in traefik-ingress-internal-bicycle-contoso-com-tls.crt \
-        -inkey traefik-ingress-internal-bicycle-contoso-com-tls.key \
-        -out root-ca.pfx
+# create the CA cer certificate
+cp traefik-ingress-internal-bicycle-contoso-com-tls.crt wildcard-bicycle-contoso-com-tls.cer
 
 # upload CA Cert to Azure Application Gateway
-az network application-gateway ssl-cert create \
+az network application-gateway root-cert create \
    -g rg-bu0001a0008 \
    --gateway-name $APP_GATEWAY_NAME \
-   --name root-ca-bicycle-contoso \
-   --cert-file root-ca.pfx \
-   --cert-password <your-pfx-pass-here>
+   --name root-ca-wildcard-bicycle-contoso \
+   --cert-file wildcard-bicycle-contoso-com-tls.cer
+
+# configure Azure Application Gatweay default Http Setting to use the root cert uploadded above
+az network application-gateway http-settings update    \
+   -g rg-bu0001a0008 \
+   --gateway-name $APP_GATEWAY_NAME \
+   -n httpsettings-default \
+   --root-certs root-cert-wildcard-bicycle-contoso \
+   --protocol Https
 
 # configure Azure Application Gateway lister, rules and more
 TODO
