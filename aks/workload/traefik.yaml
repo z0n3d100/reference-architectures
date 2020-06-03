@@ -127,7 +127,6 @@ data:
             keyFile = "/certs/tls.key"
       [tls.options.default]
         minVersion = "VersionTLS12"
-        maxVersion = "VersionTLS14"
         # keep it false, unless a clients specify the server_name extension
         sniStrict = false
 ---
