@@ -50,8 +50,9 @@ kubectl apply -f https://raw.githubusercontent.com/mspnp/reference-architectures
 
 # Check Traefik is handling HTTPS
 kubectl -n a0008 run -i --rm --generator=run-pod/v1 --tty alpine --image=alpine -- sh
+echo '10.240.4.4 hello.bicycle.contoso.com' | tee -a /etc/hosts
 apk add openssl
-echo | openssl s_client -showcerts -servername bicycle.contoso.com -connect traefik-ingress-service:443 2>/dev/null | openssl x509 -inform pem -noout -text
+echo | openssl s_client -showcerts -servername hello.bicycle.contoso.com -connect hello.bicycle.contoso.com:443 2>/dev/null | openssl x509 -inform pem -noout -text
 exit 0
 
 # Install the ASPNET core sample web app
@@ -75,7 +76,7 @@ kubectl get ingress aspnetapp-ingress -n a0008
 
 kubectl -n a0008 run -i --rm --generator=run-pod/v1 --tty alpine --image=alpine -- sh
 apk add curl
-curl --insecure -H Host:bu0001a0008-00.bicycle.contoso.com https://traefik-ingress-service
+curl --insecure -k -I --resolve bu0001a0008-00.bicycle.contoso.com:443:10.240.4.4 https://bu0001a0008-00.bicycle.contoso.com
 exit 0
 ```
 
