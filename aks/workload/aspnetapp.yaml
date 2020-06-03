@@ -97,7 +97,7 @@ metadata:
     # ingress.class annotation is being deprecated in Kubernetes 1.18: https://kubernetes.io/docs/concepts/services-networking/ingress/#deprecated-annotation
     # For backwards compatibility, when this annotation is set, precedence is given over the new field ingressClassName under spec.
     kubernetes.io/ingress.class: traefik-internal
-    traefik.ingress.kubernetes.io/router.entrypoints: web, websecure
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
     traefik.ingress.kubernetes.io/router.tls.options: default
 spec:

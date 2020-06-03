@@ -76,7 +76,6 @@ kubectl get ingress aspnetapp-ingress -n a0008
 kubectl -n a0008 run -i --rm --generator=run-pod/v1 --tty alpine --image=alpine -- sh
 apk add curl
 curl --insecure -H Host:bu0001a0008-00.bicycle.contoso.com https://traefik-ingress-service
-curl --insecure -H Host:bu0001a0008-00.bicycle.contoso.com http://traefik-ingress-service
 exit 0
 ```
 

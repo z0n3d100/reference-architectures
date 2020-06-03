@@ -113,14 +113,6 @@ data:
     [entryPoints]
       [entryPoints.traefik]
         address = ":9000"
-      [entryPoints.web]
-        address = ":8000"
-        [entryPoints.web.http]
-          [entryPoints.web.http.redirections]
-            [entryPoints.web.http.redirections.entryPoint]
-              to = "websecure"
-              scheme = "https"
-              permanent = true
       [entryPoints.websecure]
         address = ":8443"
         [entryPoints.websecure.http.tls]
@@ -157,9 +149,6 @@ spec:
     app.kubernetes.io/name: traefik-ingress-ilb
     app.kubernetes.io/instance: traefik-ingress-ilb
   ports:
-  - port: 80
-    name: http
-    targetPort: web
   - port: 443
     name: https
     targetPort: websecure
@@ -227,9 +216,6 @@ spec:
         ports:
         - name: "traefik"
           containerPort: 9000
-          protocol: TCP
-        - name: "web"
-          containerPort: 8000
           protocol: TCP
         - name: "websecure"
           containerPort: 8443
