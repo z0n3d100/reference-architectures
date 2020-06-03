@@ -46,7 +46,7 @@ type: kubernetes.io/tls
 EOF
 
 # Install Traefik ingress controller
-kubectl apply -f https://raw.githubusercontent.com/mspnp/reference-architectures/master/aks/secure-baseline/traefik.yaml
+kubectl apply -f https://raw.githubusercontent.com/mspnp/reference-architectures/master/aks/secure-baseline/workload/traefik.yaml
 
 # Check Traefik is handling HTTPS
 kubectl -n a0008 run -i --rm --generator=run-pod/v1 --tty alpine --image=alpine -- sh
@@ -55,7 +55,7 @@ echo | openssl s_client -showcerts -servername bicycle.contoso.com -connect trae
 exit 0
 
 # Install the ASPNET core sample web app
-kubectl apply -f https://raw.githubusercontent.com/mspnp/reference-architectures/master/aks/secure-baseline/aspnetapp.yaml
+kubectl apply -f https://raw.githubusercontent.com/mspnp/reference-architectures/master/aks/secure-baseline/workload/aspnetapp.yaml
 
 # the ASPNET Core webapp sample is all setup. Wait until is ready to process requests running:
 kubectl wait --namespace a0008 \
