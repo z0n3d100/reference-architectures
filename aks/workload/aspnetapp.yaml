@@ -49,6 +49,13 @@ spec:
       - name: aspnetcore-webapp-sample
         image: mcr.microsoft.com/dotnet/core/samples:aspnetapp
         imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 50m
+            memory: 50Mi
+          limits:
+            cpu: 150m
+            memory: 200Mi
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
