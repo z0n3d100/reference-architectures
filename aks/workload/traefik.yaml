@@ -82,6 +82,11 @@ metadata:
     app.kubernetes.io/instance: traefik-ingress-ilb
 data:
   traefik.toml: |
+    [metrics]
+      [metrics.prometheus]
+        entryPoint = "metrics"
+        addEntryPointsLabels = true
+        addServicesLabels = true
     [global]
       # prevent Traefik from checking newer versions in production
       checknewversion = false
@@ -111,6 +116,8 @@ data:
     [http.middlewares]
       [http.middlewares.test-compress.compress]
     [entryPoints]
+      [entryPoints.metrics]
+        address = ":8082"
       [entryPoints.traefik]
         address = ":9000"
       [entryPoints.websecure]
