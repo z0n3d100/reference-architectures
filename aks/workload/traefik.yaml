@@ -150,7 +150,7 @@ metadata:
     service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "snet-clusteringressservices"
 spec:
   type: LoadBalancer
-  externalTrafficPolicy: Cluster
+  externalTrafficPolicy: Local
   selector:
     app.kubernetes.io/name: traefik-ingress-ilb
     app.kubernetes.io/instance: traefik-ingress-ilb
