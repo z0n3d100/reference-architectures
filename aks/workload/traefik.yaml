@@ -87,6 +87,9 @@ data:
         entryPoint = "metrics"
         addEntryPointsLabels = true
         addServicesLabels = true
+    [accessLog]
+      filePath = "/data/access.log"
+      bufferingSize = 100
     [global]
       # prevent Traefik from checking newer versions in production
       checknewversion = false
