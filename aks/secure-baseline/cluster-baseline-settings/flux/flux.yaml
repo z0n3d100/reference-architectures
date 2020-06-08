@@ -56,6 +56,7 @@ spec:
     spec:
       nodeSelector:
         beta.kubernetes.io/os: linux
+        agentpool: npuser01
       serviceAccountName: flux
       volumes:
       - name: git-key
@@ -131,6 +132,7 @@ spec:
     spec:
       nodeSelector:
         beta.kubernetes.io/os: linux
+        agentpool: npuser01
       containers:
       - name: memcached
         image: memcached:1.5.20
