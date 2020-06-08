@@ -34,7 +34,7 @@ kubectl create ns cluster-baseline-settings
 kubectl apply -f https://raw.githubusercontent.com/mspnp/reference-architectures/master/aks/secure-baseline/cluster-baseline-settings/flux.yaml
 kubectl wait --namespace cluster-baseline-settings \
   --for=condition=ready pod \
-  --selector=name=flux \
+  --selector=app.kubernetes.io/name=flux \
   --timeout=90s
 
 # Wait for flux to create the following namespace and then press Ctrl-C
