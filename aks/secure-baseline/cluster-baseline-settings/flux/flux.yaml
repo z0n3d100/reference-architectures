@@ -135,6 +135,9 @@ spec:
       - name: memcached
         image: memcached:1.5.20
         imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: 512Mi
         args:
         - -m 512
         - -I 5m    # Maximum size for one item
