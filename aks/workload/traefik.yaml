@@ -255,8 +255,10 @@ spec:
             mountPath: /data
           - name: config
             mountPath: /config
+            readOnly: true
           - name: ssl
             mountPath: /certs
+            readOnly: true
         args:
         - --configfile=/config/traefik.toml
       volumes:
