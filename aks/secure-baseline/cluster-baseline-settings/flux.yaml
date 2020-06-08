@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
-    name: flux
+    app.kubernetes.io/name: flux
   name: flux
   namespace: cluster-baseline-settings
 ---
@@ -12,7 +12,7 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: flux
   labels:
-    name: flux
+    app.kubernetes.io/name: flux
 rules:
   - apiGroups: ['*']
     resources: ['*']
@@ -25,7 +25,7 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: flux
   labels:
-    name: flux
+    app.kubernetes.io/name: flux
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -44,7 +44,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      name: flux
+      app.kubernetes.io/name: flux
   strategy:
     type: Recreate
   template:
@@ -52,7 +52,7 @@ spec:
       annotations:
         prometheus.io/port: "3031"
       labels:
-        name: flux
+        app.kubernetes.io/name: flux
     spec:
       nodeSelector:
         beta.kubernetes.io/os: linux
@@ -125,11 +125,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      name: memcached
+      app.kubernetes.io/name: memcached
   template:
     metadata:
       labels:
-        name: memcached
+        app.kubernetes.io/name: memcached
     spec:
       nodeSelector:
         beta.kubernetes.io/os: linux
@@ -164,4 +164,4 @@ spec:
     - name: memcached
       port: 11211
   selector:
-    name: memcached
+    app.kubernetes.io/name: memcached
