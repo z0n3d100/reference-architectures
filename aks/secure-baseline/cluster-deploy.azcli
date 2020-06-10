@@ -16,6 +16,14 @@ az deployment group create --resource-group rg-bu0001a0008 --template-file clust
 # Get AKS Kubeconfig Credntials
 az aks get-credentials -n $AKS_NAME -g rg-bu0001a0008
 
+# The Azure Active Directory Admin team wants to grant access to the new created
+# cluster. Initially for AAD Bicycle Contoso Tenant Administrators. Therefore a new
+# group is created in the AAD that represents the Kubernetes Cluster Admin Role.
+# Later on the AAD Admin team will review the baseline settings of the cluster and
+# edit the `aks/security-baseline/cluster-baseline-settings/user-facing-cluster-role-aad-group.yaml`
+# to replace the placeholder `replace-with-an-aad-group-object-id-for-k8s-admin-clusterrole`
+# with the object id for the recently added AAD group.
+
 # Deploy flux
 kubectl create namespace cluster-baseline-settings
 kubectl apply -f https://raw.githubusercontent.com/mspnp/reference-architectures/master/aks/secure-baseline/cluster-baseline-settings/flux.yaml
