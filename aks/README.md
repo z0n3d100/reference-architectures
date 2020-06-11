@@ -46,7 +46,7 @@ type: kubernetes.io/tls
 EOF
 
 # Install Traefik ingress controller
-kubectl apply -f https://raw.githubusercontent.com/mspnp/reference-architectures/master/aks/secure-baseline/workload/traefik.yaml
+kubectl apply -f https://raw.githubusercontent.com/mspnp/reference-architectures/master/aks/workload/traefik.yaml
 
 # Check Traefik is handling HTTPS
 kubectl -n a0008 run -i --rm --generator=run-pod/v1 --tty alpine --image=alpine -- sh
@@ -56,7 +56,7 @@ echo | openssl s_client -showcerts -servername hello.bicycle.contoso.com -connec
 exit 0
 
 # Install the ASPNET core sample web app
-kubectl apply -f https://raw.githubusercontent.com/mspnp/reference-architectures/master/aks/secure-baseline/workload/aspnetapp.yaml
+kubectl apply -f https://raw.githubusercontent.com/mspnp/reference-architectures/master/aks/workload/aspnetapp.yaml
 
 # the ASPNET Core webapp sample is all setup. Wait until is ready to process requests running:
 kubectl wait --namespace a0008 \
@@ -72,7 +72,10 @@ kubectl wait --namespace a0008 \
 
 kubectl get ingress aspnetapp-ingress -n a0008
 
-# Validate router to the workload is configured, SSL offloading and redirect to Https schema
+# Validate the router to the workload is configured, SSL offloading and allowing only known Ips
+# Please notice only the Azure Application Gateway is whitelisted as known client for
+# the workload's router. Therefore, please expect a Http 403 response
+# as a way to probe the router has been properly configured
 
 kubectl -n a0008 run -i --rm --generator=run-pod/v1 --tty curl --image=curlimages/curl -- sh
 curl --insecure -k -I --resolve bu0001a0008-00.bicycle.contoso.com:443:10.240.4.4 https://bu0001a0008-00.bicycle.contoso.com
