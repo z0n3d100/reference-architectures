@@ -91,9 +91,7 @@
                     {
                         "name": "snet-applicationgateways",
                         "properties": {
-                            "addressPrefix": "10.240.4.16/28",
-                            "serviceEndpoints": [
-                            ]
+                            "addressPrefix": "10.240.4.16/28"
                         }
                     }
                 ],

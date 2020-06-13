@@ -132,9 +132,7 @@
                     "family": "A",
                     "name": "standard"
                 },
-                "tenantId": "[subscription().tenantId]",
-                "networkAcls": {
-                }
+                "tenantId": "[subscription().tenantId]"
             }
         },
         {
