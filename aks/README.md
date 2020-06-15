@@ -67,6 +67,12 @@ EOF
 # Install Traefik ingress controller
 kubectl apply -f https://raw.githubusercontent.com/mspnp/reference-architectures/master/aks/workload/traefik.yaml
 
+# Wait for Traefik to be ready
+kubectl wait --namespace a0008 \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/name=traefik-ingress-ilb \
+  --timeout=90s
+
 # Check Traefik is handling HTTPS
 kubectl -n a0008 run -i --rm --generator=run-pod/v1 --tty alpine --image=alpine -- sh
 echo '10.240.4.4 hello.aks-ingress.contoso.com' | tee -a /etc/hosts
