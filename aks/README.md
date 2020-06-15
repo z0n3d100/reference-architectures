@@ -18,26 +18,26 @@
    > Do not use the certificates created by these scripts for production. The certificates are provided for demonstration purposes only. For your production cluster, use your security best practices for digital certificates creation and lifetime management.
    > Self-signed certificates are not trusted by default and they can be difficult to maintain. Also, they may use outdated hash and cipher suites that may not be strong. For better security, purchase a certificate signed by a well-known certificate authority.
 
-   > Cluster Certificate - AKS Internal Load Balancer
+   Cluster Certificate - AKS Internal Load Balancer
 
-   > ```bash
-   > openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-   >       -out traefik-ingress-internal-aks-ingress-contoso-com-tls.crt
-   >       -keyout traefik-ingress-internal-aks-ingress-contoso-com-tls.key \
-   >       -subj "/CN=*.aks-ingress.contoso.com/O=Contoso Aks Ingress"
-   > rootCertWilcardIngressController=$(cat traefik-ingress-internal-bicycle-contoso-com-tls.crt | base64 -w 0)
-   > ```
+   ```bash
+   openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+         -out traefik-ingress-internal-aks-ingress-contoso-com-tls.crt
+         -keyout traefik-ingress-internal-aks-ingress-contoso-com-tls.key \
+         -subj "/CN=*.aks-ingress.contoso.com/O=Contoso Aks Ingress"
+   rootCertWilcardIngressController=$(cat traefik-ingress-internal-bicycle-contoso-com-tls.crt | base64 -w 0)
+   ```
 
-   > App Gateway Certificate
+   App Gateway Certificate
 
-   > ```bash
-   > openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-   >        -out appgw.crt \
-   >        -keyout appgw.key \
-   >        -subj "/CN=app.bicycle.contoso.com/O=Contoso Bicycle"
-   > openssl pkcs12 -export -out appgw.pfx -in appgw.crt -inkey appgw.key -passout pass:
-   > appGatewayListernerCertificate=$(cat appgw.pfx | base64 -w 0)
-   > ```
+   ```bash
+   openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+          -out appgw.crt \
+          -keyout appgw.key \
+          -subj "/CN=app.bicycle.contoso.com/O=Contoso Bicycle"
+   openssl pkcs12 -export -out appgw.pfx -in appgw.crt -inkey appgw.key -passout pass:
+   appGatewayListernerCertificate=$(cat appgw.pfx | base64 -w 0)
+   ```
 
 1. create [the BU 0001's app team secure AKS cluster (ID: A0008)](./secure-baseline/cluster-deploy.azcli)
    > Note: execute this step from VSCode for a better experience
