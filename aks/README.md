@@ -22,9 +22,9 @@
 
    ```bash
    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-         -out traefik-ingress-internal-aks-ingress-contoso-com-tls.crt
+         -out traefik-ingress-internal-aks-ingress-contoso-com-tls.crt \
          -keyout traefik-ingress-internal-aks-ingress-contoso-com-tls.key \
-         -subj "/CN=*.aks-ingress.contoso.com/O=Contoso Aks Ingress"
+         -subj "/CN=*.aks-ingress.contoso.com/O=Contoso Aks Ingress" && \
    rootCertWilcardIngressController=$(cat traefik-ingress-internal-bicycle-contoso-com-tls.crt | base64 -w 0)
    ```
 
@@ -34,8 +34,8 @@
    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
           -out appgw.crt \
           -keyout appgw.key \
-          -subj "/CN=app.bicycle.contoso.com/O=Contoso Bicycle"
-   openssl pkcs12 -export -out appgw.pfx -in appgw.crt -inkey appgw.key -passout pass:
+          -subj "/CN=app.bicycle.contoso.com/O=Contoso Bicycle" && \
+   openssl pkcs12 -export -out appgw.pfx -in appgw.crt -inkey appgw.key -passout pass: && \
    appGatewayListernerCertificate=$(cat appgw.pfx | base64 -w 0)
    ```
 
