@@ -41,10 +41,6 @@
 
 1. create [the BU 0001's app team secure AKS cluster (ID: A0008)](./secure-baseline/cluster-deploy.azcli)
    > Note: execute this step from VSCode for a better experience
-1. Download the AKS credentails
-   ```bash
-   az aks get-credentials -g rg-bu0001a0008 -n <cluster-name> --admin
-   ```
 
 ### Manually deploy the Ingress Controller and a basic workload
 
