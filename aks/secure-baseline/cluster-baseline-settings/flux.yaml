@@ -106,6 +106,7 @@ spec:
         - --sync-state=secret
         - --listen-metrics=:3031
         - --git-timeout=5m
+        - --registry-disable-scanning=true
 ---
 # This secret is ok to be initialized as empty since Flux annotates the
 # Kubernetes Secret object with flux.weave.works/sync-hwm: <commit-sha>
