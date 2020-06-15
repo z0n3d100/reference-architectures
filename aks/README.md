@@ -2,6 +2,14 @@
 
 1. An Azure subscription. If you don't have an Azure subscription, you can create a [free account](https://azure.microsoft.com/free).
 1. [Azure CLI installed](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest).
+1. Install kubectl 1.18 or later
+   ```bash
+   sudo az aks install-cli
+
+   # ensure you got a version 1.18 or greater
+   kubectl version --client
+   ```
+1. [Register the AAD-V2 feature for AKS-managed Azure AD](https://docs.microsoft.com/en-us/azure/aks/managed-aad#before-you-begin)
 1. Provision [a regional hub and spoke virtual networks](./secure-baseline/networking/network-deploy.azcli)
    > Note: execute this step from VSCode for a better experience
 1. Generate a CA self-signed cert
