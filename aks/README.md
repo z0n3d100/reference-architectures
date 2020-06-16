@@ -2,6 +2,14 @@
 
 1. An Azure subscription. If you don't have an Azure subscription, you can create a [free account](https://azure.microsoft.com/free).
 1. [Azure CLI installed](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest).
+1. Install kubectl 1.18 or later
+   ```bash
+   sudo az aks install-cli
+
+   # ensure you got a version 1.18 or greater
+   kubectl version --client
+   ```
+1. [Register the AAD-V2 feature for AKS-managed Azure AD](https://docs.microsoft.com/en-us/azure/aks/managed-aad#before-you-begin)
 1. Provision [a regional hub and spoke virtual networks](./secure-baseline/networking/network-deploy.azcli)
    > Note: execute this step from VSCode for a better experience
 1. Generate a CA self-signed cert
@@ -10,33 +18,29 @@
    > Do not use the certificates created by these scripts for production. The certificates are provided for demonstration purposes only. For your production cluster, use your security best practices for digital certificates creation and lifetime management.
    > Self-signed certificates are not trusted by default and they can be difficult to maintain. Also, they may use outdated hash and cipher suites that may not be strong. For better security, purchase a certificate signed by a well-known certificate authority.
 
-   > Cluster Certificate - AKS Internal Load Balancer
+   Cluster Certificate - AKS Internal Load Balancer
 
-   > ```bash
-   > openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-   >       -out traefik-ingress-internal-aks-ingress-contoso-com-tls.crt
-   >       -keyout traefik-ingress-internal-aks-ingress-contoso-com-tls.key \
-   >       -subj "/CN=*.aks-ingress.contoso.com/O=Contoso Aks Ingress"
-   > rootCertWilcardIngressController=$(cat traefik-ingress-internal-bicycle-contoso-com-tls.crt | base64 -w 0)
-   > ```
+   ```bash
+   openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+         -out traefik-ingress-internal-aks-ingress-contoso-com-tls.crt \
+         -keyout traefik-ingress-internal-aks-ingress-contoso-com-tls.key \
+         -subj "/CN=*.aks-ingress.contoso.com/O=Contoso Aks Ingress" && \
+   rootCertWilcardIngressController=$(cat traefik-ingress-internal-bicycle-contoso-com-tls.crt | base64 -w 0)
+   ```
 
-   > App Gateway Certificate
+   App Gateway Certificate
 
-   > ```bash
-   > openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-   >        -out appgw.crt \
-   >        -keyout appgw.key \
-   >        -subj "/CN=app.bicycle.contoso.com/O=Contoso Bicycle"
-   > openssl pkcs12 -export -out appgw.pfx -in appgw.crt -inkey appgw.key -passout pass:
-   > appGatewayListernerCertificate=$(cat appgw.pfx | base64 -w 0)
-   > ```
+   ```bash
+   openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+          -out appgw.crt \
+          -keyout appgw.key \
+          -subj "/CN=app.bicycle.contoso.com/O=Contoso Bicycle" && \
+   openssl pkcs12 -export -out appgw.pfx -in appgw.crt -inkey appgw.key -passout pass: && \
+   appGatewayListernerCertificate=$(cat appgw.pfx | base64 -w 0)
+   ```
 
 1. create [the BU 0001's app team secure AKS cluster (ID: A0008)](./secure-baseline/cluster-deploy.azcli)
    > Note: execute this step from VSCode for a better experience
-1. Download the AKS credentails
-   ```bash
-   az aks get-credentials -g rg-bu0001a0008 -n <cluster-name> --admin
-   ```
 
 ### Manually deploy the Ingress Controller and a basic workload
 
@@ -62,6 +66,12 @@ EOF
 
 # Install Traefik ingress controller
 kubectl apply -f https://raw.githubusercontent.com/mspnp/reference-architectures/master/aks/workload/traefik.yaml
+
+# Wait for Traefik to be ready
+kubectl wait --namespace a0008 \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/name=traefik-ingress-ilb \
+  --timeout=90s
 
 # Check Traefik is handling HTTPS
 kubectl -n a0008 run -i --rm --generator=run-pod/v1 --tty alpine --image=alpine -- sh
