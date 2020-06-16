@@ -34,7 +34,7 @@
    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
           -out appgw.crt \
           -keyout appgw.key \
-          -subj "/CN=app.bicycle.contoso.com/O=Contoso Bicycle" && \
+          -subj "/CN=bicycle.contoso.com/O=Contoso Bicycle" && \
    openssl pkcs12 -export -out appgw.pfx -in appgw.crt -inkey appgw.key -passout pass: && \
    appGatewayListernerCertificate=$(cat appgw.pfx | base64 -w 0)
    ```
@@ -116,7 +116,7 @@ export APPGW_PUBLIC_IP=$(az deployment group show --resource-group rg-enterprise
 ```
 
 1. Map the Azure Application Gateway public ip address to the application domain names. To do that, please open your hosts file (C:\windows\system32\drivers\etc\hosts or /etc/hosts) and add the following record in local host file:
-   \${APPGW_PUBLIC_IP} app.bicycle.contoso.com
+   \${APPGW_PUBLIC_IP} bicycle.contoso.com
 
 1. In your browser navigate the site anyway (A warning will be present)
-   https://app.bicycle.contoso.com/
+   https://bicycle.contoso.com/
