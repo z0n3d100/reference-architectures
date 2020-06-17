@@ -40,30 +40,6 @@
     },
     "resources": [
         {
-            "type": "Microsoft.Network/privateDnsZones",
-            "apiVersion": "2018-09-01",
-            "name": "[variables('akvPrivateDnsZonesName')]",
-            "location": "global",
-            "properties": {
-            }
-        },
-        {
-            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
-            "apiVersion": "2018-09-01",
-            "name": "[concat(variables('akvPrivateDnsZonesName'), '/', uniqueString(resourceId('Microsoft.Network/virtualNetworks', variables('clusterVNetName'))))]",
-            "location": "global",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('clusterVNetName'))]",
-                "[resourceId('Microsoft.Network/privateDnsZones', variables('akvPrivateDnsZonesName'))]"
-            ],
-            "properties": {
-                "virtualNetwork": {
-                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('clusterVNetName'))]"
-                },
-                "registrationEnabled": false
-            }
-        },
-        {
             "type": "Microsoft.Network/routeTables",
             "apiVersion": "2019-11-01",
             "location": "[parameters('location')]",
@@ -204,6 +180,14 @@
             }
         },
         {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2018-09-01",
+            "name": "[variables('akvPrivateDnsZonesName')]",
+            "location": "global",
+            "properties": {
+            }
+        },
+        {
             "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
             "apiVersion": "2018-09-01",
             "name": "[concat(variables('acrPrivateDnsZonesName'), '/', uniqueString(resourceId('Microsoft.Network/virtualNetworks', variables('clusterVNetName'))))]",
@@ -211,6 +195,22 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', variables('clusterVNetName'))]",
                 "[resourceId('Microsoft.Network/privateDnsZones', variables('acrPrivateDnsZonesName'))]"
+            ],
+            "properties": {
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('clusterVNetName'))]"
+                },
+                "registrationEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2018-09-01",
+            "name": "[concat(variables('akvPrivateDnsZonesName'), '/', uniqueString(resourceId('Microsoft.Network/virtualNetworks', variables('clusterVNetName'))))]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('clusterVNetName'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('akvPrivateDnsZonesName'))]"
             ],
             "properties": {
                 "virtualNetwork": {
