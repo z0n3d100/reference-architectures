@@ -149,7 +149,7 @@
                 },
                 "privateLinkServiceConnections": [
                     {
-                        "name": "nodepoolsubnet-to-akv-svc-connection",
+                        "name": "nodepoolsubnet-to-akv",
                         "properties": {
                             "privateLinkServiceId": "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]",
                             "groupIds": [
