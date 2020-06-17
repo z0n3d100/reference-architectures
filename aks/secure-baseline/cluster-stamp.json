@@ -520,7 +520,7 @@
         },
         {
             "type": "Microsoft.Network/privateEndpoints",
-            "apiVersion": "2020-03-01",
+            "apiVersion": "2020-04-01",
             "name": "nodepool-to-acr",
             "location": "[parameters('location')]",
             "dependsOn": [
@@ -546,7 +546,7 @@
         },
         {
             "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
-            "apiVersion": "2020-03-01",
+            "apiVersion": "2020-04-01",
             "name": "[concat('nodepool-to-acr', '/default')]",
             "location": "[parameters('location')]",
             "dependsOn": [
