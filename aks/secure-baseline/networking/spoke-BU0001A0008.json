@@ -35,6 +35,7 @@
         "hubRgName": "[split(parameters('hubVnetResourceId'),'/')[4]]",
         "hubNetworkName": "[split(parameters('hubVnetResourceId'),'/')[8]]",
 
+        "acrPrivateDnsZonesName": "privatelink.azurecr.io",
         "akvPrivateDnsZonesName": "[concat(variables('orgAppId'),'.vaultcore.azure.net')]"
     },
     "resources": [
@@ -197,7 +198,7 @@
         {
             "type": "Microsoft.Network/privateDnsZones",
             "apiVersion": "2018-09-01",
-            "name": "privatelink.azurecr.io",
+            "name": "[variables('acrPrivateDnsZonesName')]",
             "location": "global",
             "properties": {
             }
@@ -205,11 +206,11 @@
         {
             "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
             "apiVersion": "2018-09-01",
-            "name": "[concat('privatelink.azurecr.io', '/', uniqueString(resourceId('Microsoft.Network/virtualNetworks', variables('clusterVNetName'))))]",
+            "name": "[concat(variables('acrPrivateDnsZonesName'), '/', uniqueString(resourceId('Microsoft.Network/virtualNetworks', variables('clusterVNetName'))))]",
             "location": "global",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', variables('clusterVNetName'))]",
-                "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.azurecr.io')]"
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('acrPrivateDnsZonesName'))]"
             ],
             "properties": {
                 "virtualNetwork": {
